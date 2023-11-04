@@ -1,33 +1,34 @@
-import { $ } from "select-dom";
+import { $, $$ } from "select-dom";
 import React from "dom-chef";
 import skinportApi from "../lib/skinport-api.js";
 
 (async () => {
   let tradePartnerIsSkinport = false;
+  let tradePartnerSteamId: string | undefined;
 
-  const tradePartnerAnchorElement = $(
-    '.trade_partner_headline a[href^="https://steamcommunity.com/profiles/"]'
-  );
+  for (const scriptElement of $$('script[type="text/javascript"]')) {
+    const tradePartnerSteamIdMatch = scriptElement.textContent?.match(
+      /var g_ulTradePartnerSteamID = '([0-9]+)'/
+    );
 
-  if (tradePartnerAnchorElement) {
-    const tradePartnerId = tradePartnerAnchorElement
-      .getAttribute("href")
-      ?.split("/")
-      .at(-1);
+    if (tradePartnerSteamIdMatch) {
+      tradePartnerSteamId = tradePartnerSteamIdMatch[1];
+      break;
+    }
+  }
 
-    if (tradePartnerId) {
-      try {
-        const { verified } = await skinportApi(
-          `v1/extension/bot/${tradePartnerId}`
-        ).json<{ verified: boolean }>();
+  if (tradePartnerSteamId) {
+    try {
+      const { verified } = await skinportApi(
+        `v1/extension/bot/${tradePartnerSteamId}`
+      ).json<{ verified: boolean }>();
 
-        if (verified) {
-          tradePartnerIsSkinport = true;
-        }
-      } catch (error) {
-        console.error(error);
-        // TODO: Handle error with e.g. Sentry
+      if (verified) {
+        tradePartnerIsSkinport = true;
       }
+    } catch (error) {
+      console.error(error);
+      // TODO: Handle error with e.g. Sentry
     }
   }
 
