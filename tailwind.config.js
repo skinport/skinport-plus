@@ -1,8 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [`./src/${process.env.EXT_SCRIPT}/**/*.tsx`],
+  content: [`./src/**/*.{ts,tsx}`],
   theme: {
-    extend: {},
+    fontFamily: {
+      sans: ["Montserrat", "sans-serif"],
+    },
+    extend: {
+      colors: {
+        "skinport-bg": "#2b2f30",
+        "skinport-white": "#f6f6f6",
+        "skinport-gray": "#8e9191",
+      },
+    },
   },
   plugins: [],
   corePlugins: {

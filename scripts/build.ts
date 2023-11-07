@@ -9,13 +9,14 @@ const esbuildOptions = {
   bundle: true,
   outfile: "./dist/content.js",
   plugins: [
-    clean({ patterns: ["./dist/*"] }),
     copy({
       resolveFrom: "cwd",
-      assets: {
-        from: ["./src/manifest.json"],
-        to: ["./dist"],
-      },
+      assets: [
+        {
+          from: ["./src/manifest.json"],
+          to: ["./dist"],
+        },
+      ],
       watch: IS_DEV,
     }),
   ],

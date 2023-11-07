@@ -6,10 +6,17 @@
   "host_permissions": ["https://api.skinport.com/*"],
   "content_scripts": [
     {
+      "run_at": "document_end",
       "matches": ["https://steamcommunity.com/*"],
+      "exclude_matches": ["https://*/login/*"],
       "js": ["content.js"],
-      "css": ["content.css"],
-      "run_at": "document_end"
+      "css": ["content.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["static/*.ttf"],
+      "matches": ["https://steamcommunity.com/*"]
     }
   ]
 }
