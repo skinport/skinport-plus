@@ -3,20 +3,16 @@
   "name": "Skinport",
   "version": "1.0.0",
   "description": "Skinport extension",
-  "host_permissions": ["https://api.skinport.com/*"],
+  "host_permissions": [
+    "https://api.skinport.com/*",
+    "https://steamcommunity.com/*"
+  ],
   "content_scripts": [
     {
-      "run_at": "document_end",
+      "run_at": "document_start",
       "matches": ["https://steamcommunity.com/*"],
-      "exclude_matches": ["https://*/login/*"],
       "js": ["content.js"],
       "css": ["content.css"]
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": ["static/*.ttf"],
-      "matches": ["https://steamcommunity.com/*"]
     }
   ]
 }

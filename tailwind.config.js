@@ -10,12 +10,9 @@ module.exports = {
         "skinport-bg": "#2b2f30",
         "skinport-white": "#f6f6f6",
         "skinport-gray": "#8e9191",
+        "skinport-orange": "#fa490a",
       },
     },
   },
-  plugins: [],
-  corePlugins: {
-    preflight: false,
-  },
-  prefix: "sp-",
+  plugins: [require("tailwindcss-animate")],
 };

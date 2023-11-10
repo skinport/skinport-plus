@@ -1,19 +1,19 @@
-import * as React from "react";
+import React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/utils";
 
 const buttonVariants = cva(
-  "sp-rounded sp-uppercase sp-font-bold sp-tracking-widest sp-text-sm sp-transition",
+  "rounded uppercase font-bold tracking-widest text-xs transition text-white",
   {
     variants: {
       variant: {
-        default: "sp-bg-[#4db5da] hover:sp-bg-[#36809a]",
-        destructive: "sp-bg-[#e05a59] hover:sp-bg-[#cb3837]",
-        ghost: "hover:sp-text-[#fa490a]",
+        default: "bg-[#4db5da] hover:bg-[#36809a]",
+        destructive: "bg-[#e05a59] hover:bg-[#cb3837]",
+        ghost: "hover:text-[#fa490a]",
       },
       size: {
-        default: "sp-py-4 sp-px-6",
+        default: "py-2 px-4",
       },
     },
     defaultVariants: {
