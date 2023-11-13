@@ -5,6 +5,7 @@ import skinportApi from "@/lib/skinport-api";
 import SkinportLogo from "@/components/skinport-logo";
 import { Button } from "@/components/ui/button";
 import { createWidgetElement } from "../widget";
+import elementReady from "element-ready";
 
 function TradePartnerVerified() {
   return (
@@ -89,6 +90,21 @@ export default async function tradeOfferVerification() {
     return;
   }
 
+  const tradeYoursReadyElement = await elementReady("#trade_yours.ready", {
+    stopOnDomReady: false,
+    timeout: 30000,
+  });
+
+  if (!tradeYoursReadyElement) {
+    return;
+  }
+
+  const tradeYoursItemElements = $$("#your_slots .has_item");
+
+  if (tradeYoursItemElements.length === 0) {
+    return;
+  }
+
   let tradePartnerIsVerified = false;
   let tradePartnerSteamId: string | undefined;
 
@@ -118,28 +134,28 @@ export default async function tradeOfferVerification() {
     }
   }
 
-  const tradeBoxElement = $(".trade_right .trade_box_contents");
-  const tradeConfirmBoxElement = $(".trade_right .trade_confirm_box");
+  const tradeYoursElement = $("#trade_yours");
+  const tradeConfirmYourContentsElement = $(".tutorial_arrow_ctn");
 
-  if (tradeBoxElement && tradeConfirmBoxElement) {
+  if (tradeYoursElement && tradeConfirmYourContentsElement) {
     if (tradePartnerIsVerified) {
       const [tradePartnerVerifiedElement] = createWidgetElement(
         <TradePartnerVerified />
       );
 
-      tradeConfirmBoxElement.prepend(tradePartnerVerifiedElement);
+      tradeConfirmYourContentsElement.prepend(tradePartnerVerifiedElement);
     } else {
-      tradeConfirmBoxElement.style.display = "none";
+      tradeConfirmYourContentsElement.style.display = "none";
 
       const [TradePartnerUnverifiedElement] = createWidgetElement(
         <TradePartnerUnverified
           onContinueTrade={() => {
-            tradeConfirmBoxElement.style.display = "";
+            tradeConfirmYourContentsElement.style.display = "";
           }}
         />
       );
 
-      tradeBoxElement.append(TradePartnerUnverifiedElement);
+      tradeYoursElement.append(TradePartnerUnverifiedElement);
     }
   }
 }
