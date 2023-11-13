@@ -47,10 +47,11 @@ export default async function securityCheck() {
                   Review your Steam account security vulnerabilities
                 </DialogTitle>
                 <DialogDescription>
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                  Expedita autem sint quisquam, eligendi itaque sit! Placeat in
-                  quam, illo commodi unde explicabo minima fugit veritatis,
-                  eveniet tenetur maxime? Saepe, quam.
+                  Sharing your API key for trading websites is unnecessary and
+                  very risky. It's intended for developers and misusing it is
+                  like exposing your login credentials. Doing so can lead to
+                  phishing attacks and risk your Steam account being banned,
+                  violating <a href="https://steamcommunity.com/dev/apiterms" target="_blank">Steam Web API Terms</a>.
                 </DialogDescription>
               </DialogHeader>
               <div className="flex flex-col gap-2">
