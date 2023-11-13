@@ -127,7 +127,18 @@ export default async function securityCheck() {
       </div>
     ));
 
-  const globalHeaderElement = $("#global_header");
+    if (document.body.classList.contains("headerless_page")) {
+      document.body.prepend(securityCheckElement);
 
-  globalHeaderElement?.insertAdjacentElement("afterend", securityCheckElement);
+      return;
+    }
+
+    const globalHeaderElement = $("#global_header");
+
+    if (globalHeaderElement) {
+      globalHeaderElement.insertAdjacentElement(
+        "afterend",
+        securityCheckElement
+      );
+    }
 }
