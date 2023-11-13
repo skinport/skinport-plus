@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ExternalLink } from "lucide-react";
+import { $ } from "select-dom";
 
 export default async function securityCheck() {
   const webApiKeyRepsonse = await ky("/dev/apikey").text();
@@ -28,26 +29,16 @@ export default async function securityCheck() {
 
   const [securityCheckElement, removeSecurityCheckElement] =
     createWidgetElement((shadowRoot) => (
-      <div className="bg-skinport-bg p-4 fixed right-4 bottom-4 w-96 flex flex-col gap-4 z-[1000] shadow-xl rounded animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <SkinportLogo width={96} />
-        <div className="flex flex-col gap-2">
-          <h2 className="font-semibold text-skinport-white text-lg">
-            Security vulnerabilities detected on your Steam account
-          </h2>
-          <p>
-            We've detected one or more security vulnerabilities on your Steam
-            account that can be exploited to access to your account and
-            inventory unknowingly by malicious actors.
-          </p>
-          <p>
-            We recommend you to review them and take actions immediately to keep
-            your account and inventory safe.
-          </p>
-        </div>
+      <div className="bg-[#e05a59] p-2 flex gap-4 justify-center items-center">
+        <p className="font-semibold text-white">
+          Security vulnerabilities detected on your Steam account
+        </p>
         <div className="flex gap-2">
           <Dialog>
             <DialogTrigger asChild>
-              <Button>Review</Button>
+              <Button variant="outline" size="sm">
+                Review
+              </Button>
             </DialogTrigger>
             <DialogContent container={shadowRoot}>
               <SkinportLogo width={96} />
@@ -132,15 +123,11 @@ export default async function securityCheck() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
-          <Button variant="ghost" onClick={() => removeSecurityCheckElement()}>
-            Dismiss
-          </Button>
         </div>
-        <p className="text-xs text-[#6b6d6e]">
-          Security provided by Skinport browser extension
-        </p>
       </div>
     ));
 
-  document.body.append(securityCheckElement);
+  const globalHeaderElement = $("#global_header");
+
+  globalHeaderElement?.insertAdjacentElement("afterend", securityCheckElement);
 }

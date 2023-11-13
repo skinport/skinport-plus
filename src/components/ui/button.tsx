@@ -4,16 +4,18 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/utils";
 
 const buttonVariants = cva(
-  "rounded uppercase font-bold tracking-widest text-xs transition text-white",
+  "rounded uppercase font-bold tracking-widest text-xs transition text-white border border-transparent",
   {
     variants: {
       variant: {
         default: "bg-[#4db5da] hover:bg-[#36809a]",
         destructive: "bg-[#e05a59] hover:bg-[#cb3837]",
         ghost: "hover:text-[#fa490a]",
+        outline: "border-white hover:bg-white hover:text-skinport-bg",
       },
       size: {
         default: "py-2 px-4",
+        sm: "py-1 px-2",
       },
     },
     defaultVariants: {
