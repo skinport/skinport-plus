@@ -89,7 +89,7 @@ export default async function securityCheck() {
                     </a>
                   </Button>
                 </div>
-                <p>
+                <p className="mt-2">
                   We also highly recommend to change your password and
                   deauthorize all devices, to log out any malicious actor.
                 </p>

@@ -337,4 +337,5 @@
 
 .skinport-widget {
   all: initial;
+  @apply antialiased font-sans text-skinport-gray text-sm;
 }
