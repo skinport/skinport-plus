@@ -8,10 +8,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-[#4db5da] hover:bg-[#36809a]",
+        default: "bg-blue hover:bg-blue-dark",
         destructive: "bg-[#e05a59] hover:bg-[#cb3837]",
-        ghost: "hover:text-[#fa490a]",
-        outline: "border-white hover:bg-white hover:text-skinport-bg",
+        ghost: "hover:text-red",
+        outline: "border-white hover:bg-white hover:text-background",
       },
       size: {
         default: "py-2 px-4",

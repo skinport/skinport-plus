@@ -9,21 +9,21 @@ import elementReady from "element-ready";
 
 function TradePartnerVerified() {
   return (
-    <div className="bg-skinport-bg p-4 text-center flex flex-col gap-4 mb-6">
+    <div className="p-4 text-center flex flex-col gap-4 mb-6">
       <div className="flex flex-col items-center">
         <SkinportLogo />
       </div>
       <div className="flex flex-col items-center text-[#00a67c]">
         <ShieldCheck size="64" />
       </div>
-      <h3 className="font-semibold text-lg text-skinport-white">
+      <h3 className="font-semibold text-lg text-white">
         You're trading with Skinport
       </h3>
-      <p className="text-skinport-gray">
+      <p className="text-text-foreground">
         This trade offer is oficially from Skinport and the trade partner is a
         verified Skinport bot.
       </p>
-      <p className="text-xs text-skinport-gray">
+      <p className="text-xs text-text-foreground">
         Security provided by the Skinport browser extension
       </p>
     </div>
@@ -42,21 +42,21 @@ function TradePartnerUnverified({
   }
 
   return (
-    <div className="bg-skinport-bg p-4 text-center flex flex-col gap-4">
+    <div className="p-4 text-center flex flex-col gap-4">
       <div className="flex flex-col items-center">
         <SkinportLogo />
       </div>
       <div className="flex flex-col items-center text-[#e05a59]">
         <ShieldAlert size="64" />
       </div>
-      <h3 className="font-semibold text-lg text-skinport-white">
+      <h3 className="font-semibold text-lg text-white">
         Could someone be trying to scam you?
       </h3>
-      <p className="text-skinport-gray">
+      <p className="text-text-foreground">
         This trade offer doesn't appear to be from Skinport and we couldn't
         verify the trade partner.
       </p>
-      <p className="text-skinport-gray">
+      <p className="text-text-foreground">
         We advise you to only continue if you trust the trade partner. You will
         not be able to get your items back.
       </p>
@@ -78,14 +78,14 @@ function TradePartnerUnverified({
           Read safety guide
         </a>
       </Button>
-      <p className="text-xs text-skinport-gray">
+      <p className="text-xs text-text-foreground">
         Security provided by the Skinport browser extension
       </p>
     </div>
   );
 }
 
-export default async function tradeOfferVerification() {
+export default async function steamTradeOfferCheck() {
   if (!window.location.pathname.startsWith("/tradeoffer")) {
     return;
   }

@@ -1,10 +1,16 @@
 import domLoaded from "dom-loaded";
-import tradeOfferVerification from "./features/trade-offer-verification";
-import securityCheck from "./features/security-check";
+import tradeOfferChcek from "./features/steam-trade-offer-check";
+import securityCheck from "./features/steam-account-security-check";
+import optionsStorage from "@/lib/options-storage";
 
 (async () => {
-  await domLoaded;
+  const [options] = await Promise.all([optionsStorage.getAll(), domLoaded]);
 
-  tradeOfferVerification();
-  securityCheck();
+  if (options.steamAccountSecurityCheck) {
+    securityCheck();
+  }
+
+  if (options.steamTradeOfferCheck) {
+    tradeOfferChcek();
+  }
 })();

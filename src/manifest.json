@@ -7,6 +7,7 @@
     "https://api.skinport.com/*",
     "https://steamcommunity.com/*"
   ],
+  "permissions": ["storage"],
   "content_scripts": [
     {
       "run_at": "document_start",
@@ -14,5 +15,10 @@
       "js": ["content.js"],
       "css": ["content.css"]
     }
-  ]
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true,
+    "browser_style": false
+  }
 }
