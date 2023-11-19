@@ -1,16 +1,19 @@
 import domLoaded from "dom-loaded";
-import tradeOfferChcek from "./features/steam-trade-offer-check";
-import securityCheck from "./features/steam-account-security-check";
+import tradeOfferCheck from "./features/steam-trade-offer-check";
+import steamAccountSecurityCheck from "./features/steam-account-security-check";
 import optionsStorage from "@/lib/options-storage";
+import i18n from "@/lib/i18n";
+
+i18n.setDefaultNamespace("content");
 
 (async () => {
   const [options] = await Promise.all([optionsStorage.getAll(), domLoaded]);
 
-  if (options.steamAccountSecurityCheck) {
-    securityCheck();
+  if (options.checkSteamAccountSecurity) {
+    steamAccountSecurityCheck();
   }
 
-  if (options.steamTradeOfferCheck) {
-    tradeOfferChcek();
+  if (options.checkTradeOffer) {
+    tradeOfferCheck();
   }
 })();

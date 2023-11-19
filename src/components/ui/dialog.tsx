@@ -43,7 +43,7 @@ const DialogContent = React.forwardRef<
     >
       {children}
       <DialogPrimitive.Close className="absolute right-4 top-4">
-        <X className="h-4 w-4 text-white hover:text-destructive" />
+        <X className="h-4 w-4 text-white hover:text-red transition-colors" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>

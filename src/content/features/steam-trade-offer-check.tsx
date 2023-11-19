@@ -6,8 +6,11 @@ import SkinportLogo from "@/components/skinport-logo";
 import { Button } from "@/components/ui/button";
 import { createWidgetElement } from "../widget";
 import elementReady from "element-ready";
+import { useTranslation } from "react-i18next";
 
 function TradePartnerVerified() {
+  const { t } = useTranslation();
+
   return (
     <div className="p-4 text-center flex flex-col gap-4 mb-6">
       <div className="flex flex-col items-center">
@@ -17,14 +20,13 @@ function TradePartnerVerified() {
         <ShieldCheck size="64" />
       </div>
       <h3 className="font-semibold text-lg text-white">
-        You're trading with Skinport
+        {t("traderOfferCheck.tradePartnerVerified.title")}
       </h3>
       <p className="text-text-foreground">
-        This trade offer is oficially from Skinport and the trade partner is a
-        verified Skinport bot.
+        {t("traderOfferCheck.tradePartnerVerified.description.paragraph1")}
       </p>
-      <p className="text-xs text-text-foreground">
-        Security provided by the Skinport browser extension
+      <p className="text-xs text-[#6b6d6e]">
+        {t("securityProvidedBySkinportBrowserExtension")}
       </p>
     </div>
   );
@@ -36,6 +38,7 @@ function TradePartnerUnverified({
   onContinueTrade: () => void;
 }) {
   const [isContinuingTrade, setIsContinuingTrade] = useState(false);
+  const { t } = useTranslation();
 
   if (isContinuingTrade) {
     return null;
@@ -50,15 +53,13 @@ function TradePartnerUnverified({
         <ShieldAlert size="64" />
       </div>
       <h3 className="font-semibold text-lg text-white">
-        Could someone be trying to scam you?
+        {t("traderOfferCheck.tradePartnerUnverified.title")}
       </h3>
       <p className="text-text-foreground">
-        This trade offer doesn't appear to be from Skinport and we couldn't
-        verify the trade partner.
+        {t("traderOfferCheck.tradePartnerUnverified.description.paragraph1")}
       </p>
       <p className="text-text-foreground">
-        We advise you to only continue if you trust the trade partner. You will
-        not be able to get your items back.
+        {t("traderOfferCheck.tradePartnerUnverified.description.paragraph2")}
       </p>
       <Button
         variant="destructive"
@@ -67,7 +68,7 @@ function TradePartnerUnverified({
           onContinueTrade();
         }}
       >
-        Continue trade
+        {t("traderOfferCheck.tradePartnerUnverified.continueTrade")}
       </Button>
       <Button variant="ghost" asChild>
         <a
@@ -75,11 +76,11 @@ function TradePartnerUnverified({
           rel="noopener noreferrer"
           target="_blank"
         >
-          Read safety guide
+          {t("traderOfferCheck.tradePartnerUnverified.readSafetyGuide")}
         </a>
       </Button>
-      <p className="text-xs text-text-foreground">
-        Security provided by the Skinport browser extension
+      <p className="text-xs text-[#6b6d6e]">
+        {t("securityProvidedBySkinportBrowserExtension")}
       </p>
     </div>
   );
@@ -139,21 +140,20 @@ export default async function steamTradeOfferCheck() {
 
   if (tradeYoursElement && tradeConfirmYourContentsElement) {
     if (tradePartnerIsVerified) {
-      const [tradePartnerVerifiedElement] = createWidgetElement(
-        <TradePartnerVerified />
-      );
+      const [tradePartnerVerifiedElement] =
+        createWidgetElement(TradePartnerVerified);
 
       tradeConfirmYourContentsElement.prepend(tradePartnerVerifiedElement);
     } else {
       tradeConfirmYourContentsElement.style.display = "none";
 
-      const [TradePartnerUnverifiedElement] = createWidgetElement(
+      const [TradePartnerUnverifiedElement] = createWidgetElement(() => (
         <TradePartnerUnverified
           onContinueTrade={() => {
             tradeConfirmYourContentsElement.style.display = "";
           }}
         />
-      );
+      ));
 
       tradeYoursElement.append(TradePartnerUnverifiedElement);
     }

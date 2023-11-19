@@ -1,0 +1,57 @@
+{
+  "content": {
+    "steamAccountSecurityCheck": {
+      "banner": {
+        "title": "Security vulnerabilities detected on your Steam account",
+        "review": "Review"
+      },
+      "dialog": {
+        "title": "Review your Steam account security vulnerabilities",
+        "description": "Sharing your API key for trading websites is unnecessary and very risky. It's intended for developers and misusing it is like exposing your login credentials. Doing so can lead to phishing attacks and risk your Steam account being banned, violating <0>Steam Web API Terms</0>.",
+        "steamWebApiKeyExposed": {
+          "title": "Steam Web API Key exposed",
+          "description": {
+            "paragraph1": "A Steam Web API Key has been detected on your account, which can be used by a malicious actor to control your account and inventory, such as accepting or declining trade offers. It's commonly used as part of phishing attacks to steal inventories.",
+            "paragraph2": "If you haven't registered a Steam Web API Key yourself, pleaserevoke it immediately.",
+            "paragraph3": "We also highly recommend to change your password and deauthorize all devices, to log out any malicious actor.",
+            "paragraph4": "If you haven't registered a Steam Web API Key yourself, please change your password and deauthorize all devices immediately."
+          },
+          "revokeSteamWebApiKey": "Revoke Steam Web API Key",
+          "changePassword": "Change password",
+          "deauthorizeAllDevices": "Deauthorize all devices"
+        }
+      }
+    },
+    "traderOfferCheck": {
+      "tradePartnerUnverified": {
+        "title": "Could someone be trying to scam you?",
+        "description": {
+          "paragraph1": "This trade offer doesn't appear to be from Skinport and we couldn't verify the trade partner.",
+          "paragraph2": "We advise you to only continue if you trust the trade partner. You will not be able to get your items back."
+        },
+        "continueTrade": "Continue trade",
+        "readSafetyGuide": "Read safety guide"
+      },
+      "tradePartnerVerified": {
+        "title": "You're trading with Skinport",
+        "description": {
+          "paragraph1": "This trade offer is oficially from Skinport and the trade partner is a verified Skinport bot."
+        }
+      }
+    },
+    "securityProvidedBySkinportBrowserExtension": "Security provided by Skinport browser extension",
+    "close": "Close"
+  },
+  "options": {
+    "headerTitle": "Browser extension",
+    "pageTitle": "Settings",
+    "checkSteamAccountSecurity": {
+      "label": "Check for Steam account security vulnerabilities",
+      "description": "Placeholder"
+    },
+    "checkTradeOffer": {
+      "label": "Check Trade offer",
+      "description": "Placeholder"
+    }
+  }
+}

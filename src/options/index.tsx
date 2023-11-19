@@ -1,13 +1,42 @@
 import SkinportLogo from "@/components/skinport-logo";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useId } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import optionsStorage, { optionsStorageDefaults } from "@/lib/options-storage";
+import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
+import "./index.css";
+
+i18n.setDefaultNamespace("options");
+
+function OptionField({
+  labelKey,
+  descriptionKey,
+  ...switchProps
+}: {
+  labelKey: string;
+  descriptionKey?: string;
+} & React.ComponentPropsWithoutRef<typeof Switch>) {
+  const { t } = useTranslation();
+  const id = useId();
+
+  return (
+    <div className="bg-card px-8 py-6 flex flex-row items-center gap-8">
+      <div className="space-y-1 flex-1">
+        <Label htmlFor={id}>{t(labelKey)}</Label>
+        {descriptionKey && <p>{t(descriptionKey)}</p>}
+      </div>
+      <div>
+        <Switch {...switchProps} id={id} />
+      </div>
+    </div>
+  );
+}
 
 function App() {
   const [options, setOptions] = useState<typeof optionsStorageDefaults>();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const loadOptions = async () => {
@@ -29,58 +58,36 @@ function App() {
             >
               <SkinportLogo />
             </a>
-            Browser Extension
+            {t("headerTitle")}
           </div>
         </div>
       </header>
       <div className="bg-background px-8 py-12 mt-[78px] max-w-screen-md mx-auto">
-        <h1 className="text-white text-5xl font-semibold mb-8">Settings</h1>
+        <h1 className="text-white text-5xl font-semibold mb-8">
+          {t("pageTitle")}
+        </h1>
         {options && (
           <>
             <h2 className="text-white font-semibold mb-5">Steam Community</h2>
             <div className="space-y-0.5">
-              <div className="bg-card px-8 py-6 flex flex-row items-center gap-8">
-                <div className="space-y-1">
-                  <Label htmlFor="steamAccountSecurityCheck">
-                    Check for Steam account security vulnerabilities
-                  </Label>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui
-                    laborum voluptas corrupti quo suscipit aliquid natus, odit
-                    beatae quas dolore harum iusto rerum.
-                  </p>
-                </div>
-                <div>
-                  <Switch
-                    id="steamAccountSecurityCheck"
-                    defaultChecked={options.steamAccountSecurityCheck}
-                    onCheckedChange={(checked) =>
-                      optionsStorage.set({ steamAccountSecurityCheck: checked })
-                    }
-                  />
-                </div>
-              </div>
-              <div className="bg-card px-8 py-6 flex flex-row items-center gap-8">
-                <div className="space-y-1">
-                  <Label htmlFor="steamTradePartnerCheck">
-                    Check Trade offer
-                  </Label>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui
-                    laborum voluptas corrupti quo suscipit aliquid natus, odit
-                    beatae quas dolore harum iusto rerum.
-                  </p>
-                </div>
-                <div>
-                  <Switch
-                    id="steamTradePartnerCheck"
-                    defaultChecked={options.steamTradeOfferCheck}
-                    onCheckedChange={(checked) =>
-                      optionsStorage.set({ steamTradeOfferCheck: checked })
-                    }
-                  />
-                </div>
-              </div>
+              <OptionField
+                labelKey="checkSteamAccountSecurity.label"
+                descriptionKey="checkSteamAccountSecurity.description"
+                defaultChecked={options.checkSteamAccountSecurity}
+                onCheckedChange={(checked) =>
+                  optionsStorage.set({
+                    checkSteamAccountSecurity: checked,
+                  })
+                }
+              />
+              <OptionField
+                labelKey="checkTradeOffer.label"
+                descriptionKey="checkTradeOffer.description"
+                defaultChecked={options.checkTradeOffer}
+                onCheckedChange={(checked) =>
+                  optionsStorage.set({ checkTradeOffer: checked })
+                }
+              />
             </div>
           </>
         )}

@@ -5,6 +5,7 @@
     "jsx": "react",
     "module": "ESNext",
     "moduleResolution": "Node",
+    "resolveJsonModule": true,
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"]

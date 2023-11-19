@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import styles from "tailwind:./widget.css";
 
 export function createWidgetElement(
-  reactNode: React.ReactNode | ((shadowRoot: HTMLElement) => React.ReactNode)
+  Widget: React.ComponentType<{ shadowRoot: HTMLElement }>
 ) {
   const widgetElement = document.createElement("div");
 
@@ -18,11 +18,7 @@ export function createWidgetElement(
 
   const reactRoot = createRoot(shadowRoot);
 
-  reactRoot.render(
-    typeof reactNode === "function"
-      ? reactNode(shadowRoot as unknown as HTMLElement)
-      : reactNode
-  );
+  reactRoot.render(<Widget shadowRoot={shadowRoot as any as HTMLElement} />);
 
   const removeWidgetElement = () => {
     if (reactRoot) {

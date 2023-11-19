@@ -1,8 +1,8 @@
 import OptionsSync from "webext-options-sync";
 
 export const optionsStorageDefaults = {
-  steamAccountSecurityCheck: true,
-  steamTradeOfferCheck: true,
+  checkSteamAccountSecurity: true,
+  checkTradeOffer: true,
 };
 
 const optionsStorage = new OptionsSync({
