@@ -1,7 +1,7 @@
-import fs from "fs/promises";
-import path from "path";
+import { writeFile } from "node:fs/promises";
+import path from "node:path";
 import AdmZip from "adm-zip";
-import async from "async";
+import { format } from "prettier";
 
 const API_URL = "https://webtranslateit.com/api";
 const PUBLIC_API_KEY =
@@ -20,27 +20,30 @@ console.log("start loading language file");
 
     const data = await response.arrayBuffer();
 
-    console.log(data);
-
-    const zipFile = Buffer.from(data, "binary");
+    const zipFile = Buffer.from(data);
     console.log("received language file");
     const zip = new AdmZip(zipFile);
 
     const entries = zip.getEntries();
 
-    await async.eachSeries(entries, async (zipEntry) => {
-      const lang = zipEntry.name.replace(".json", "");
-      console.log(`found language file for: ${lang}`);
+    await Promise.all(
+      entries.map(async (zipEntry) => {
+        const lang = zipEntry.name.replace(".json", "");
+        console.log(`found language file for: ${lang}`);
 
-      await fs.writeFile(
-        path.resolve("src/locales/" + lang + ".json"),
-        JSON.stringify(JSON.parse(zipEntry.getData().toString("utf8"))),
-      );
+        await writeFile(
+          path.resolve("src/locales/" + lang + ".json"),
+          await format(zipEntry.getData().toString("utf8"), {
+            parser: "json-stringify",
+          }),
+        );
 
-      console.log(`Saved language file to ${lang}.json`);
-    });
+        console.log(`Saved language file to ${lang}.json`);
+      }),
+    );
   } catch (e) {
     console.error(e);
+    process.exit(1);
   }
 
   console.log("Done prebuilding!");
