@@ -4,7 +4,8 @@
     "dev": "tsx ./scripts/build.ts --dev",
     "build": "tsx ./scripts/build.ts",
     "i18n": "tsx ./scripts/i18n.ts",
-    "load:chrome": "web-ext run --target=chromium"
+    "load:chrome": "web-ext run --target=chromium",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",
@@ -40,6 +41,8 @@
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-inline-import": "^1.0.2",
     "esbuild-style-plugin": "^1.6.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.1.0",
     "postcss": "^8.4.31",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.6",
@@ -51,5 +54,8 @@
   },
   "webExt": {
     "sourceDir": "./dist"
+  },
+  "lint-staged": {
+    "*": "prettier --write --ignore-unknown"
   }
 }
