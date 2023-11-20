@@ -22,7 +22,7 @@ export default async function steamAccountSecurityCheck() {
   const webApiKeyRepsonse = await ky("/dev/apikey").text();
 
   const isWebApiKeyExposed = webApiKeyRepsonse.includes(
-    'action="https://steamcommunity.com/dev/revokekey"'
+    'action="https://steamcommunity.com/dev/revokekey"',
   );
 
   if (!isWebApiKeyExposed) {
@@ -65,17 +65,17 @@ export default async function steamAccountSecurityCheck() {
               <div className="flex flex-col gap-2">
                 <h3 className="font-semibold text-white text-base">
                   {t(
-                    "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.title"
+                    "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.title",
                   )}
                 </h3>
                 <p>
                   {t(
-                    "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.description.paragraph1"
+                    "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.description.paragraph1",
                   )}
                 </p>
                 <p>
                   {t(
-                    "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.description.paragraph2"
+                    "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.description.paragraph2",
                   )}
                 </p>
                 <div>
@@ -85,7 +85,7 @@ export default async function steamAccountSecurityCheck() {
                       target="_blank"
                     >
                       {t(
-                        "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.revokeSteamWebApiKey"
+                        "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.revokeSteamWebApiKey",
                       )}
                       <ExternalLink className="text-white" size={16} />
                     </Link>
@@ -93,12 +93,12 @@ export default async function steamAccountSecurityCheck() {
                 </div>
                 <p className="mt-2">
                   {t(
-                    "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.description.paragraph3"
+                    "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.description.paragraph3",
                   )}
                 </p>
                 <p>
                   {t(
-                    "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.description.paragraph4"
+                    "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.description.paragraph4",
                   )}
                 </p>
                 <div>
@@ -108,7 +108,7 @@ export default async function steamAccountSecurityCheck() {
                       target="_blank"
                     >
                       {t(
-                        "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.changePassword"
+                        "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.changePassword",
                       )}
                       <ExternalLink className="text-white" size={16} />
                     </Link>
@@ -121,7 +121,7 @@ export default async function steamAccountSecurityCheck() {
                       target="_blank"
                     >
                       {t(
-                        "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.deauthorizeAllDevices"
+                        "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.deauthorizeAllDevices",
                       )}
                       <ExternalLink className="text-white" size={16} />
                     </Link>

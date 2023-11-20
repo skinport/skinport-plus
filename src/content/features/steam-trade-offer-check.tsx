@@ -111,7 +111,7 @@ export default async function steamTradeOfferCheck() {
 
   for (const scriptElement of $$('script[type="text/javascript"]')) {
     const tradePartnerSteamIdMatch = scriptElement.textContent?.match(
-      /var g_ulTradePartnerSteamID = '([0-9]+)'/
+      /var g_ulTradePartnerSteamID = '([0-9]+)'/,
     );
 
     if (tradePartnerSteamIdMatch) {
@@ -123,7 +123,7 @@ export default async function steamTradeOfferCheck() {
   if (tradePartnerSteamId) {
     try {
       const { verified } = await skinportApi(
-        `v1/extension/bot/${tradePartnerSteamId}`
+        `v1/extension/bot/${tradePartnerSteamId}`,
       ).json<{ verified: boolean }>();
 
       if (verified) {

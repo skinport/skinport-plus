@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import styles from "tailwind:./widget.css";
 
 export function createWidgetElement(
-  Widget: React.ComponentType<{ shadowRoot: HTMLElement }>
+  Widget: React.ComponentType<{ shadowRoot: HTMLElement }>,
 ) {
   const widgetElement = document.createElement("div");
 
