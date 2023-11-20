@@ -12,14 +12,22 @@ import style from "esbuild-style-plugin";
 const IS_DEV = process.argv.includes("--dev");
 
 async function copyManifest() {
-  const manifestSrcPath = "./src/manifest.json";
+  const manifestSrcPath = "./src";
+  const manifestSrcFiles = ["manifest.json", "icon.png"];
 
-  const copy = () => copyFile(manifestSrcPath, "./dist/manifest.json");
+  const copy = () =>
+    Promise.all(
+      manifestSrcFiles.map((srcFile) =>
+        copyFile(`${manifestSrcPath}/${srcFile}`, `./dist/${srcFile}`),
+      ),
+    );
 
   if (IS_DEV) {
     await copy();
 
-    chokidar.watch(manifestSrcPath).on("change", copy);
+    chokidar
+      .watch(`${manifestSrcPath}/{${manifestSrcFiles.join(",")}}`)
+      .on("change", copy);
 
     return;
   }
@@ -104,9 +112,20 @@ async function buildOptions() {
     ],
   };
 
-  const htmlSrcPath = "./src/options/index.html";
+  const htmlSrcPath = "./src/options";
+  const htmlSrcFiles = ["index.html", "favicon.ico"];
 
-  const copyHtml = () => copyFile(htmlSrcPath, "./dist/options.html");
+  const copyHtml = () =>
+    Promise.all(
+      htmlSrcFiles.map((htmlSrcFile) =>
+        copyFile(
+          `${htmlSrcPath}/${htmlSrcFile}`,
+          `./dist/${
+            htmlSrcFile === htmlSrcFiles[0] ? "options.html" : htmlSrcFile
+          }`,
+        ),
+      ),
+    );
 
   if (IS_DEV) {
     const [esbuildContext] = await Promise.all([
@@ -115,7 +134,9 @@ async function buildOptions() {
     ]);
 
     esbuildContext.watch();
-    chokidar.watch(htmlSrcPath).on("change", copyHtml);
+    chokidar
+      .watch(`${htmlSrcPath}/{${htmlSrcFiles.join(",")}}`)
+      .on("change", copyHtml);
 
     return;
   }

@@ -3,6 +3,9 @@
   "name": "Skinport",
   "version": "1.0.0",
   "description": "Skinport extension",
+  "icons": {
+    "48": "icon.png"
+  },
   "host_permissions": [
     "https://api.skinport.com/*",
     "https://steamcommunity.com/*"
