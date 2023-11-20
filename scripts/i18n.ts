@@ -1,7 +1,6 @@
 import { writeFile } from "node:fs/promises";
 import path from "node:path";
 import AdmZip from "adm-zip";
-import { format } from "prettier";
 
 const API_URL = "https://webtranslateit.com/api";
 const PUBLIC_API_KEY =
@@ -33,9 +32,11 @@ console.log("start loading language file");
 
         await writeFile(
           path.resolve("src/locales/" + lang + ".json"),
-          await format(zipEntry.getData().toString("utf8"), {
-            parser: "json-stringify",
-          }),
+          JSON.stringify(
+            JSON.parse(zipEntry.getData().toString("utf8")),
+            null,
+            2,
+          ),
         );
 
         console.log(`Saved language file to ${lang}.json`);

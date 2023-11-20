@@ -2,56 +2,56 @@
   "content": {
     "steamAccountSecurityCheck": {
       "banner": {
-        "title": "Security vulnerabilities detected on your Steam account",
-        "review": "Review"
+        "title": "Sicherheitslücken auf deinem Steam-Konto entdeckt",
+        "review": "Bewertung"
       },
       "dialog": {
-        "title": "Review your Steam account security vulnerabilities",
-        "description": "Sharing your API key for trading websites is unnecessary and very risky. It's intended for developers and misusing it is like exposing your login credentials. Doing so can lead to phishing attacks and risk your Steam account being banned, violating <0>Steam Web API Terms</0>.",
+        "title": "Überprüfe die Sicherheitslücken deines Steam-Kontos",
+        "description": "Deinen API-Schlüssel für Handelswebsites zu teilen, ist unnötig und sehr riskant. Er ist für Entwickler gedacht und ein Missbrauch ist so, als würdest du deine Anmeldeinformationen preisgeben. Dies kann zu Phishing-Angriffen führen und riskiert, dass dein Steam-Konto gesperrt wird und damit gegen die <0>Steam Web API Bedingungen</0> verstößt.",
         "steamWebApiKeyExposed": {
           "title": "Steam Web API Key exposed",
           "description": {
-            "paragraph1": "A Steam Web API Key has been detected on your account, which can be used by a malicious actor to control your account and inventory, such as accepting or declining trade offers. It's commonly used as part of phishing attacks to steal inventories.",
-            "paragraph2": "If you haven't registered a Steam Web API Key yourself, pleaserevoke it immediately.",
-            "paragraph3": "We also highly recommend to change your password and deauthorize all devices, to log out any malicious actor.",
-            "paragraph4": "If you haven't registered a Steam Web API Key yourself, please change your password and deauthorize all devices immediately."
+            "paragraph1": "Ein Steam Web API Schlüssel wurde auf deinem Account entdeckt, der von einem bösartigen Akteur verwendet werden kann, um deinen Account und dein Inventar zu kontrollieren, wie zum Beispiel das Annehmen oder Ablehnen von Handelsangeboten. Er wird häufig als Teil von Phishing-Angriffen verwendet, um Inventare zu stehlen.",
+            "paragraph2": "Wenn du keinen Steam Web API Key selbst registriert hast, widerrufe ihn bitte sofort.",
+            "paragraph3": "Wir empfehlen auch dringend, dein Passwort zu ändern und alle Geräte zu deautorisieren, um jeden böswilligen Nutzer abzumelden.",
+            "paragraph4": "Wenn du keinen Steam Web API Schlüssel selbst registriert hast, ändere bitte sofort dein Passwort und entziehe allen Geräten die Berechtigung."
           },
-          "revokeSteamWebApiKey": "Revoke Steam Web API Key",
-          "changePassword": "Change password",
-          "deauthorizeAllDevices": "Deauthorize all devices"
+          "revokeSteamWebApiKey": "Steam Web API-Schlüssel widerrufen",
+          "changePassword": "Passwort ändern",
+          "deauthorizeAllDevices": "Entferne die Berechtigung von allen Geräten"
         }
       }
     },
     "traderOfferCheck": {
       "tradePartnerUnverified": {
-        "title": "Could someone be trying to scam you?",
+        "title": "Könnte jemand versuchen, dich zu betrügen?",
         "description": {
-          "paragraph1": "This trade offer doesn't appear to be from Skinport and we couldn't verify the trade partner.",
-          "paragraph2": "We advise you to only continue if you trust the trade partner. You will not be able to get your items back."
+          "paragraph1": "Dieses Handelsangebot scheint nicht von Skinport zu stammen und wir konnten den Handelspartner nicht überprüfen.",
+          "paragraph2": "Wir raten dir, nur fortzufahren, wenn du dem Handelspartner vertraust. Du wirst deine Gegenstände nicht zurückbekommen können."
         },
-        "continueTrade": "Continue trade",
-        "readSafetyGuide": "Read safety guide"
+        "continueTrade": "Handel fortsetzen",
+        "readSafetyGuide": "Sicherheitsleitfaden lesen"
       },
       "tradePartnerVerified": {
-        "title": "You're trading with Skinport",
+        "title": "Du handelst mit Skinport",
         "description": {
-          "paragraph1": "This trade offer is oficially from Skinport and the trade partner is a verified Skinport bot."
+          "paragraph1": "Dieses Handelsangebot kommt offiziell von Skinport und der Handelspartner ist ein verifizierter Skinport-Bot."
         }
       }
     },
-    "securityProvidedBySkinportBrowserExtension": "Security provided by Skinport browser extension",
-    "close": "Close"
+    "securityProvidedBySkinportBrowserExtension": "Sicherheit durch die Skinport Browser-Erweiterung",
+    "close": "Schließen"
   },
   "options": {
-    "headerTitle": "Browser extension",
-    "pageTitle": "Settings",
+    "headerTitle": "Browsererweiterung",
+    "pageTitle": "Einstellungen",
     "checkSteamAccountSecurity": {
-      "label": "Check for Steam account security vulnerabilities",
-      "description": "Placeholder"
+      "label": "Suche nach Sicherheitslücken im Steam-Konto",
+      "description": "Platzhalter"
     },
     "checkTradeOffer": {
-      "label": "Check Trade offer",
-      "description": "Placeholder"
+      "label": "Handelsangebot prüfen",
+      "description": "Platzhalter"
     }
   }
 }
