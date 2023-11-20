@@ -87,10 +87,6 @@ function TradePartnerUnverified({
 }
 
 export default async function steamTradeOfferCheck() {
-  if (!window.location.pathname.startsWith("/tradeoffer")) {
-    return;
-  }
-
   const tradeYoursReadyElement = await elementReady("#trade_yours.ready", {
     stopOnDomReady: false,
     timeout: 30000,
@@ -159,3 +155,7 @@ export default async function steamTradeOfferCheck() {
     }
   }
 }
+
+steamTradeOfferCheck.matchPathname = "/tradeoffer";
+
+steamTradeOfferCheck.optionsKey = "checkTradeOffer" as const;

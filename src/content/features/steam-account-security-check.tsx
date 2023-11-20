@@ -155,3 +155,5 @@ export default async function steamAccountSecurityCheck() {
     globalHeaderElement.insertAdjacentElement("afterend", securityCheckElement);
   }
 }
+
+steamAccountSecurityCheck.optionKey = "checkSteamAccountSecurity" as const;
