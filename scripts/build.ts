@@ -8,8 +8,22 @@ import tailwindBaseConfig from "../tailwind.config";
 import { deleteAsync } from "del";
 import chokidar from "chokidar";
 import style from "esbuild-style-plugin";
+import cssnano from "cssnano";
 
 const IS_DEV = process.argv.includes("--dev");
+
+const esbuildBaseOptions = {
+  bundle: true,
+  minify: !IS_DEV,
+};
+
+function getPostcssPlugins(tailwindConfig: tailwind.Config) {
+  return [
+    tailwind(tailwindConfig),
+    autoprefixer,
+    ...(!IS_DEV ? [cssnano] : []),
+  ];
+}
 
 async function copyManifest() {
   const manifestSrcPath = "./src";
@@ -45,14 +59,14 @@ async function buildContent() {
   };
 
   const esbuildOptions = {
+    ...esbuildBaseOptions,
     entryPoints: ["./src/content/index.tsx"],
-    bundle: true,
     outfile: "./dist/content.js",
     plugins: [
       inline({
         filter: /^tailwind:/,
         transform: (content) =>
-          postcss(tailwind(tailwindConfig), autoprefixer)
+          postcss(getPostcssPlugins(tailwindConfig))
             .process(content, { from: undefined })
             .then((result) => result.css)
             .catch((error) => {
@@ -66,7 +80,7 @@ async function buildContent() {
   const cssSrcPath = "./src/content/index.css";
 
   const buildCss = async () => {
-    return postcss(tailwind(tailwindConfig), autoprefixer)
+    return postcss(getPostcssPlugins(tailwindConfig))
       .process(await readFile(cssSrcPath), {
         from: undefined,
       })
@@ -91,8 +105,8 @@ async function buildContent() {
 
 async function buildOptions() {
   const esbuildOptions = {
+    ...esbuildBaseOptions,
     entryPoints: ["./src/options/index.tsx"],
-    bundle: true,
     outfile: "./dist/options.js",
     plugins: [
       style({
