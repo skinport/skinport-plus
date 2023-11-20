@@ -4,7 +4,7 @@ import { createWidgetElement } from "../widget";
 import { Link } from "@/components/ui/link";
 import { $ } from "select-dom";
 import { steamAppIdNames, supportedSteamAppIds } from "@/lib/steam";
-import { getSkinportItemUrl } from "@/lib/skinport-api";
+import { getSkinportItemUrl } from "@/lib/skinport";
 
 export default async function steamMarketItemSkinportLink() {
   const urlPathName = window.location.pathname.split("/");

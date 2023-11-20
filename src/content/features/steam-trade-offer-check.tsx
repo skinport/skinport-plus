@@ -1,7 +1,7 @@
 import { $, $$ } from "select-dom";
 import React, { useState } from "react";
 import { ShieldCheck, ShieldAlert } from "lucide-react";
-import skinportApi from "@/lib/skinport-api";
+import skinportApi from "@/lib/skinport";
 import SkinportLogo from "@/components/skinport-logo";
 import { Button } from "@/components/ui/button";
 import { createWidgetElement } from "../widget";
