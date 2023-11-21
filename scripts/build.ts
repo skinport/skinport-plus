@@ -17,11 +17,14 @@ const esbuildBaseOptions = {
   minify: !IS_DEV,
 };
 
-function getPostcssPlugins(tailwindConfig: tailwind.Config) {
+function getPostcssPlugins(
+  tailwindConfig: tailwind.Config,
+  minifyCss: boolean = true,
+) {
   return [
     tailwind(tailwindConfig),
     autoprefixer,
-    ...(!IS_DEV ? [cssnano] : []),
+    ...(!IS_DEV && minifyCss ? [cssnano()] : []),
   ];
 }
 
@@ -80,7 +83,7 @@ async function buildContent() {
   const cssSrcPath = "./src/content/index.css";
 
   const buildCss = async () => {
-    return postcss(getPostcssPlugins(tailwindConfig))
+    return postcss(getPostcssPlugins(tailwindConfig, false))
       .process(await readFile(cssSrcPath), {
         from: undefined,
       })
