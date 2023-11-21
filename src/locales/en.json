@@ -6,19 +6,21 @@
         "review": "Review"
       },
       "dialog": {
-        "title": "Review your Steam account security vulnerabilities",
-        "description": "Sharing your API key for trading websites is unnecessary and very risky. It's intended for developers and misusing it is like exposing your login credentials. Doing so can lead to phishing attacks and risk your Steam account being banned, violating <0>Steam Web API Terms</0>.",
         "steamWebApiKeyExposed": {
           "title": "Steam Web API Key exposed",
           "description": {
             "paragraph1": "A Steam Web API Key has been detected on your account, which can be used by a malicious actor to control your account and inventory, such as accepting or declining trade offers. It's commonly used as part of phishing attacks to steal inventories.",
-            "paragraph2": "If you haven't registered a Steam Web API Key yourself, pleaserevoke it immediately.",
-            "paragraph3": "We also highly recommend to change your password and deauthorize all devices, to log out any malicious actor.",
-            "paragraph4": "If you haven't registered a Steam Web API Key yourself, please change your password and deauthorize all devices immediately."
+            "paragraph2": "If you haven't registered a Steam Web API Key yourself, please first deauthorize all devices immediately.",
+            "paragraph3": "Then revoke the Steam Web API Key.",
+            "paragraph4": "We also recommend chaning your password as well, because the attacker will be aware of your Steam password. If you used this password else, change it on other sites as well."
           },
           "revokeSteamWebApiKey": "Revoke Steam Web API Key",
           "changePassword": "Change password",
           "deauthorizeAllDevices": "Deauthorize all devices"
+        },
+        "steamWebApiKeyExplained": {
+          "title": "What is a Steam Web Api Key?",
+          "description": "Sharing your API key for trading websites is unnecessary and very risky. It's intended for developers and misusing it is like exposing your login credentials. Doing so can lead to phishing attacks and risk your Steam account being banned, violating <0>Steam Web API Terms</0>."
         }
       }
     },

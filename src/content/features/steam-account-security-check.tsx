@@ -48,34 +48,38 @@ export default async function steamAccountSecurityCheck() {
               <SkinportLogo width={96} />
               <DialogHeader>
                 <DialogTitle>
-                  {t("steamAccountSecurityCheck.dialog.title")}
-                </DialogTitle>
-                <DialogDescription>
-                  <Trans
-                    i18nKey="steamAccountSecurityCheck.dialog.description"
-                    components={[
-                      <Link
-                        href="https://steamcommunity.com/dev/apiterms"
-                        target="_blank"
-                      />,
-                    ]}
-                  />
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex flex-col gap-2">
-                <h3 className="font-semibold text-white text-base">
                   {t(
                     "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.title",
                   )}
-                </h3>
-                <p>
+                </DialogTitle>
+                <DialogDescription>
                   {t(
                     "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.description.paragraph1",
                   )}
-                </p>
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex flex-col gap-2">
                 <p>
                   {t(
                     "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.description.paragraph2",
+                  )}
+                </p>
+                <div>
+                  <Button asChild>
+                    <Link
+                      href="https://store.steampowered.com/twofactor/manage"
+                      target="_blank"
+                    >
+                      {t(
+                        "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.deauthorizeAllDevices",
+                      )}
+                      <ExternalLink className="text-white" size={16} />
+                    </Link>
+                  </Button>
+                </div>
+                <p className="mt-2">
+                  {t(
+                    "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.description.paragraph3",
                   )}
                 </p>
                 <div>
@@ -91,11 +95,6 @@ export default async function steamAccountSecurityCheck() {
                     </Link>
                   </Button>
                 </div>
-                <p className="mt-2">
-                  {t(
-                    "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.description.paragraph3",
-                  )}
-                </p>
                 <p>
                   {t(
                     "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.description.paragraph4",
@@ -114,19 +113,24 @@ export default async function steamAccountSecurityCheck() {
                     </Link>
                   </Button>
                 </div>
-                <div>
-                  <Button asChild>
-                    <Link
-                      href="https://store.steampowered.com/twofactor/manage"
-                      target="_blank"
-                    >
-                      {t(
-                        "steamAccountSecurityCheck.dialog.steamWebApiKeyExposed.deauthorizeAllDevices",
-                      )}
-                      <ExternalLink className="text-white" size={16} />
-                    </Link>
-                  </Button>
-                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <h3 className="font-semibold text-white text-base">
+                  {t(
+                    "steamAccountSecurityCheck.dialog.steamWebApiKeyExplained.title",
+                  )}
+                </h3>
+                <p>
+                  <Trans
+                    i18nKey="steamAccountSecurityCheck.dialog.steamWebApiKeyExplained.description"
+                    components={[
+                      <Link
+                        href="https://steamcommunity.com/dev/apiterms"
+                        target="_blank"
+                      />,
+                    ]}
+                  />
+                </p>
               </div>
               <DialogFooter>
                 <p className="text-xs text-[#6b6d6e] flex-1">
