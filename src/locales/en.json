@@ -42,7 +42,8 @@
       }
     },
     "securityProvidedBySkinportBrowserExtension": "Security provided by Skinport browser extension",
-    "close": "Close"
+    "close": "Close",
+    "viewOnSkinport": "View on Skinport"
   },
   "options": {
     "headerTitle": "Browser extension",
