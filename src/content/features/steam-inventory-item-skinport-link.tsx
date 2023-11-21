@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/components/ui/link";
 import React from "react";
 import elementReady from "element-ready";
+import { useTranslation } from "react-i18next";
 
 export default async function steamInventoryItemSkinportLink() {
   const inventoryContentElement = await elementReady("#tabcontent_inventory", {
@@ -67,16 +68,17 @@ export default async function steamInventoryItemSkinportLink() {
     removeViewOnSkinportElementFns.forEach((removeElement) => removeElement());
 
     const [viewOnSkinportElement, removeViewOnSkinportElement] =
-      createWidgetElement(
-        () => (
+      createWidgetElement(() => {
+        const { t } = useTranslation();
+
+        return (
           <Button className="mb-4" asChild>
             <Link href={skinportItemUrl} target="_blank">
-              View on Skinport
+              {t("viewOnSkinport")}
             </Link>
           </Button>
-        ),
-        widgetName,
-      );
+        );
+      }, widgetName);
 
     removeViewOnSkinportElementFns.push(removeViewOnSkinportElement);
 
