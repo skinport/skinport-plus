@@ -17,8 +17,9 @@ import { ExternalLink } from "lucide-react";
 import { $ } from "select-dom";
 import { Trans, useTranslation } from "react-i18next";
 import { Link } from "@/components/ui/link";
+import featureManager from "../feature-manager";
 
-export default async function steamAccountSecurityCheck() {
+async function steamAccountSecurityCheck() {
   const webApiKeyRepsonse = await ky("/dev/apikey").text();
 
   const isWebApiKeyExposed = webApiKeyRepsonse.includes(
@@ -160,4 +161,7 @@ export default async function steamAccountSecurityCheck() {
   }
 }
 
-steamAccountSecurityCheck.optionKey = "checkSteamAccountSecurity" as const;
+featureManager.add(steamAccountSecurityCheck, {
+  host: "steamcommunity.com",
+  optionKey: "checkSteamAccountSecurity",
+});

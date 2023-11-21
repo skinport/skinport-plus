@@ -7,8 +7,9 @@ import { Link } from "@/components/ui/link";
 import React from "react";
 import elementReady from "element-ready";
 import { useTranslation } from "react-i18next";
+import featureManager from "../feature-manager";
 
-export default async function steamInventoryItemSkinportLink() {
+async function steamInventoryItemSkinportLink() {
   const inventoryContentElement = await elementReady("#tabcontent_inventory", {
     stopOnDomReady: false,
     timeout: 30000,
@@ -100,5 +101,7 @@ export default async function steamInventoryItemSkinportLink() {
   });
 }
 
-steamInventoryItemSkinportLink.matchPathname =
-  /\/(id|profiles)\/\w+\/inventory/;
+featureManager.add(steamInventoryItemSkinportLink, {
+  host: "steamcommunity.com",
+  matchPathname: /\/(id|profiles)\/\w+\/inventory/,
+});

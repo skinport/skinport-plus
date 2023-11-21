@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { createWidgetElement } from "../widget";
 import elementReady from "element-ready";
 import { useTranslation } from "react-i18next";
+import featureManager from "../feature-manager";
 
 function TradePartnerVerified() {
   const { t } = useTranslation();
@@ -86,7 +87,7 @@ function TradePartnerUnverified({
   );
 }
 
-export default async function steamTradeOfferCheck() {
+async function steamTradeOfferCheck() {
   const tradeYoursReadyElement = await elementReady("#trade_yours.ready", {
     stopOnDomReady: false,
     timeout: 30000,
@@ -156,6 +157,8 @@ export default async function steamTradeOfferCheck() {
   }
 }
 
-steamTradeOfferCheck.matchPathname = "/tradeoffer";
-
-steamTradeOfferCheck.optionsKey = "checkTradeOffer" as const;
+featureManager.add(steamTradeOfferCheck, {
+  host: "steamcommunity.com",
+  matchPathname: "/tradeoffer",
+  optionKey: "checkTradeOffer",
+});
