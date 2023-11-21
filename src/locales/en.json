@@ -7,28 +7,28 @@
       },
       "dialog": {
         "steamWebApiKeyExposed": {
-          "title": "Steam Web API Key exposed",
+          "title": "Steam Web API Key Exposed",
           "description": {
-            "paragraph1": "A Steam Web API Key has been detected on your account, which can be used by a malicious actor to control your account and inventory, such as accepting or declining trade offers. It's commonly used as part of phishing attacks to steal inventories.",
-            "paragraph2": "If you haven't registered a Steam Web API Key yourself, please first deauthorize all devices immediately.",
-            "paragraph3": "Then revoke the Steam Web API Key.",
-            "paragraph4": "We also recommend chaning your password as well, because the attacker will be aware of your Steam password. If you used this password else, change it on other sites as well."
+            "paragraph1": "A Steam Web API Key has been detected on your account. This key could be exploited by malicious actors to control your account and inventory, including accepting or declining trade offers. Such keys are frequently used in phishing attacks to steal inventory.",
+            "paragraph2": "If you have not registered a Steam Web API Key yourself, please deauthorize all devices immediately as a precaution.",
+            "paragraph3": "Next, ensure to revoke the Steam Web API Key.",
+            "paragraph4": "Additionally, we recommend changing your password. If attackers have accessed your Steam Web API Key, they might also know your Steam password. If this password is used elsewhere, it is crucial to change it on other sites too."
           },
           "revokeSteamWebApiKey": "Revoke Steam Web API Key",
           "changePassword": "Change password",
           "deauthorizeAllDevices": "Deauthorize all devices"
         },
         "steamWebApiKeyExplained": {
-          "title": "What is a Steam Web Api Key?",
-          "description": "Sharing your API key for trading websites is unnecessary and very risky. It's intended for developers and misusing it is like exposing your login credentials. Doing so can lead to phishing attacks and risk your Steam account being banned, violating <0>Steam Web API Terms</0>."
+          "title": "What is a Steam Web API Key?",
+          "description": "Using your API key on trading websites is unnecessary and poses significant risks. Intended primarily for developers, misuse of your API key is akin to exposing your login credentials. Such actions can lead to phishing attacks and might result in your Steam account being compromised or banned, in violation of the <0>Steam Web API Terms of Use</0>."
         }
       }
     },
     "traderOfferCheck": {
       "tradePartnerUnverified": {
-        "title": "Could someone be trying to scam you?",
+        "title": "Could someone be attempting to scam you?",
         "description": {
-          "paragraph1": "This trade offer doesn't appear to be from Skinport and we couldn't verify the trade partner.",
+          "paragraph1": "This trade offer does not appear to be from Skinport, and we couldn't verify the trade partner.",
           "paragraph2": "We advise you to only continue if you trust the trade partner. You will not be able to get your items back."
         },
         "continueTrade": "Continue trade",
@@ -37,7 +37,7 @@
       "tradePartnerVerified": {
         "title": "You're trading with Skinport",
         "description": {
-          "paragraph1": "This trade offer is oficially from Skinport and the trade partner is a verified Skinport bot."
+          "paragraph1": "This trade offer is officially from Skinport, and the trade partner is a verified Skinport bot."
         }
       }
     },
@@ -49,11 +49,11 @@
     "pageTitle": "Settings",
     "checkSteamAccountSecurity": {
       "label": "Check for Steam account security vulnerabilities",
-      "description": "Placeholder"
+      "description": "This feature detects exposed Steam Web API Keys on your account, a common target in phishing attacks to control your account and steal inventories."
     },
     "checkTradeOffer": {
-      "label": "Check Trade offer",
-      "description": "Placeholder"
+      "label": "Check Trade offers",
+      "description": "The feature checks if a trading partner on Steam is an official Skinport bot to confirm its authenticity."
     }
   }
 }

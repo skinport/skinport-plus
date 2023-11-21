@@ -2,23 +2,25 @@
   "content": {
     "steamAccountSecurityCheck": {
       "banner": {
-        "title": "Sicherheitslücken auf deinem Steam-Konto entdeckt",
-        "review": "Bewertung"
+        "title": "Sicherheitslücken auf deinem Steam-Konto festgestellt",
+        "review": "Überprüfen"
       },
       "dialog": {
-        "title": "Überprüfe die Sicherheitslücken deines Steam-Kontos",
-        "description": "Deinen API-Schlüssel für Handelswebsites zu teilen, ist unnötig und sehr riskant. Er ist für Entwickler gedacht und ein Missbrauch ist so, als würdest du deine Anmeldeinformationen preisgeben. Dies kann zu Phishing-Angriffen führen und riskiert, dass dein Steam-Konto gesperrt wird und damit gegen die <0>Steam Web API Bedingungen</0> verstößt.",
         "steamWebApiKeyExposed": {
-          "title": "Steam Web API Key exposed",
+          "title": "Steam Web API Schlüssel offengelegt",
           "description": {
-            "paragraph1": "Ein Steam Web API Schlüssel wurde auf deinem Account entdeckt, der von einem bösartigen Akteur verwendet werden kann, um deinen Account und dein Inventar zu kontrollieren, wie zum Beispiel das Annehmen oder Ablehnen von Handelsangeboten. Er wird häufig als Teil von Phishing-Angriffen verwendet, um Inventare zu stehlen.",
-            "paragraph2": "Wenn du keinen Steam Web API Key selbst registriert hast, widerrufe ihn bitte sofort.",
-            "paragraph3": "Wir empfehlen auch dringend, dein Passwort zu ändern und alle Geräte zu deautorisieren, um jeden böswilligen Nutzer abzumelden.",
-            "paragraph4": "Wenn du keinen Steam Web API Schlüssel selbst registriert hast, ändere bitte sofort dein Passwort und entziehe allen Geräten die Berechtigung."
+            "paragraph1": "Ein Steam Web API-Schlüssel wurde auf deinem Konto erkannt. Dieser Schlüssel könnte von böswilligen Akteuren ausgenutzt werden, um dein Konto und dein Inventar zu kontrollieren, einschließlich dem Annehmen oder Ablehnen von Handelsangeboten. Solche Schlüssel werden häufig bei Phishing-Angriffen verwendet, um Inventar zu stehlen.",
+            "paragraph2": "Wenn du selbst keinen Steam Web API Key registriert hast, solltest du bitte sofort aus Vorsicht alle Geräte deauthorisieren.",
+            "paragraph3": "Stelle als Nächstes sicher, dass du den Steam Web API-Schlüssel widerrufst.",
+            "paragraph4": "Zusätzlich empfehlen wir, dein Passwort zu ändern. Wenn Angreifer Zugriff auf deinen Steam Web API Key hatten, könnten sie auch dein Steam Passwort kennen. Wenn dieses Passwort auch woanders genutzt wird, ist es entscheidend, es auch auf anderen Seiten zu ändern."
           },
-          "revokeSteamWebApiKey": "Steam Web API-Schlüssel widerrufen",
+          "revokeSteamWebApiKey": "Steam Web API-Key widerrufen",
           "changePassword": "Passwort ändern",
           "deauthorizeAllDevices": "Entferne die Berechtigung von allen Geräten"
+        },
+        "steamWebApiKeyExplained": {
+          "title": "Was ist ein Steam Web API Schlüssel?",
+          "description": "Die Nutzung deines API-Schlüssels auf Handelswebseiten ist unnötig und birgt erhebliche Risiken. Hauptsächlich für Entwickler gedacht, ist der Missbrauch deines API-Schlüssels vergleichbar mit dem Offenlegen deiner Anmeldeinformationen. Solche Aktionen können zu Phishing-Angriffen führen und könnten dazu führen, dass dein Steam-Konto gefährdet oder gesperrt wird, was gegen die <0>Steam Web API Nutzungsbedingungen</0> verstößt."
         }
       }
     },
@@ -26,8 +28,8 @@
       "tradePartnerUnverified": {
         "title": "Könnte jemand versuchen, dich zu betrügen?",
         "description": {
-          "paragraph1": "Dieses Handelsangebot scheint nicht von Skinport zu stammen und wir konnten den Handelspartner nicht überprüfen.",
-          "paragraph2": "Wir raten dir, nur fortzufahren, wenn du dem Handelspartner vertraust. Du wirst deine Gegenstände nicht zurückbekommen können."
+          "paragraph1": "Dieses Handelsangebot scheint nicht von Skinport zu stammen, und wir konnten den Handelspartner nicht verifizieren.",
+          "paragraph2": "Wir raten dir, nur weiterzumachen, wenn du deinem Handelspartner vertraust. Du wirst deine Gegenstände nicht zurückbekommen können."
         },
         "continueTrade": "Handel fortsetzen",
         "readSafetyGuide": "Sicherheitsleitfaden lesen"
@@ -39,19 +41,19 @@
         }
       }
     },
-    "securityProvidedBySkinportBrowserExtension": "Sicherheit durch die Skinport Browser-Erweiterung",
+    "securityProvidedBySkinportBrowserExtension": "Sicherheit bereitgestellt durch die Skinport Browser-Erweiterung",
     "close": "Schließen"
   },
   "options": {
     "headerTitle": "Browsererweiterung",
     "pageTitle": "Einstellungen",
     "checkSteamAccountSecurity": {
-      "label": "Suche nach Sicherheitslücken im Steam-Konto",
-      "description": "Platzhalter"
+      "label": "Prüfe auf Sicherheitslücken des Steam-Kontos",
+      "description": "Diese Funktion erkennt offengelegte Steam Web API-Keys auf deinem Konto, ein häufiges Ziel von Phishing-Angriffen, um dein Konto zu kontrollieren und Inventare zu stehlen."
     },
     "checkTradeOffer": {
-      "label": "Handelsangebot prüfen",
-      "description": "Platzhalter"
+      "label": "Handelsangebote prüfen",
+      "description": "Diese Funktion prüft, ob ein Handelspartner auf Steam ein offizieller Skinport Bot ist, um seine Echtheit zu bestätigen."
     }
   }
 }
