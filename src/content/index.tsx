@@ -4,6 +4,7 @@ import steamAccountSecurityCheck from "./features/steam-account-security-check";
 import optionsStorage from "@/lib/options-storage";
 import i18n from "@/lib/i18n";
 import steamMarketItemSkinportLink from "./features/steam-market-item-skinport-link";
+import steamInventoryItemSkinportLink from "./features/steam-inventory-item-skinport-link";
 
 i18n.setDefaultNamespace("content");
 
@@ -40,5 +41,6 @@ i18n.setDefaultNamespace("content");
     steamAccountSecurityCheck,
     tradeOfferCheck,
     steamMarketItemSkinportLink,
+    steamInventoryItemSkinportLink,
   ].forEach(runFeature);
 })();

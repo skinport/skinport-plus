@@ -1,13 +1,19 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import styles from "tailwind:./widget.css";
+import { elementExists } from "select-dom";
 
 export function createWidgetElement(
   Widget: React.ComponentType<{ shadowRoot: HTMLElement }>,
+  widgetName?: string,
 ) {
   const widgetElement = document.createElement("div");
 
   widgetElement.classList.add("skinport-widget");
+
+  if (widgetName) {
+    widgetElement.setAttribute("data-widget-name", widgetName);
+  }
 
   const shadowRoot = widgetElement.attachShadow({ mode: "open" });
 
@@ -28,4 +34,11 @@ export function createWidgetElement(
   };
 
   return [widgetElement, removeWidgetElement] as const;
+}
+
+export function widgetElementExists(
+  widgetName: string,
+  baseElement?: Parameters<typeof elementExists>[1],
+) {
+  return elementExists(`[data-widget-name='${widgetName}']`, baseElement);
 }

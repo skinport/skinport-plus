@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { createWidgetElement } from "../widget";
 import { Link } from "@/components/ui/link";
 import { $ } from "select-dom";
-import { steamAppIdNames, supportedSteamAppIds } from "@/lib/steam";
+import { supportedSteamAppIds } from "@/lib/steam";
 import { getSkinportItemUrl } from "@/lib/skinport";
 
 export default async function steamMarketItemSkinportLink() {
@@ -15,15 +15,9 @@ export default async function steamMarketItemSkinportLink() {
     return;
   }
 
-  const [buyOnSkinportButtonElement] = createWidgetElement(() => (
+  const [viewOnSkinportButtonElement] = createWidgetElement(() => (
     <Button className="mb-4" asChild>
-      <Link
-        href={getSkinportItemUrl(
-          steamAppIdNames[appId as keyof typeof steamAppIdNames],
-          itemName,
-        )}
-        target="_blank"
-      >
+      <Link href={getSkinportItemUrl(appId, itemName)} target="_blank">
         View on Skinport
       </Link>
     </Button>
@@ -39,7 +33,7 @@ export default async function steamMarketItemSkinportLink() {
 
   itemDescriptionElement.insertAdjacentElement(
     "beforebegin",
-    buyOnSkinportButtonElement,
+    viewOnSkinportButtonElement,
   );
 }
 
