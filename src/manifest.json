@@ -6,11 +6,7 @@
   "icons": {
     "48": "icon.png"
   },
-  "host_permissions": [
-    "https://skinport.com/*",
-    "https://api.skinport.com/*",
-    "https://steamcommunity.com/*"
-  ],
+  "host_permissions": ["<all_urls>"],
   "permissions": ["storage", "declarativeNetRequest"],
   "content_scripts": [
     {
@@ -22,16 +18,24 @@
   ],
   "options_ui": {
     "page": "options.html",
-    "open_in_tab": true,
-    "browser_style": false
+    "open_in_tab": true
   },
   "declarative_net_request": {
     "rule_resources": [
       {
-        "id": "block_rules",
+        "id": "phishing",
         "enabled": true,
-        "path": "block_rules.json"
+        "path": "/rulesets/phishing.json"
       }
     ]
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "/web_accessible_resources/skinport-phishing-warning.html",
+        "/web_accessible_resources/skinport-phishing-warning.css"
+      ],
+      "use_dynamic_url": true
+    }
+  ]
 }

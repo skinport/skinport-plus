@@ -3,7 +3,7 @@ import tailwind from "tailwindcss";
 import autoprefixer from "autoprefixer";
 import inline from "esbuild-plugin-inline-import";
 import postcss from "postcss";
-import { readFile, writeFile, mkdir, copyFile } from "node:fs/promises";
+import { readFile, writeFile, mkdir, cp } from "node:fs/promises";
 import tailwindBaseConfig from "../tailwind.config";
 import { deleteAsync } from "del";
 import chokidar from "chokidar";
@@ -30,13 +30,41 @@ function getPostcssPlugins(
 
 async function copyManifest() {
   const manifestSrcPath = "./src";
-  const manifestSrcFiles = ["manifest.json", "icon.png", "block_rules.json"];
+  const manifestSrcFiles = [
+    "manifest.json",
+    "icon.png",
+    "rulesets",
+    "web_accessible_resources/skinport-phishing-warning.html",
+    "web_accessible_resources/skinport-phishing-warning.css",
+  ];
 
   const copy = () =>
     Promise.all(
-      manifestSrcFiles.map((srcFile) =>
-        copyFile(`${manifestSrcPath}/${srcFile}`, `./dist/${srcFile}`),
-      ),
+      manifestSrcFiles.map(async (srcFile) => {
+        if (srcFile.endsWith(".css")) {
+          return postcss(
+            getPostcssPlugins(
+              {
+                ...tailwindBaseConfig,
+                content: [
+                  ...tailwindBaseConfig.content,
+                  `./src/${srcFile.replace(".css", ".html")}`,
+                ],
+              },
+              false,
+            ),
+          )
+            .process(await readFile(`${manifestSrcPath}/${srcFile}`), {
+              from: undefined,
+            })
+            .then((result) => writeFile(`./dist/${srcFile}`, result.css))
+            .catch((error) => console.error(error.message));
+        }
+
+        return cp(`${manifestSrcPath}/${srcFile}`, `./dist/${srcFile}`, {
+          recursive: true,
+        });
+      }),
     );
 
   if (IS_DEV) {
@@ -135,7 +163,7 @@ async function buildOptions() {
   const copyHtml = () =>
     Promise.all(
       htmlSrcFiles.map((htmlSrcFile) =>
-        copyFile(
+        cp(
           `${htmlSrcPath}/${htmlSrcFile}`,
           `./dist/${
             htmlSrcFile === htmlSrcFiles[0] ? "options.html" : htmlSrcFile
