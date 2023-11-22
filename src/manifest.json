@@ -11,7 +11,12 @@
   "content_scripts": [
     {
       "run_at": "document_start",
-      "matches": ["https://skinport.com/*", "https://steamcommunity.com/*"],
+      "matches": ["https://skinport.com/*"],
+      "js": ["content.js"]
+    },
+    {
+      "run_at": "document_start",
+      "matches": ["https://steamcommunity.com/*"],
       "js": ["content.js"],
       "css": ["content.css"]
     }
