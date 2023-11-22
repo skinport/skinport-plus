@@ -11,7 +11,7 @@
     "https://api.skinport.com/*",
     "https://steamcommunity.com/*"
   ],
-  "permissions": ["storage"],
+  "permissions": ["storage", "declarativeNetRequest"],
   "content_scripts": [
     {
       "run_at": "document_start",
@@ -24,5 +24,14 @@
     "page": "options.html",
     "open_in_tab": true,
     "browser_style": false
+  },
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "block_rules",
+        "enabled": true,
+        "path": "block_rules.json"
+      }
+    ]
   }
 }

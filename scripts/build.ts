@@ -30,7 +30,7 @@ function getPostcssPlugins(
 
 async function copyManifest() {
   const manifestSrcPath = "./src";
-  const manifestSrcFiles = ["manifest.json", "icon.png"];
+  const manifestSrcFiles = ["manifest.json", "icon.png", "block_rules.json"];
 
   const copy = () =>
     Promise.all(
