@@ -12,33 +12,36 @@
     {
       "run_at": "document_start",
       "matches": ["https://skinport.com/*"],
-      "js": ["content.js"]
+      "js": ["content/index.js"]
     },
     {
       "run_at": "document_start",
       "matches": ["https://steamcommunity.com/*"],
-      "js": ["content.js"],
-      "css": ["content.css"]
+      "js": ["content/index.js"],
+      "css": ["fonts.css"]
     }
   ],
   "options_ui": {
-    "page": "options.html",
+    "page": "options/index.html",
     "open_in_tab": true
   },
   "declarative_net_request": {
     "rule_resources": [
       {
-        "id": "phishing",
+        "id": "phishing-blocker",
         "enabled": true,
-        "path": "/rulesets/phishing.json"
+        "path": "phishing-blocker/rulesets.json"
       }
     ]
   },
   "web_accessible_resources": [
     {
       "resources": [
-        "/web_accessible_resources/skinport-phishing-warning.html",
-        "/web_accessible_resources/skinport-phishing-warning.css"
+        "fonts.css",
+        "favicon.ico",
+        "phishing-blocker/index.html",
+        "phishing-blocker/index.css",
+        "phishing-blocker/index.js"
       ],
       "use_dynamic_url": true
     }

@@ -9,13 +9,11 @@ export function createWidgetElement(
 ) {
   const widgetElement = document.createElement("div");
 
-  widgetElement.classList.add("skinport-widget");
-
   if (widgetName) {
     widgetElement.setAttribute("data-widget-name", widgetName);
   }
 
-  const shadowRoot = widgetElement.attachShadow({ mode: "open" });
+  const shadowRoot = widgetElement.attachShadow({ mode: "closed" });
 
   const styleElement = document.createElement("style");
   styleElement.textContent = styles;

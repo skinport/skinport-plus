@@ -1,103 +1,84 @@
 import * as esbuild from "esbuild";
 import tailwind from "tailwindcss";
 import autoprefixer from "autoprefixer";
-import inline from "esbuild-plugin-inline-import";
+import esbuildInline from "esbuild-plugin-inline-import";
 import postcss from "postcss";
-import { readFile, writeFile, mkdir, cp } from "node:fs/promises";
+import { mkdir, cp, rm } from "node:fs/promises";
 import tailwindBaseConfig from "../tailwind.config";
-import { deleteAsync } from "del";
 import chokidar from "chokidar";
-import style from "esbuild-style-plugin";
-import cssnano from "cssnano";
+import esbuildStyle from "esbuild-style-plugin";
+import path from "node:path";
 
 const IS_DEV = process.argv.includes("--dev");
 
-const esbuildBaseOptions = {
-  bundle: true,
-  minify: !IS_DEV,
-};
+function getSrcPath(srcPath: string = "") {
+  return path.join("./src", srcPath);
+}
 
-function getPostcssPlugins(
-  tailwindConfig: tailwind.Config,
-  minifyCss: boolean = true,
-) {
-  return [
-    tailwind(tailwindConfig),
+function getDistPath(distPath: string = "") {
+  return path.join("./dist", distPath);
+}
+
+async function copySrcFileToDist(srcFile: string) {
+  const srcPath = srcFile.startsWith("src") ? srcFile : getSrcPath(srcFile);
+  const distPath = getDistPath(srcPath.replace("src", ""));
+
+  await cp(srcPath, distPath, {
+    recursive: true,
+  });
+
+  console.log("[info] copied", srcPath);
+}
+
+function getPostcssPlugins(tailwindContent: string[]) {
+  return <postcss.AcceptedPlugin[]>[
+    tailwind({
+      ...tailwindBaseConfig,
+      content: [...tailwindBaseConfig.content, ...tailwindContent],
+    }),
     autoprefixer,
-    ...(!IS_DEV && minifyCss ? [cssnano()] : []),
   ];
 }
 
-async function copyManifest() {
-  const manifestSrcPath = "./src";
-  const manifestSrcFiles = [
-    "manifest.json",
-    "icon.png",
-    "rulesets",
-    "web_accessible_resources/skinport-phishing-warning.html",
-    "web_accessible_resources/skinport-phishing-warning.css",
-  ];
-
-  const copy = () =>
-    Promise.all(
-      manifestSrcFiles.map(async (srcFile) => {
-        if (srcFile.endsWith(".css")) {
-          return postcss(
-            getPostcssPlugins(
-              {
-                ...tailwindBaseConfig,
-                content: [
-                  ...tailwindBaseConfig.content,
-                  `./src/${srcFile.replace(".css", ".html")}`,
-                ],
-              },
-              false,
-            ),
-          )
-            .process(await readFile(`${manifestSrcPath}/${srcFile}`), {
-              from: undefined,
-            })
-            .then((result) => writeFile(`./dist/${srcFile}`, result.css))
-            .catch((error) => console.error(error.message));
-        }
-
-        return cp(`${manifestSrcPath}/${srcFile}`, `./dist/${srcFile}`, {
-          recursive: true,
-        });
-      }),
-    );
+async function copyStaticFiles(srcFiles: string[]) {
+  await Promise.all(srcFiles.map(copySrcFileToDist));
 
   if (IS_DEV) {
-    await copy();
-
     chokidar
-      .watch(`${manifestSrcPath}/{${manifestSrcFiles.join(",")}}`)
-      .on("change", copy);
-
-    return;
+      .watch(getSrcPath(`{${srcFiles.join(",")}}`))
+      .on("change", copySrcFileToDist);
   }
-
-  return copy();
 }
 
-async function buildContent() {
-  const tailwindConfig = {
-    ...tailwindBaseConfig,
-    content: [...tailwindBaseConfig.content, `./src/content/**/*.{ts,tsx}`],
-    corePlugins: {
-      preflight: false,
-    },
+async function buildExtensionContext(
+  context: string,
+  plugins?: { tailwind?: boolean; inlineTailwind?: boolean },
+) {
+  const esbuildOptions: esbuild.BuildOptions & { plugins: esbuild.Plugin[] } = {
+    entryPoints: [getSrcPath(`${context}/index.tsx`)],
+    outfile: getDistPath(`${context}/index.js`),
+    bundle: true,
+    minify: !IS_DEV,
+    metafile: true,
+    plugins: [],
   };
 
-  const esbuildOptions = {
-    ...esbuildBaseOptions,
-    entryPoints: ["./src/content/index.tsx"],
-    outfile: "./dist/content.js",
-    plugins: [
-      inline({
+  if (plugins?.tailwind) {
+    esbuildOptions.plugins.push(
+      esbuildStyle({
+        postcss: {
+          plugins: getPostcssPlugins([getSrcPath(`${context}/**/*.{ts,tsx}`)]),
+        },
+      }),
+    );
+  }
+
+  if (plugins?.inlineTailwind) {
+    esbuildOptions.plugins.push(
+      esbuildInline({
         filter: /^tailwind:/,
         transform: (content) =>
-          postcss(getPostcssPlugins(tailwindConfig))
+          postcss(getPostcssPlugins([getSrcPath(`${context}/**/*.{ts,tsx}`)]))
             .process(content, { from: undefined })
             .then((result) => result.css)
             .catch((error) => {
@@ -105,97 +86,51 @@ async function buildContent() {
               return "";
             }),
       }),
-    ],
-  };
-
-  const cssSrcPath = "./src/content/index.css";
-
-  const buildCss = async () => {
-    return postcss(getPostcssPlugins(tailwindConfig, false))
-      .process(await readFile(cssSrcPath), {
-        from: undefined,
-      })
-      .then((result) => writeFile("./dist/content.css", result.css))
-      .catch((error) => console.error(error.message));
-  };
-
-  if (IS_DEV) {
-    const [esbuildContext] = await Promise.all([
-      esbuild.context(esbuildOptions),
-      buildCss(),
-    ]);
-
-    esbuildContext.watch();
-    chokidar.watch(cssSrcPath).on("change", buildCss);
-
-    return;
-  }
-
-  return Promise.all([esbuild.build(esbuildOptions), buildCss()]);
-}
-
-async function buildOptions() {
-  const esbuildOptions = {
-    ...esbuildBaseOptions,
-    entryPoints: ["./src/options/index.tsx"],
-    outfile: "./dist/options.js",
-    plugins: [
-      style({
-        postcss: {
-          plugins: [
-            tailwind({
-              ...tailwindBaseConfig,
-              content: [
-                ...tailwindBaseConfig.content,
-                `./src/options/**/*.{ts,tsx}`,
-              ],
-            }),
-            autoprefixer,
-          ],
-        },
-      }),
-    ],
-  };
-
-  const htmlSrcPath = "./src/options";
-  const htmlSrcFiles = ["index.html", "favicon.ico"];
-
-  const copyHtml = () =>
-    Promise.all(
-      htmlSrcFiles.map((htmlSrcFile) =>
-        cp(
-          `${htmlSrcPath}/${htmlSrcFile}`,
-          `./dist/${
-            htmlSrcFile === htmlSrcFiles[0] ? "options.html" : htmlSrcFile
-          }`,
-        ),
-      ),
     );
-
-  if (IS_DEV) {
-    const [esbuildContext] = await Promise.all([
-      esbuild.context(esbuildOptions),
-      copyHtml(),
-    ]);
-
-    esbuildContext.watch();
-    chokidar
-      .watch(`${htmlSrcPath}/{${htmlSrcFiles.join(",")}}`)
-      .on("change", copyHtml);
-
-    return;
   }
 
-  return Promise.all([esbuild.build(esbuildOptions), copyHtml()]);
+  esbuildOptions.plugins.push({
+    name: "log",
+    setup: (build) => {
+      build.onEnd((result) => {
+        if (result.metafile?.outputs) {
+          Object.keys(result.metafile.outputs).forEach((outputFile) =>
+            console.log("[info] compiled", outputFile.replace("dist/", "")),
+          );
+        }
+      });
+    },
+  });
+
+  const esbuildContext = await esbuild.context(esbuildOptions);
+
+  await esbuildContext.watch();
+
+  if (!IS_DEV) {
+    await esbuildContext.dispose();
+  }
 }
 
 (async () => {
   try {
-    await deleteAsync("./dist");
+    await rm(getDistPath(), { recursive: true, force: true });
 
-    await mkdir("./dist");
+    await mkdir(getDistPath());
 
-    await Promise.all([copyManifest(), buildContent(), buildOptions()]);
+    await Promise.all([
+      copyStaticFiles([
+        "phishing-blocker/rulesets.json",
+        "phishing-blocker/index.html",
+        "options/index.html",
+        "favicon.ico",
+        "manifest.json",
+        "icon.png",
+        "fonts.css",
+      ]),
+      buildExtensionContext("content", { inlineTailwind: true }),
+      buildExtensionContext("options", { tailwind: true }),
+      buildExtensionContext("phishing-blocker", { tailwind: true }),
+    ]);
   } catch (error) {
     console.error(error);
     process.exit(1);

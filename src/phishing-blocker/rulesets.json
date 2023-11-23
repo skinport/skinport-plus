@@ -2,7 +2,7 @@
   {
     "action": {
       "redirect": {
-        "extensionPath": "/web_accessible_resources/skinport-phishing-warning.html"
+        "extensionPath": "/phishing-blocker/index.html"
       },
       "type": "redirect"
     },

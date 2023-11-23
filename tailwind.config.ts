@@ -1,7 +1,7 @@
 import animate from "tailwindcss-animate";
 
 const tailwindConfig = {
-  content: ["./src/{components,lib}/**/*.{ts,tsx}"],
+  content: ["./src/components/**/*.{ts,tsx}"],
   theme: {
     fontFamily: {
       sans: ["Montserrat", "sans-serif"],
