@@ -8,6 +8,10 @@
   },
   "host_permissions": ["<all_urls>"],
   "permissions": ["storage", "declarativeNetRequest"],
+  "background": {
+    "service_worker": "background/index.js",
+    "type": "module"
+  },
   "content_scripts": [
     {
       "run_at": "document_start",
@@ -24,15 +28,6 @@
   "options_ui": {
     "page": "options/index.html",
     "open_in_tab": true
-  },
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "phishing-blocker",
-        "enabled": true,
-        "path": "phishing-blocker/rulesets.json"
-      }
-    ]
   },
   "web_accessible_resources": [
     {

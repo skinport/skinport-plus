@@ -52,10 +52,18 @@ async function copyStaticFiles(srcFiles: string[]) {
 
 async function buildExtensionContext(
   context: string,
-  plugins?: { tailwind?: boolean; inlineTailwind?: boolean },
+  {
+    tailwind,
+    inlineTailwind,
+    entryPointSuffix = "tsx",
+  }: {
+    tailwind?: boolean;
+    inlineTailwind?: boolean;
+    entryPointSuffix?: "ts" | "tsx";
+  } = {},
 ) {
   const esbuildOptions: esbuild.BuildOptions & { plugins: esbuild.Plugin[] } = {
-    entryPoints: [getSrcPath(`${context}/index.tsx`)],
+    entryPoints: [getSrcPath(`${context}/index.${entryPointSuffix}`)],
     outfile: getDistPath(`${context}/index.js`),
     bundle: true,
     minify: !IS_DEV,
@@ -63,7 +71,7 @@ async function buildExtensionContext(
     plugins: [],
   };
 
-  if (plugins?.tailwind) {
+  if (tailwind) {
     esbuildOptions.plugins.push(
       esbuildStyle({
         postcss: {
@@ -73,7 +81,7 @@ async function buildExtensionContext(
     );
   }
 
-  if (plugins?.inlineTailwind) {
+  if (inlineTailwind) {
     esbuildOptions.plugins.push(
       esbuildInline({
         filter: /^tailwind:/,
@@ -127,6 +135,7 @@ async function buildExtensionContext(
         "icon.png",
         "fonts.css",
       ]),
+      buildExtensionContext("background", { entryPointSuffix: "ts" }),
       buildExtensionContext("content", { inlineTailwind: true }),
       buildExtensionContext("options", { tailwind: true }),
       buildExtensionContext("phishing-blocker", { tailwind: true }),
