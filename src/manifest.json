@@ -24,12 +24,12 @@
     {
       "run_at": "document_start",
       "matches": ["https://skinport.com/*"],
-      "js": ["content/index.js"]
+      "js": ["content/skinport/index.js"]
     },
     {
       "run_at": "document_start",
       "matches": ["https://steamcommunity.com/*"],
-      "js": ["content/index.js"],
+      "js": ["content/steamcommunity/index.js"],
       "css": ["fonts.css"]
     },
     {
@@ -223,7 +223,7 @@
         "*://www.google.co.zw/search*",
         "*://www.google.ca/search*"
       ],
-      "js": ["google/index.js"],
+      "js": ["content/google/index.js"],
       "css": ["fonts.css"]
     }
   ],

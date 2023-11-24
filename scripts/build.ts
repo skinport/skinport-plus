@@ -49,7 +49,7 @@ async function copySrcFileToDist(srcFile: string) {
     }
   }
 
-  console.log("[info] copied", srcPath);
+  console.log("[info] copied", srcPath.replace("src/", ""));
 }
 
 function getPostcssPlugins(tailwindContent: string[]) {
@@ -77,15 +77,15 @@ async function buildExtensionContext(
   {
     tailwind,
     inlineTailwind,
-    entryPointSuffix = "tsx",
+    indexSuffix,
   }: {
     tailwind?: boolean;
     inlineTailwind?: boolean;
-    entryPointSuffix?: "ts" | "tsx";
-  } = {},
+    indexSuffix: "ts" | "tsx";
+  },
 ) {
   const esbuildOptions: esbuild.BuildOptions & { plugins: esbuild.Plugin[] } = {
-    entryPoints: [getSrcPath(`${context}/index.${entryPointSuffix}`)],
+    entryPoints: [getSrcPath(`${context}/index.${indexSuffix}`)],
     outfile: getDistPath(`${context}/index.js`),
     bundle: true,
     minify: !IS_DEV,
@@ -160,11 +160,21 @@ async function buildExtensionContext(
         "icon.png",
         "fonts.css",
       ]),
-      buildExtensionContext("background", { entryPointSuffix: "ts" }),
-      buildExtensionContext("content", { inlineTailwind: true }),
-      buildExtensionContext("options", { tailwind: true }),
-      buildExtensionContext("phishing-blocker", { tailwind: true }),
-      buildExtensionContext("google", { inlineTailwind: true }),
+      buildExtensionContext("background", { indexSuffix: "ts" }),
+      buildExtensionContext("content/google", {
+        indexSuffix: "ts",
+        inlineTailwind: true,
+      }),
+      buildExtensionContext("content/skinport", { indexSuffix: "ts" }),
+      buildExtensionContext("content/steamcommunity", {
+        indexSuffix: "ts",
+        inlineTailwind: true,
+      }),
+      buildExtensionContext("options", { indexSuffix: "tsx", tailwind: true }),
+      buildExtensionContext("phishing-blocker", {
+        indexSuffix: "tsx",
+        tailwind: true,
+      }),
     ]);
   } catch (error) {
     console.error(error);

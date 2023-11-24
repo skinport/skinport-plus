@@ -1,4 +1,4 @@
-import { createWidgetElement } from "../widget";
+import { createWidgetElement } from "@/content/widget";
 import React from "react";
 import SkinportLogo from "@/components/skinport-logo";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import { ExternalLink } from "lucide-react";
 import { $ } from "select-dom";
 import { Trans, useTranslation } from "react-i18next";
 import { Link } from "@/components/ui/link";
-import featureManager from "../feature-manager";
+import featureManager from "@/content/feature-manager";
 
 async function steamAccountSecurityCheck() {
   const webApiKeyRepsonse = await fetch("/dev/apikey").then((response) => {
@@ -168,6 +168,6 @@ async function steamAccountSecurityCheck() {
 }
 
 featureManager.add(steamAccountSecurityCheck, {
-  host: "steamcommunity.com",
   optionKey: "checkSteamAccountSecurity",
+  awaitDomReady: true,
 });

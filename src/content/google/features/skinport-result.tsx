@@ -1,14 +1,12 @@
 import React from "react";
 import { createWidgetElement } from "@/content/widget";
-import domLoaded from "dom-loaded";
 import { $$ } from "select-dom";
 import { BadgeCheck } from "lucide-react";
 import SkinportLogo from "@/components/skinport-logo";
 import { injectStyle } from "@/lib/dom";
+import featureManager from "@/content/feature-manager";
 
-(async () => {
-  await domLoaded;
-
+async function googleSkinportResult() {
   const skinportLinkElements = $$('a[href="https://skinport.com/"]');
 
   if (skinportLinkElements.length === 0) {
@@ -33,4 +31,6 @@ import { injectStyle } from "@/lib/dom";
       officialSkinportWebsiteElement,
     );
   });
-})();
+}
+
+featureManager.add(googleSkinportResult, { awaitDomReady: true });

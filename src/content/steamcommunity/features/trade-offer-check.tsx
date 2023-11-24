@@ -4,10 +4,10 @@ import { ShieldCheck, ShieldAlert } from "lucide-react";
 import skinportApi from "@/lib/skinport";
 import SkinportLogo from "@/components/skinport-logo";
 import { Button } from "@/components/ui/button";
-import { createWidgetElement } from "../widget";
+import { createWidgetElement } from "@/content/widget";
 import elementReady from "element-ready";
 import { useTranslation } from "react-i18next";
-import featureManager from "../feature-manager";
+import featureManager from "@/content/feature-manager";
 
 function TradePartnerVerified() {
   const { t } = useTranslation();
@@ -158,7 +158,7 @@ async function steamTradeOfferCheck() {
 }
 
 featureManager.add(steamTradeOfferCheck, {
-  host: "steamcommunity.com",
   matchPathname: "/tradeoffer",
   optionKey: "checkTradeOffer",
+  awaitDomReady: true,
 });

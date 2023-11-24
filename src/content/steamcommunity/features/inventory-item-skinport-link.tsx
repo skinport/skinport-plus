@@ -1,13 +1,13 @@
 import { supportedSteamAppIds } from "@/lib/steam";
 import { $ } from "select-dom";
-import { createWidgetElement, widgetElementExists } from "../widget";
+import { createWidgetElement, widgetElementExists } from "@/content/widget";
 import { getSkinportItemUrl } from "@/lib/skinport";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/components/ui/link";
 import React from "react";
 import elementReady from "element-ready";
 import { useTranslation } from "react-i18next";
-import featureManager from "../feature-manager";
+import featureManager from "@/content/feature-manager";
 
 async function steamInventoryItemSkinportLink() {
   const inventoryContentElement = await elementReady("#tabcontent_inventory", {
@@ -102,6 +102,6 @@ async function steamInventoryItemSkinportLink() {
 }
 
 featureManager.add(steamInventoryItemSkinportLink, {
-  host: "steamcommunity.com",
   matchPathname: /\/(id|profiles)\/\w+\/inventory/,
+  awaitDomReady: true,
 });

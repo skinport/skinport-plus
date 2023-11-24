@@ -1,77 +1,66 @@
 import optionsStorage, { Options } from "@/lib/options-storage";
+import domLoaded from "dom-loaded";
 
-type Feature = () => Promise<void>;
-
-export const supportedHosts = {
-  steamCommunity: "steamcommunity.com",
-  skinport: "skinport.com",
-} as const;
+type RunFeature = () => Promise<void>;
 
 interface FeatureConfig {
-  host: (typeof supportedHosts)[keyof typeof supportedHosts];
   matchPathname?: string | RegExp;
   optionKey?: keyof Options;
+  awaitDomReady?: boolean;
 }
 
-const featuresByHost: Record<
-  (typeof supportedHosts)[keyof typeof supportedHosts],
-  [Feature, FeatureConfig][]
-> = {
-  [supportedHosts.steamCommunity]: [],
-  [supportedHosts.skinport]: [],
-};
+const features: [RunFeature, FeatureConfig][] = [];
 
-function add(feature: Feature, config: FeatureConfig) {
-  featuresByHost[config.host].push([feature, config]);
+function add(runFeature: RunFeature, featureConfig: FeatureConfig = {}) {
+  features.push([runFeature, featureConfig]);
 }
 
-let options: Options;
-
-async function init() {
-  options = await optionsStorage.getAll();
-}
+let options: Options | undefined;
 
 async function run() {
-  const hostFeatures =
-    featuresByHost[
-      window.location
-        .host as (typeof supportedHosts)[keyof typeof supportedHosts]
-    ];
-
-  if (!hostFeatures) {
-    return;
-  }
-
-  hostFeatures.forEach(([feature, { matchPathname, optionKey }]) => {
-    if (
-      (matchPathname &&
-        matchPathname instanceof RegExp &&
-        !matchPathname.test(window.location.pathname)) ||
-      (typeof matchPathname === "string" &&
-        !window.location.pathname.startsWith(matchPathname))
-    ) {
-      return;
-    }
-
-    if (optionKey && options[optionKey] === false) {
-      return;
-    }
-
-    try {
-      if (process.env.NODE_ENV !== "production") {
-        console.log("feature-manager:", `running feature ${feature.name}`);
+  features.forEach(
+    async ([runFeature, { matchPathname, optionKey, awaitDomReady }]) => {
+      if (
+        (matchPathname &&
+          matchPathname instanceof RegExp &&
+          !matchPathname.test(window.location.pathname)) ||
+        (typeof matchPathname === "string" &&
+          !window.location.pathname.startsWith(matchPathname))
+      ) {
+        return;
       }
 
-      feature();
-    } catch (error) {
-      console.error(error);
-    }
-  });
+      if (optionKey) {
+        if (options === undefined) {
+          options = await optionsStorage.getAll();
+        } else if (options instanceof Promise) {
+          await options;
+        }
+
+        if (options[optionKey] === false) {
+          return;
+        }
+      }
+
+      try {
+        if (process.env.NODE_ENV !== "production") {
+          console.log("feature-manager:", `running feature ${runFeature.name}`);
+        }
+
+        if (awaitDomReady) {
+          await domLoaded;
+        }
+
+        runFeature();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  );
 }
 
 const featureManager = {
   add,
-  init,
   run,
 };
 
