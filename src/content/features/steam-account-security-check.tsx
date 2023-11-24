@@ -1,4 +1,3 @@
-import ky from "ky";
 import { createWidgetElement } from "../widget";
 import React from "react";
 import SkinportLogo from "@/components/skinport-logo";
@@ -20,11 +19,18 @@ import { Link } from "@/components/ui/link";
 import featureManager from "../feature-manager";
 
 async function steamAccountSecurityCheck() {
-  const webApiKeyRepsonse = await ky("/dev/apikey").text();
+  const webApiKeyRepsonse = await fetch("/dev/apikey").then((response) => {
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
 
-  const isWebApiKeyExposed = webApiKeyRepsonse.includes(
-    'action="https://steamcommunity.com/dev/revokekey"',
-  );
+    return response.text();
+  });
+
+  const isWebApiKeyExposed =
+    webApiKeyRepsonse.indexOf(
+      'action="https://steamcommunity.com/dev/revokekey"',
+    ) !== -1;
 
   if (!isWebApiKeyExposed) {
     return;
