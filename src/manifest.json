@@ -3,10 +3,11 @@
   "name": "Skinport Plus",
   "version": "1.0.1",
   "description": "Enhance your online trading experience on Skinport and Steam with Skinport Plus.",
+  "minimum_chrome_version": "105.0",
   "browser_specific_settings": {
     "gecko": {
       "id": "{46da1da2-d8cd-42b2-b6d6-dfc312231d15}",
-      "strict_min_version": "121.0"
+      "strict_min_version": "114.0"
     }
   },
   "icons": {

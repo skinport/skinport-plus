@@ -42,6 +42,7 @@ async function copySrcFileToDist(srcFile: string) {
           manifestJson.get("background.service_worker"),
         ])
         .delete("background.service_worker")
+        .delete("minimum_chrome_version")
         .save();
     } else {
       manifestJson.delete("browser_specific_settings").save();
