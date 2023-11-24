@@ -70,7 +70,15 @@ async function copyStaticFiles(srcFiles: string[]) {
 
   if (IS_DEV) {
     chokidar
-      .watch(getSrcPath(`{${srcFiles.join(",")}}`))
+      .watch(
+        getSrcPath(
+          `{${srcFiles
+            .map((srcFile) =>
+              srcFile.endsWith("/") ? srcFile.replace("/", "/**/*") : srcFile,
+            )
+            .join(",")}}`,
+        ),
+      )
       .on("change", copySrcFileToDist);
   }
 }
@@ -154,7 +162,7 @@ async function buildExtensionContext(
 
     await Promise.all([
       copyStaticFiles([
-        "_locales",
+        "_locales/",
         "phishing-blocker/rulesets.json",
         "phishing-blocker/index.html",
         "options/index.html",

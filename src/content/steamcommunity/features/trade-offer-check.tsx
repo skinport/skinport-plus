@@ -6,12 +6,10 @@ import SkinportLogo from "@/components/skinport-logo";
 import { Button } from "@/components/ui/button";
 import { createWidgetElement } from "@/content/widget";
 import elementReady from "element-ready";
-import { useTranslation } from "react-i18next";
 import featureManager from "@/content/feature-manager";
+import browser from "webextension-polyfill";
 
 function TradePartnerVerified() {
-  const { t } = useTranslation();
-
   return (
     <div className="p-4 text-center flex flex-col gap-4 mb-6">
       <div className="flex flex-col items-center">
@@ -21,13 +19,17 @@ function TradePartnerVerified() {
         <ShieldCheck size="64" />
       </div>
       <h3 className="font-semibold text-lg text-white">
-        {t("traderOfferCheck.tradePartnerVerified.title")}
+        {browser.i18n.getMessage(
+          "steamcommunity_traderOfferCheck_tradePartnerVerified_title",
+        )}
       </h3>
       <p className="text-text-foreground">
-        {t("traderOfferCheck.tradePartnerVerified.description.paragraph1")}
+        {browser.i18n.getMessage(
+          "steamcommunity_traderOfferCheck_tradePartnerVerified_description_paragraph1",
+        )}
       </p>
       <p className="text-xs text-[#6b6d6e]">
-        {t("securityProvidedBySkinportBrowserExtension")}
+        {browser.i18n.getMessage("common_securityProvidedBySkinportPlus")}
       </p>
     </div>
   );
@@ -39,8 +41,6 @@ function TradePartnerUnverified({
   onContinueTrade: () => void;
 }) {
   const [isContinuingTrade, setIsContinuingTrade] = useState(false);
-  const { t } = useTranslation();
-
   if (isContinuingTrade) {
     return null;
   }
@@ -54,13 +54,19 @@ function TradePartnerUnverified({
         <ShieldAlert size="64" />
       </div>
       <h3 className="font-semibold text-lg text-white">
-        {t("traderOfferCheck.tradePartnerUnverified.title")}
+        {browser.i18n.getMessage(
+          "steamcommunity_traderOfferCheck_tradePartnerUnverified_title",
+        )}
       </h3>
       <p className="text-text-foreground">
-        {t("traderOfferCheck.tradePartnerUnverified.description.paragraph1")}
+        {browser.i18n.getMessage(
+          "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph1",
+        )}
       </p>
       <p className="text-text-foreground">
-        {t("traderOfferCheck.tradePartnerUnverified.description.paragraph2")}
+        {browser.i18n.getMessage(
+          "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph2",
+        )}
       </p>
       <Button
         variant="destructive"
@@ -69,7 +75,9 @@ function TradePartnerUnverified({
           onContinueTrade();
         }}
       >
-        {t("traderOfferCheck.tradePartnerUnverified.continueTrade")}
+        {browser.i18n.getMessage(
+          "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade",
+        )}
       </Button>
       <Button variant="ghost" asChild>
         <a
@@ -77,11 +85,13 @@ function TradePartnerUnverified({
           rel="noopener noreferrer"
           target="_blank"
         >
-          {t("traderOfferCheck.tradePartnerUnverified.readSafetyGuide")}
+          {browser.i18n.getMessage(
+            "steamcommunity_traderOfferCheck_tradePartnerUnverified_readSafetyGuide",
+          )}
         </a>
       </Button>
       <p className="text-xs text-[#6b6d6e]">
-        {t("securityProvidedBySkinportBrowserExtension")}
+        {browser.i18n.getMessage("securityProvidedBySkinportPlus")}
       </p>
     </div>
   );

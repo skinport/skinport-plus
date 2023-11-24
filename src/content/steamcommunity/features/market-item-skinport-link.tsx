@@ -5,8 +5,8 @@ import { Link } from "@/components/ui/link";
 import { $ } from "select-dom";
 import { supportedSteamAppIds } from "@/lib/steam";
 import { getSkinportItemUrl } from "@/lib/skinport";
-import { useTranslation } from "react-i18next";
 import featureManager from "@/content/feature-manager";
+import browser from "webextension-polyfill";
 
 async function steamMarketItemSkinportLink() {
   const urlPathName = window.location.pathname.split("/");
@@ -17,17 +17,13 @@ async function steamMarketItemSkinportLink() {
     return;
   }
 
-  const [viewOnSkinportButtonElement] = createWidgetElement(() => {
-    const { t } = useTranslation();
-
-    return (
-      <Button className="mb-4" asChild>
-        <Link href={getSkinportItemUrl(appId, itemName)} target="_blank">
-          {t("viewOnSkinport")}
-        </Link>
-      </Button>
-    );
-  });
+  const [viewOnSkinportButtonElement] = createWidgetElement(() => (
+    <Button className="mb-4" asChild>
+      <Link href={getSkinportItemUrl(appId, itemName)} target="_blank">
+        {browser.i18n.getMessage("common_viewOnSkinport")}
+      </Link>
+    </Button>
+  ));
 
   const itemDescriptionElement = $(
     ".market_listing_iteminfo .item_desc_descriptors",

@@ -1,10 +1,126 @@
 {
-  "extName": {
+  "extensionName": {
     "message": "Skinport Plus",
     "description": "Name of the extension. This is used to identify the extension in the browser's user interface and on sites like addons.mozilla.org. Chrome and Edge restrict the name length to 45 characters."
   },
-  "extShortDesc": {
+  "extensionDescription": {
     "message": "Enhance your online trading experience on Skinport and Steam with Skinport Plus.",
     "description": "A short description of the extension, intended for display in the browser's user interface. In Firefox and Chrome this value can be up to 132 characters."
+  },
+  "google_officialSkinportWebsite": {
+    "message": "Official <skinportLogo /> website",
+    "description": ""
+  },
+  "steamcommunity_accountSecurityCheck_banner_title": {
+    "message": "Security vulnerabilities detected on your Steam account",
+    "description": ""
+  },
+  "steamcommunity_accountSecurityCheck_banner_review": {
+    "message": "Review",
+    "description": ""
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_title": {
+    "message": "Steam Web API Key Exposed",
+    "description": ""
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph1": {
+    "message": "A Steam Web API Key has been detected on your account. This key could be exploited by malicious actors to control your account and inventory, including accepting or declining trade offers. Such keys are frequently used in phishing attacks to steal inventory.",
+    "description": ""
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph2": {
+    "message": "If you have not registered a Steam Web API Key yourself, please deauthorize all devices immediately as a precaution.",
+    "description": ""
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph3": {
+    "message": "Next, ensure to revoke the Steam Web API Key.",
+    "description": ""
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph4": {
+    "message": "Additionally, we recommend changing your password. If attackers have accessed your Steam Web API Key, they might also know your Steam password. If this password is used elsewhere, it is crucial to change it on other sites too.",
+    "description": ""
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_revokeSteamWebApiKey": {
+    "message": "Revoke Steam Web API Key",
+    "description": ""
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_changePassword": {
+    "message": "Change password",
+    "description": ""
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_deauthorizeAllDevices": {
+    "message": "Deauthorize all devices",
+    "description": ""
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExplained_title": {
+    "message": "What is a Steam Web API Key?",
+    "description": ""
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExplained_description": {
+    "message": "Using your API key on trading websites is unnecessary and poses significant risks. Intended primarily for developers, misuse of your API key is akin to exposing your login credentials. Such actions can lead to phishing attacks and might result in your Steam account being compromised or banned, in violation of the <0>Steam Web API Terms of Use</0>.",
+    "description": ""
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_title": {
+    "message": "Could someone be attempting to scam you?",
+    "description": ""
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph1": {
+    "message": "This trade offer does not appear to be from Skinport, and we couldn't verify the trade partner.",
+    "description": ""
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph2": {
+    "message": "We advise you to only continue if you trust the trade partner. You will not be able to get your items back.",
+    "description": ""
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
+    "message": "Continue trade",
+    "description": ""
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_readSafetyGuide": {
+    "message": "Read safety guide",
+    "description": ""
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerVerified_title": {
+    "message": "You're trading with Skinport",
+    "description": ""
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerVerified_description_paragraph1": {
+    "message": "This trade offer is officially from Skinport, and the trade partner is a verified Skinport bot.",
+    "description": ""
+  },
+  "common_securityProvidedBySkinportPlus": {
+    "message": "Security provided by Skinport Plus",
+    "description": ""
+  },
+  "common_close": {
+    "message": "Close",
+    "description": ""
+  },
+  "common_viewOnSkinport": {
+    "message": "View on Skinport",
+    "description": ""
+  },
+  "options_headerTitle": {
+    "message": "Plus",
+    "description": ""
+  },
+  "options_pageTitle": {
+    "message": "Settings",
+    "description": ""
+  },
+  "options_checkSteamAccountSecurity_label": {
+    "message": "Check for Steam account security vulnerabilities",
+    "description": ""
+  },
+  "options_checkSteamAccountSecurity_description": {
+    "message": "This feature detects exposed Steam Web API Keys on your account, a common target in phishing attacks to control your account and steal inventories.",
+    "description": ""
+  },
+  "options_checkTradeOffer_label": {
+    "message": "Check Trade offers",
+    "description": ""
+  },
+  "options_checkTradeOffer_description": {
+    "message": "The feature checks if a trading partner on Steam is an official Skinport bot to confirm its authenticity.",
+    "description": ""
   }
 }

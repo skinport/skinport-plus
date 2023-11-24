@@ -5,10 +5,8 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import optionsStorage, { optionsStorageDefaults } from "@/lib/options-storage";
 import { useTranslation } from "react-i18next";
-import i18n from "@/lib/i18n";
+import browser from "webextension-polyfill";
 import "./index.css";
-
-i18n.setDefaultNamespace("options");
 
 function OptionField({
   labelKey,
@@ -18,14 +16,13 @@ function OptionField({
   labelKey: string;
   descriptionKey?: string;
 } & React.ComponentPropsWithoutRef<typeof Switch>) {
-  const { t } = useTranslation();
   const id = useId();
 
   return (
     <div className="bg-card px-8 py-6 flex flex-row items-center gap-8">
       <div className="space-y-1 flex-1">
-        <Label htmlFor={id}>{t(labelKey)}</Label>
-        {descriptionKey && <p>{t(descriptionKey)}</p>}
+        <Label htmlFor={id}>{browser.i18n.getMessage(labelKey)}</Label>
+        {descriptionKey && <p>{browser.i18n.getMessage(descriptionKey)}</p>}
       </div>
       <div>
         <Switch {...switchProps} id={id} />
@@ -58,21 +55,21 @@ function App() {
             >
               <SkinportLogo />
             </a>
-            {t("headerTitle")}
+            {browser.i18n.getMessage("options_headerTitle")}
           </div>
         </div>
       </header>
       <div className="bg-background px-8 py-12 mt-[78px] max-w-screen-md mx-auto">
         <h1 className="text-white text-5xl font-semibold mb-8">
-          {t("pageTitle")}
+          {browser.i18n.getMessage("options_pageTitle")}
         </h1>
         {options && (
           <>
             <h2 className="text-white font-semibold mb-5">Steam Community</h2>
             <div className="space-y-0.5">
               <OptionField
-                labelKey="checkSteamAccountSecurity.label"
-                descriptionKey="checkSteamAccountSecurity.description"
+                labelKey="options_checkSteamAccountSecurity_label"
+                descriptionKey="options_checkSteamAccountSecurity_description"
                 defaultChecked={options.checkSteamAccountSecurity}
                 onCheckedChange={(checked) =>
                   optionsStorage.set({
@@ -81,8 +78,8 @@ function App() {
                 }
               />
               <OptionField
-                labelKey="checkTradeOffer.label"
-                descriptionKey="checkTradeOffer.description"
+                labelKey="options_checkTradeOffer_label"
+                descriptionKey="options_checkTradeOffer_description"
                 defaultChecked={options.checkTradeOffer}
                 onCheckedChange={(checked) =>
                   optionsStorage.set({ checkTradeOffer: checked })
