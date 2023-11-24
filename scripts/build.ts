@@ -8,7 +8,10 @@ import tailwindBaseConfig from "../tailwind.config";
 import chokidar from "chokidar";
 import esbuildStyle from "esbuild-style-plugin";
 import path from "node:path";
+// @ts-expect-error: Doesn't come with TS definitions and `@types/dot-json` isn't available
+import DotJson from "dot-json";
 
+const IS_FIREFOX = process.argv.includes("--firefox");
 const IS_DEV = process.argv.includes("--dev");
 
 function getSrcPath(srcPath: string = "") {
@@ -26,6 +29,24 @@ async function copySrcFileToDist(srcFile: string) {
   await cp(srcPath, distPath, {
     recursive: true,
   });
+
+  if (distPath.endsWith("manifest.json")) {
+    const manifestJson = new DotJson(distPath);
+
+    // Firefox doesn't support `background.service_worker`, but `background.scripts`:
+    // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/background#browser_support
+    // TODO: Remove/change this once browsers have come to a common solution
+    if (IS_FIREFOX) {
+      manifestJson
+        .set("background.scripts", [
+          manifestJson.get("background.service_worker"),
+        ])
+        .delete("background.service_worker")
+        .save();
+    } else {
+      manifestJson.delete("browser_specific_settings").save();
+    }
+  }
 
   console.log("[info] copied", srcPath);
 }
@@ -124,6 +145,8 @@ async function buildExtensionContext(
     await rm(getDistPath(), { recursive: true, force: true });
 
     await mkdir(getDistPath());
+
+    console.log("[info] building for", IS_FIREFOX ? "firefox" : "chrome");
 
     await Promise.all([
       copyStaticFiles([
