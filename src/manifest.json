@@ -1,9 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Skinport Plus",
+  "name": "__MSG_extName__",
   "version": "1.0.1",
-  "description": "Enhance your online trading experience on Skinport and Steam with Skinport Plus.",
+  "description": "__MSG_extShortDesc__",
   "minimum_chrome_version": "105.0",
+  "default_locale": "en",
   "browser_specific_settings": {
     "gecko": {
       "id": "{46da1da2-d8cd-42b2-b6d6-dfc312231d15}",

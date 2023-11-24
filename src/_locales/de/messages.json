@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "Skinport Plus",
+    "description": "Name of the extension. This is used to identify the extension in the browser's user interface and on sites like addons.mozilla.org. Chrome and Edge restrict the name length to 45 characters."
+  },
+  "extShortDesc": {
+    "message": "Enhance your online trading experience on Skinport and Steam with Skinport Plus.",
+    "description": "A short description of the extension, intended for display in the browser's user interface. In Firefox and Chrome this value can be up to 132 characters."
+  }
+}
