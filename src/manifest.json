@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Skinport Plus",
-  "version": "1.0.0",
-  "description": "Enhance your online trading experience on Skinport and Steam with Skinport Plus, a specialized tool designed to provide a secure environment for trading skins.\nSkinport Plus includes great additions for further security, can verify whether your trading partner is an official bot and detects potential security breaches due to activated Steam Web API keys.",
+  "version": "1.0.1",
+  "description": "Enhance your online trading experience on Skinport and Steam with Skinport Plus.",
   "browser_specific_settings": {
     "gecko": {
       "id": "{46da1da2-d8cd-42b2-b6d6-dfc312231d15}",
