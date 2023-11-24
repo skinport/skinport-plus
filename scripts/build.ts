@@ -33,18 +33,21 @@ async function copySrcFileToDist(srcFile: string) {
   if (distPath.endsWith("manifest.json")) {
     const manifestJson = new DotJson(distPath);
 
-    // Firefox doesn't support `background.service_worker`, but `background.scripts`:
-    // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/background#browser_support
-    // TODO: Remove/change this once browsers have come to a common solution
     if (IS_FIREFOX) {
       manifestJson
+        // Firefox doesn't support `background.service_worker`, but `background.scripts`:
+        // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/background#browser_support
+        // TODO: Remove/change this once browsers have come to a common solution
         .set("background.scripts", [
           manifestJson.get("background.service_worker"),
         ])
         .delete("background.service_worker")
+        // Remove keys not supported by Firefox
         .delete("minimum_chrome_version")
+        .delete("web_accessible_resources.use_dynamic_url")
         .save();
     } else {
+      // Remove keys not supported by Firefox
       manifestJson.delete("browser_specific_settings").save();
     }
   }
