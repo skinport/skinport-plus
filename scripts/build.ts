@@ -139,6 +139,7 @@ async function buildExtensionContext(
       buildExtensionContext("content", { inlineTailwind: true }),
       buildExtensionContext("options", { tailwind: true }),
       buildExtensionContext("phishing-blocker", { tailwind: true }),
+      buildExtensionContext("google", { inlineTailwind: true }),
     ]);
   } catch (error) {
     console.error(error);
