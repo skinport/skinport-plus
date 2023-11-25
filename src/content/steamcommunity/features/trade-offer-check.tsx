@@ -1,12 +1,12 @@
-import { $, $$ } from "select-dom";
-import React, { useState } from "react";
-import { ShieldCheck, ShieldAlert } from "lucide-react";
-import skinportApi from "@/lib/skinport";
 import SkinportLogo from "@/components/skinport-logo";
 import { Button } from "@/components/ui/button";
-import { createWidgetElement } from "@/content/widget";
-import elementReady from "element-ready";
 import featureManager from "@/content/feature-manager";
+import { createWidgetElement } from "@/content/widget";
+import skinportApi from "@/lib/skinport";
+import elementReady from "element-ready";
+import { ShieldAlert, ShieldCheck } from "lucide-react";
+import React, { useState } from "react";
+import { $, $$ } from "select-dom";
 import browser from "webextension-polyfill";
 
 function TradePartnerVerified() {

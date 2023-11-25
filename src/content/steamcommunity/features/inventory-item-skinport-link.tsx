@@ -1,12 +1,12 @@
-import { supportedSteamAppIds } from "@/lib/steam";
-import { $ } from "select-dom";
-import { createWidgetElement, widgetElementExists } from "@/content/widget";
-import { getSkinportItemUrl } from "@/lib/skinport";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/components/ui/link";
-import React from "react";
-import elementReady from "element-ready";
 import featureManager from "@/content/feature-manager";
+import { createWidgetElement, widgetElementExists } from "@/content/widget";
+import { getSkinportItemUrl } from "@/lib/skinport";
+import { supportedSteamAppIds } from "@/lib/steam";
+import elementReady from "element-ready";
+import React from "react";
+import { $ } from "select-dom";
 import browser from "webextension-polyfill";
 
 async function steamInventoryItemSkinportLink() {
@@ -21,8 +21,11 @@ async function steamInventoryItemSkinportLink() {
 
   const removeViewOnSkinportElementFns: (() => void)[] = [];
 
-  const removeViewOnSkinportElements = () =>
-    removeViewOnSkinportElementFns.forEach((removeElement) => removeElement());
+  const removeViewOnSkinportElements = () => {
+    for (const removeViewOnSkinportElementFn of removeViewOnSkinportElementFns) {
+      removeViewOnSkinportElementFn();
+    }
+  };
 
   const observer = new MutationObserver(() => {
     const itemInfoElement = $(
@@ -66,7 +69,7 @@ async function steamInventoryItemSkinportLink() {
       return;
     }
 
-    removeViewOnSkinportElementFns.forEach((removeElement) => removeElement());
+    removeViewOnSkinportElements();
 
     const [viewOnSkinportElement, removeViewOnSkinportElement] =
       createWidgetElement(

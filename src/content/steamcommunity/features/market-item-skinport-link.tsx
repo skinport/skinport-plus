@@ -1,11 +1,11 @@
-import React from "react";
 import { Button } from "@/components/ui/button";
-import { createWidgetElement } from "@/content/widget";
 import { Link } from "@/components/ui/link";
-import { $ } from "select-dom";
-import { supportedSteamAppIds } from "@/lib/steam";
-import { getSkinportItemUrl } from "@/lib/skinport";
 import featureManager from "@/content/feature-manager";
+import { createWidgetElement } from "@/content/widget";
+import { getSkinportItemUrl } from "@/lib/skinport";
+import { supportedSteamAppIds } from "@/lib/steam";
+import React from "react";
+import { $ } from "select-dom";
 import browser from "webextension-polyfill";
 
 async function steamMarketItemSkinportLink() {

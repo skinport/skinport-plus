@@ -1,5 +1,4 @@
-import { createWidgetElement } from "@/content/widget";
-import React from "react";
+import { InterpolateMessage } from "@/components/interpolate-message";
 import SkinportLogo from "@/components/skinport-logo";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,12 +11,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ExternalLink } from "lucide-react";
-import { $ } from "select-dom";
 import { Link } from "@/components/ui/link";
 import featureManager from "@/content/feature-manager";
+import { createWidgetElement } from "@/content/widget";
+import { ExternalLink } from "lucide-react";
+import React from "react";
+import { $ } from "select-dom";
 import browser from "webextension-polyfill";
-import { InterpolateMessage } from "@/components/interpolate-message";
 
 async function steamAccountSecurityCheck() {
   const webApiKeyRepsonse = await fetch("/dev/apikey").then((response) => {

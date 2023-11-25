@@ -1,24 +1,24 @@
-import * as esbuild from "esbuild";
-import tailwind from "tailwindcss";
-import autoprefixer from "autoprefixer";
-import esbuildInline from "esbuild-plugin-inline-import";
-import postcss from "postcss";
-import { mkdir, cp, rm } from "node:fs/promises";
-import tailwindBaseConfig from "../tailwind.config";
-import chokidar from "chokidar";
-import esbuildStyle from "esbuild-style-plugin";
+import { cp, mkdir, rm } from "node:fs/promises";
 import path from "node:path";
+import autoprefixer from "autoprefixer";
+import chokidar from "chokidar";
 // @ts-expect-error: Doesn't come with TS definitions and `@types/dot-json` isn't available
 import DotJson from "dot-json";
+import * as esbuild from "esbuild";
+import esbuildInline from "esbuild-plugin-inline-import";
+import esbuildStyle from "esbuild-style-plugin";
+import postcss from "postcss";
+import tailwind from "tailwindcss";
+import tailwindBaseConfig from "../tailwind.config";
 
 const IS_FIREFOX = process.argv.includes("--firefox");
 const IS_DEV = process.argv.includes("--dev");
 
-function getSrcPath(srcPath: string = "") {
+function getSrcPath(srcPath = "") {
   return path.join("./src", srcPath);
 }
 
-function getDistPath(distPath: string = "") {
+function getDistPath(distPath = "") {
   return path.join("./dist", distPath);
 }
 
@@ -135,9 +135,9 @@ async function buildExtensionContext(
     setup: (build) => {
       build.onEnd((result) => {
         if (result.metafile?.outputs) {
-          Object.keys(result.metafile.outputs).forEach((outputFile) =>
-            console.log("[info] compiled", outputFile.replace("dist/", "")),
-          );
+          for (const outputFile of Object.keys(result.metafile.outputs)) {
+            console.log("[info] compiled", outputFile.replace("dist/", ""));
+          }
         }
       });
     },

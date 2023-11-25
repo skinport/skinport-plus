@@ -18,45 +18,45 @@ function add(runFeature: RunFeature, featureConfig: FeatureConfig = {}) {
 let options: Options | undefined;
 
 async function run() {
-  features.forEach(
-    async ([runFeature, { matchPathname, optionKey, awaitDomReady }]) => {
-      if (
-        (matchPathname &&
-          matchPathname instanceof RegExp &&
-          !matchPathname.test(window.location.pathname)) ||
-        (typeof matchPathname === "string" &&
-          !window.location.pathname.startsWith(matchPathname))
-      ) {
-        return;
+  for (const [
+    runFeature,
+    { matchPathname, optionKey, awaitDomReady },
+  ] of features) {
+    if (
+      (matchPathname instanceof RegExp &&
+        !matchPathname.test(window.location.pathname)) ||
+      (typeof matchPathname === "string" &&
+        !window.location.pathname.startsWith(matchPathname))
+    ) {
+      continue;
+    }
+
+    if (optionKey) {
+      if (options === undefined) {
+        options = await optionsStorage.getAll();
+      } else if (options instanceof Promise) {
+        await options;
       }
 
-      if (optionKey) {
-        if (options === undefined) {
-          options = await optionsStorage.getAll();
-        } else if (options instanceof Promise) {
-          await options;
-        }
+      if (options[optionKey] === false) {
+        continue;
+      }
+    }
 
-        if (options[optionKey] === false) {
-          return;
-        }
+    try {
+      if (awaitDomReady) {
+        await domLoaded;
       }
 
-      try {
-        if (process.env.NODE_ENV !== "production") {
-          console.log("feature-manager:", `running feature ${runFeature.name}`);
-        }
+      runFeature();
 
-        if (awaitDomReady) {
-          await domLoaded;
-        }
-
-        runFeature();
-      } catch (error) {
-        console.error(error);
+      if (process.env.NODE_ENV !== "production") {
+        console.log("feature-manager:", `running feature ${runFeature.name}`);
       }
-    },
-  );
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
 
 const featureManager = {

@@ -1,12 +1,12 @@
-import React from "react";
-import { createWidgetElement } from "@/content/widget";
-import { $$ } from "select-dom";
-import { BadgeCheck } from "lucide-react";
-import SkinportLogo from "@/components/skinport-logo";
-import { injectStyle } from "@/lib/dom";
-import featureManager from "@/content/feature-manager";
-import browser from "webextension-polyfill";
 import { InterpolateMessage } from "@/components/interpolate-message";
+import SkinportLogo from "@/components/skinport-logo";
+import featureManager from "@/content/feature-manager";
+import { createWidgetElement } from "@/content/widget";
+import { injectStyle } from "@/lib/dom";
+import { BadgeCheck } from "lucide-react";
+import React from "react";
+import { $$ } from "select-dom";
+import browser from "webextension-polyfill";
 
 async function googleSkinportResult() {
   const skinportLinkElements = $$('a[href="https://skinport.com/"]');
@@ -15,7 +15,7 @@ async function googleSkinportResult() {
     return;
   }
 
-  injectStyle(`.uEierd { display: none !important; }`);
+  injectStyle(".uEierd { display: none !important; }");
 
   const [officialSkinportWebsiteElement] = createWidgetElement(() => {
     return (
@@ -33,11 +33,11 @@ async function googleSkinportResult() {
     );
   });
 
-  skinportLinkElements.forEach((skinportLinkElement) => {
+  for (const skinportLinkElement of skinportLinkElements) {
     skinportLinkElement.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.prepend(
       officialSkinportWebsiteElement,
     );
-  });
+  }
 }
 
 featureManager.add(googleSkinportResult, { awaitDomReady: true });

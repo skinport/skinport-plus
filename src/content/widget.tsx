@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import styles from "tailwind:./widget.css";
 import { elementExists } from "select-dom";
+import styles from "tailwind:./widget.css";
 
 export function createWidgetElement(
   Widget: React.ComponentType<{ shadowRoot: HTMLElement }>,
@@ -22,7 +22,9 @@ export function createWidgetElement(
 
   const reactRoot = createRoot(shadowRoot);
 
-  reactRoot.render(<Widget shadowRoot={shadowRoot as any as HTMLElement} />);
+  reactRoot.render(
+    <Widget shadowRoot={shadowRoot as unknown as HTMLElement} />,
+  );
 
   const removeWidgetElement = () => {
     if (reactRoot) {

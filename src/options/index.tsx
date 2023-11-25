@@ -1,9 +1,9 @@
 import SkinportLogo from "@/components/skinport-logo";
-import React, { useState, useEffect, useId } from "react";
-import { createRoot } from "react-dom/client";
-import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import optionsStorage, { optionsStorageDefaults } from "@/lib/options-storage";
+import React, { useEffect, useId, useState } from "react";
+import { createRoot } from "react-dom/client";
 import browser from "webextension-polyfill";
 import "./index.css";
 
@@ -91,4 +91,8 @@ function App() {
   );
 }
 
-createRoot(document.getElementById("root")!).render(<App />);
+const rootElement = document.getElementById("root");
+
+if (rootElement) {
+  createRoot(rootElement).render(<App />);
+}

@@ -10,6 +10,7 @@ export default function SkinportLogo(props: SVGProps<SVGSVGElement>) {
       viewBox="0 0 731 88.1"
       {...props}
     >
+      <title>Skinport</title>
       <path
         fill="#fff"
         d="m119.2 41.4 32.2 45h22.8l-32.2-45zM100.3 1.9v84.5h18.9V1.9z"
