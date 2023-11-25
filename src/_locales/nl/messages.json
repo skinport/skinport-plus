@@ -1,0 +1,97 @@
+{
+  "common_close": {
+    "message": "Sluiten"
+  },
+  "common_securityProvidedBySkinportPlus": {
+    "message": "Beveiliging geboden door Skinport Plus"
+  },
+  "common_viewOnSkinport": {
+    "message": "Bekijk op Skinport"
+  },
+  "extensionDescription": {
+    "description": "A short description of the extension, intended for display in the browser's user interface. In Firefox and Chrome this value can be up to 132 characters.",
+    "message": "Verbeter je online handelservaring op Skinport en Steam met Skinport Plus."
+  },
+  "extensionName": {
+    "description": "Name of the extension. This is used to identify the extension in the browser's user interface and on sites like addons.mozilla.org. Chrome and Edge restrict the name length to 45 characters.",
+    "message": "Skinport Plus"
+  },
+  "google_officialSkinportWebsite": {
+    "message": "Officiële <skinportLogo /> website"
+  },
+  "options_checkSteamAccountSecurity_description": {
+    "message": "Deze functie detecteert blootgestelde Steam Web API-sleutels op je account, een veelvoorkomend doelwit in phishing-aanvallen om je account te beheersen en inventarissen te stelen."
+  },
+  "options_checkSteamAccountSecurity_label": {
+    "message": "Controleer op beveiligingskwetsbaarheden in je Steam-account"
+  },
+  "options_checkTradeOffer_description": {
+    "message": "Deze functie controleert of een handelspartner op Steam een officiële Skinport bot is om de echtheid te bevestigen."
+  },
+  "options_checkTradeOffer_label": {
+    "message": "Controleer Handelsaanbiedingen"
+  },
+  "options_headerTitle": {
+    "message": "Plus"
+  },
+  "options_pageTitle": {
+    "message": "Instellingen"
+  },
+  "steamcommunity_accountSecurityCheck_banner_review": {
+    "message": "Bekijk"
+  },
+  "steamcommunity_accountSecurityCheck_banner_title": {
+    "message": "Beveiligingskwetsbaarheden gedetecteerd op je Steam-account"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExplained_description": {
+    "message": "Het gebruik van je API-sleutel op handelswebsites is onnodig en brengt aanzienlijke risico's met zich mee. Voornamelijk bedoeld voor ontwikkelaars, is misbruik van je API-sleutel vergelijkbaar met het blootstellen van je inloggegevens. Dergelijke acties kunnen leiden tot phishing-aanvallen en kunnen resulteren in het feit dat je Steam account wordt gehackt of verbannen, in strijd met de <0>Steam Web API Gebruiksvoorwaarden</0>."
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExplained_title": {
+    "message": "Wat is een Steam Web API-sleutel?"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_changePassword": {
+    "message": "Wachtwoord wijzigen"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_deauthorizeAllDevices": {
+    "message": "Deautoriseer alle apparaten"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph1": {
+    "message": "Er is een Steam Web API-sleutel gedetecteerd op jouw account. Deze sleutel kan worden misbruikt door kwaadwillende actoren om je account en voorraad te beheren, inclusief het accepteren of afwijzen van handelsaanbiedingen. Dergelijke sleutels worden vaak gebruikt in phishing-aanvallen om voorraad te stelen."
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph2": {
+    "message": "Als je zelf geen Steam Web API Key hebt geregistreerd, trek dan voor de zekerheid onmiddellijk de toestemming van alle apparaten in."
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph3": {
+    "message": "Zorg er vervolgens voor dat je de Steam Web API Key intrekt."
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph4": {
+    "message": "Daarnaast raden we aan om je wachtwoord te veranderen. Als aanvallers je Steam Web API Key hebben weten te bemachtigen, is de kans groot dat ze ook je Steam wachtwoord kennen. Als dit wachtwoord ook op andere plekken wordt gebruikt, is het cruciaal om het daar ook te veranderen."
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_revokeSteamWebApiKey": {
+    "message": "Trek Steam Web API Sleutel in"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_title": {
+    "message": "Steam Web API Sleutel Blootgesteld"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
+    "message": "Ga door met de handel"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph1": {
+    "message": "Deze ruil aanbieding lijkt niet van Skinport te zijn en we konden de handelspartner niet verifiëren."
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph2": {
+    "message": "We raden je aan om alleen door te gaan als je de handelspartner vertrouwt. Je zult je voorwerpen niet terug kunnen krijgen."
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_readSafetyGuide": {
+    "message": "Lees de veiligheidsgids"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_title": {
+    "message": "Probeert iemand je misschien op te lichten?"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerVerified_description_paragraph1": {
+    "message": "Dit handelsaanbod is officieel van Skinport, en de handelspartner is een geverifieerde Skinport bot."
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerVerified_title": {
+    "message": "Je handelt met Skinport"
+  }
+}

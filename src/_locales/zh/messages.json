@@ -1,0 +1,97 @@
+{
+  "common_close": {
+    "message": "关闭"
+  },
+  "common_securityProvidedBySkinportPlus": {
+    "message": "由Skinport Plus提供的安全保障"
+  },
+  "common_viewOnSkinport": {
+    "message": "在Skinport上查看"
+  },
+  "extensionDescription": {
+    "description": "A short description of the extension, intended for display in the browser's user interface. In Firefox and Chrome this value can be up to 132 characters.",
+    "message": "使用Skinport Plus，提升你在Skinport和Steam上的在线交易体验。"
+  },
+  "extensionName": {
+    "description": "Name of the extension. This is used to identify the extension in the browser's user interface and on sites like addons.mozilla.org. Chrome and Edge restrict the name length to 45 characters.",
+    "message": "Skinport Plus"
+  },
+  "google_officialSkinportWebsite": {
+    "message": "官方 <skinportLogo /> 网站"
+  },
+  "options_checkSteamAccountSecurity_description": {
+    "message": "此功能可以检测到您帐户上公开的Steam Web API密钥，这是钓鱼攻击的常见目标，以控制您的帐户并窃取库存。"
+  },
+  "options_checkSteamAccountSecurity_label": {
+    "message": "检查Steam账户的安全漏洞"
+  },
+  "options_checkTradeOffer_description": {
+    "message": "此功能检查Steam上的交易伙伴是否是官方Skinport bot，以确认其真实性。"
+  },
+  "options_checkTradeOffer_label": {
+    "message": "检查交易提供"
+  },
+  "options_headerTitle": {
+    "message": "加号"
+  },
+  "options_pageTitle": {
+    "message": "设置"
+  },
+  "steamcommunity_accountSecurityCheck_banner_review": {
+    "message": "检查"
+  },
+  "steamcommunity_accountSecurityCheck_banner_title": {
+    "message": "在你的Steam账户上检测到安全漏洞"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExplained_description": {
+    "message": "在交易网站上使用你的API密钥是不必要的，而且带有显著的风险。这主要是为开发者准备的，误用你的API密钥就像是暴露你的登录凭证一样。这样的行为可能导致网络钓鱼攻击，可能导致你的Steam账户被侵犯或禁止，违反了<0>Steam Web API使用条款</0>。"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExplained_title": {
+    "message": "什么是Steam Web API密钥？"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_changePassword": {
+    "message": "更改密码"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_deauthorizeAllDevices": {
+    "message": "取消授权所有设备"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph1": {
+    "message": "在您的帐户上检测到了Steam Web API密钥。恶意行动者可能会利用这个密钥来控制您的帐户和库存，包括接受或拒绝交易提议。这种密钥常常在网络钓鱼攻击中被用来盗取库存。"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph2": {
+    "message": "如果你没有自己注册Steam Web API Key，请立即作为预防措施撤销所有设备的授权。"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph3": {
+    "message": "接下来，请确保撤销Steam Web API密钥。"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph4": {
+    "message": "此外，我们建议您更改密码。如果攻击者已经访问了您的Steam Web API密钥，他们可能也知道您的Steam密码。如果这个密码在其他地方也被使用，那么在其他网站上更改它就至关重要了。"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_revokeSteamWebApiKey": {
+    "message": "撤销Steam网页API密钥"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_title": {
+    "message": "Steam Web API 密钥已泄露"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
+    "message": "继续交易"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph1": {
+    "message": "这个交易提议似乎不是来自Skinport，我们无法验证交易伙伴。"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph2": {
+    "message": "我们建议你只在信任交易伙伴的情况下继续。你将无法取回你的物品。"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_readSafetyGuide": {
+    "message": "阅读安全指南"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_title": {
+    "message": "有人试图骗你吗？"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerVerified_description_paragraph1": {
+    "message": "这个交易提案是来自Skinport的官方提供，交易伙伴是经过Skinport验证的机器人。"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerVerified_title": {
+    "message": "你正在与Skinport进行交易"
+  }
+}

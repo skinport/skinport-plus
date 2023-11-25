@@ -1,4 +1,4 @@
-import { writeFile } from "node:fs/promises";
+import { writeFile, access, mkdir } from "node:fs/promises";
 import path from "node:path";
 import AdmZip from "adm-zip";
 
@@ -30,8 +30,16 @@ console.log("start loading language file");
         const lang = zipEntry.name.replace(".json", "");
         console.log(`found language file for: ${lang}`);
 
+        const basePath = path.resolve("src/_locales/" + lang);
+
+        try {
+          await access(basePath);
+        } catch (e) {
+          await mkdir(basePath);
+        }
+
         await writeFile(
-          path.resolve("src/locales/" + lang + ".json"),
+          path.resolve(basePath + "/messages.json"),
           JSON.stringify(
             JSON.parse(zipEntry.getData().toString("utf8")),
             null,

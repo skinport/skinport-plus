@@ -1,0 +1,97 @@
+{
+  "common_close": {
+    "message": "Zamknij"
+  },
+  "common_securityProvidedBySkinportPlus": {
+    "message": "Bezpieczeństwo zapewnione przez Skinport Plus"
+  },
+  "common_viewOnSkinport": {
+    "message": "Zobacz na Skinport"
+  },
+  "extensionDescription": {
+    "description": "A short description of the extension, intended for display in the browser's user interface. In Firefox and Chrome this value can be up to 132 characters.",
+    "message": "Ulepsz swoje doświadczenia z handlem online na Skinport i Steam z Skinport Plus."
+  },
+  "extensionName": {
+    "description": "Name of the extension. This is used to identify the extension in the browser's user interface and on sites like addons.mozilla.org. Chrome and Edge restrict the name length to 45 characters.",
+    "message": "Skinport Plus"
+  },
+  "google_officialSkinportWebsite": {
+    "message": "Oficjalna strona <skinportLogo />"
+  },
+  "options_checkSteamAccountSecurity_description": {
+    "message": "Ta funkcja wykrywa wystawione klucze Steam Web API na twoim koncie, które są częstym celem ataków phishingowych mających na celu przejęcie kontroli nad twoim kontem i kradzież inwentarzy."
+  },
+  "options_checkSteamAccountSecurity_label": {
+    "message": "Sprawdź podatności na luki bezpieczeństwa konta Steam"
+  },
+  "options_checkTradeOffer_description": {
+    "message": "Ta funkcja sprawdza, czy partner handlowy na Steamie jest oficjalnym botem Skinport, aby potwierdzić jego autentyczność."
+  },
+  "options_checkTradeOffer_label": {
+    "message": "Sprawdź oferty wymiany"
+  },
+  "options_headerTitle": {
+    "message": "Plus"
+  },
+  "options_pageTitle": {
+    "message": "Ustawienia"
+  },
+  "steamcommunity_accountSecurityCheck_banner_review": {
+    "message": "Recenzja"
+  },
+  "steamcommunity_accountSecurityCheck_banner_title": {
+    "message": "Wykryto luki bezpieczeństwa na Twoim koncie Steam"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExplained_description": {
+    "message": "Używanie twojego klucza API na stronach handlowych jest niepotrzebne i wiąże się z istotnymi ryzykami. Przeznaczony przede wszystkim dla deweloperów, niewłaściwe użycie twojego klucza API jest jak ujawnienie twoich danych do logowania. Takie działania mogą prowadzić do ataków phishingowych i mogą skutkować kompromitacją lub zablokowaniem twojego konta Steam, co jest sprzeczne z <0>Warunkami Korzystania z Steam Web API</0>."
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExplained_title": {
+    "message": "Co to jest klucz do Steam Web API?"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_changePassword": {
+    "message": "Zmień hasło"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_deauthorizeAllDevices": {
+    "message": "Odautoryzuj wszystkie urządzenia"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph1": {
+    "message": "Wykryto klucz Web API Steam na Twoim koncie. Ten klucz może być wykorzystany przez złośliwe podmioty do kontrolowania Twojego konta i ekwipunku, w tym akceptowania lub odrzucania ofert wymiany. Takie klucze są często wykorzystywane w atakach phishingowych do kradzieży ekwipunku."
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph2": {
+    "message": "Jeśli samodzielnie nie zarejestrowałeś klucza Steam Web API, natychmiast dezaktywuj wszystkie urządzenia jako środek ostrożności."
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph3": {
+    "message": "Następnie upewnij się, że cofnąłeś klucz do Steam Web API."
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph4": {
+    "message": "Dodatkowo, zalecamy zmienienie hasła. Jeśli atakujący mieli dostęp do twojego klucza Steam Web API, mogą również znać twoje hasło do Steam. Jeśli to hasło jest używane gdzie indziej, niezbędne jest jego zmienienie również na innych stronach."
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_revokeSteamWebApiKey": {
+    "message": "Cofnij klucz Steam Web API"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_title": {
+    "message": "Klucz do Steam Web API ujawniony"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
+    "message": "Kontynuuj wymianę"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph1": {
+    "message": "Ta oferta wymiany nie wydaje się pochodzić od Skinport, a my nie mogliśmy zweryfikować partnera handlowego."
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph2": {
+    "message": "Zalecamy kontynuowanie tylko wtedy, gdy ufasz partnerowi handlowemu. Nie będziesz mógł odzyskać swoich przedmiotów."
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_readSafetyGuide": {
+    "message": "Przeczytaj przewodnik bezpieczeństwa"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_title": {
+    "message": "Czy ktoś próbuje Cię oszukać?"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerVerified_description_paragraph1": {
+    "message": "Ta oferta handlowa pochodzi oficjalnie od Skinport, a partnerem handlowym jest zweryfikowany bot Skinport."
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerVerified_title": {
+    "message": "Handlujesz na Skinport"
+  }
+}

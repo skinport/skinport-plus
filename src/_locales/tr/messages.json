@@ -1,0 +1,97 @@
+{
+  "common_close": {
+    "message": "Kapat"
+  },
+  "common_securityProvidedBySkinportPlus": {
+    "message": "Skinport Plus tarafından sağlanan güvenlik"
+  },
+  "common_viewOnSkinport": {
+    "message": "Skinport'ta Görüntüle"
+  },
+  "extensionDescription": {
+    "description": "A short description of the extension, intended for display in the browser's user interface. In Firefox and Chrome this value can be up to 132 characters.",
+    "message": "Skinport ve Steam'deki çevrimiçi takas deneyimini Skinport Plus ile geliştir."
+  },
+  "extensionName": {
+    "description": "Name of the extension. This is used to identify the extension in the browser's user interface and on sites like addons.mozilla.org. Chrome and Edge restrict the name length to 45 characters.",
+    "message": "Skinport Plus"
+  },
+  "google_officialSkinportWebsite": {
+    "message": "Resmi <skinportLogo /> web sitesi"
+  },
+  "options_checkSteamAccountSecurity_description": {
+    "message": "Bu özellik, hesabınızdaki açığa çıkmış Steam Web API Anahtarlarını tespit eder, bu da hesabınızı kontrol etmek ve envanterleri çalmak için sık kullanılan bir phishing saldırısı hedefidir."
+  },
+  "options_checkSteamAccountSecurity_label": {
+    "message": "Steam hesap güvenlik açıklarını kontrol et"
+  },
+  "options_checkTradeOffer_description": {
+    "message": "Bu özellik, bir ticaret partnerinin Steam'da resmi bir Skinport botu olup olmadığını kontrol ederek doğruluğunu teyit eder."
+  },
+  "options_checkTradeOffer_label": {
+    "message": "Ticaret Tekliflerini Kontrol Et"
+  },
+  "options_headerTitle": {
+    "message": "Artı"
+  },
+  "options_pageTitle": {
+    "message": "Ayarlar"
+  },
+  "steamcommunity_accountSecurityCheck_banner_review": {
+    "message": "Görüntüle"
+  },
+  "steamcommunity_accountSecurityCheck_banner_title": {
+    "message": "Steam hesabınızda güvenlik açıkları tespit edildi"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExplained_description": {
+    "message": "API anahtarınızı alışveriş sitelerinde kullanmak gereksizdir ve önemli riskler taşır. Öncelikle geliştiriciler için tasarlanmış olan API anahtarınızın yanlış kullanılması, giriş bilgilerinizi ifşa etmekle eşdeğerdir. Bu tür eylemler, balık avlama saldırılarına yol açabilir ve Steam hesabınızın tehlikeye girmesine veya <0>Steam Web API Kullanım Şartları</0> ihlali sebebiyle yasaklanmasına neden olabilir."
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExplained_title": {
+    "message": "Steam Web API Anahtarı nedir?"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_changePassword": {
+    "message": "Şifreyi değiştir"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_deauthorizeAllDevices": {
+    "message": "Tüm cihazların yetkisini kaldır"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph1": {
+    "message": "Hesabınızda bir Steam Web API Anahtarı tespit edildi. Bu anahtar, hesabınızı ve envanterinizi kontrol etmek, ticaret tekliflerini kabul etmek veya reddetmek için kötü niyetli kişiler tarafından kötüye kullanılabilir. Bu tür anahtarlar, envanteri çalmak için sıklıkla phishing saldırılarında kullanılır."
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph2": {
+    "message": "Eğer kendiniz için bir Steam Web API Anahtarı kaydetmediyseniz, lütfen önlem olarak tüm cihazların yetkisini hemen kaldırın."
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph3": {
+    "message": "Sonraki adım, Steam Web API Anahtarını iptal etmeyi sağlamaktır."
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph4": {
+    "message": "Ayrıca, şifrenizi değiştirmenizi öneririz. Saldırganlar Steam Web API Anahtarınıza erişmişse, Steam şifrenizi de biliyor olabilirler. Bu şifre başka yerlerde kullanılıyorsa, diğer sitelerde de değiştirmeniz çok önemlidir."
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_revokeSteamWebApiKey": {
+    "message": "Steam Web API Anahtarını İptal Et"
+  },
+  "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_title": {
+    "message": "Steam Web API Anahtarı Ortaya Çıktı"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
+    "message": "Ticarete devam et"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph1": {
+    "message": "Bu takas teklifinin Skinport'tan gelmediği görünüyor ve takas partnerini doğrulayamadık."
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph2": {
+    "message": "Sadece ticaret ortağınıza güveniyorsanız devam etmenizi tavsiye ederiz. Esyalarınızı geri alamayacaksınız."
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_readSafetyGuide": {
+    "message": "Güvenlik rehberini oku"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerUnverified_title": {
+    "message": "Biri sana dolandırıcılık mı yapmaya çalışıyor olabilir?"
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerVerified_description_paragraph1": {
+    "message": "Bu takas teklifi resmi olarak Skinport'tan ve ticaret ortağı doğrulanmış bir Skinport botudur."
+  },
+  "steamcommunity_traderOfferCheck_tradePartnerVerified_title": {
+    "message": "Skinport ile ticaret yapıyorsun"
+  }
+}
