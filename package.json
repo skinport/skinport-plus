@@ -1,6 +1,7 @@
 {
   "type": "module",
   "scripts": {
+    "postinstall": "patch-package",
     "prepare": "husky install",
     "i18n": "tsx ./scripts/i18n.ts",
     "dev": "tsx ./scripts/build.ts --dev",
@@ -9,6 +10,7 @@
     "build:firefox": "tsx ./scripts/build.ts --firefox"
   },
   "dependencies": {
+    "@doist/react-interpolate": "^1.1.0",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
@@ -22,7 +24,6 @@
     "lucide-react": "^0.292.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-i18next": "^13.5.0",
     "select-dom": "^9.0.0",
     "tailwind-merge": "^2.0.0",
     "webext-options-sync": "^4.2.1",
@@ -43,6 +44,7 @@
     "esbuild-style-plugin": "^1.6.3",
     "husky": "^8.0.3",
     "lint-staged": "^15.1.0",
+    "patch-package": "^8.0.0",
     "postcss": "^8.4.31",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7",

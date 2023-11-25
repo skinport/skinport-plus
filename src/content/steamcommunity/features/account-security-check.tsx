@@ -14,10 +14,10 @@ import {
 } from "@/components/ui/dialog";
 import { ExternalLink } from "lucide-react";
 import { $ } from "select-dom";
-import { Trans } from "react-i18next";
 import { Link } from "@/components/ui/link";
 import featureManager from "@/content/feature-manager";
 import browser from "webextension-polyfill";
+import { InterpolateMessage } from "@/components/interpolate-message";
 
 async function steamAccountSecurityCheck() {
   const webApiKeyRepsonse = await fetch("/dev/apikey").then((response) => {
@@ -130,18 +130,19 @@ async function steamAccountSecurityCheck() {
                 )}
               </h3>
               <p>
-                <Trans
-                  components={[
-                    <Link
-                      href="https://steamcommunity.com/dev/apiterms"
-                      target="_blank"
-                    />,
-                  ]}
-                >
-                  {browser.i18n.getMessage(
+                <InterpolateMessage
+                  message={browser.i18n.getMessage(
                     "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExplained_description",
                   )}
-                </Trans>
+                  values={{
+                    0: (
+                      <Link
+                        href="https://steamcommunity.com/dev/apiterms"
+                        target="_blank"
+                      />
+                    ),
+                  }}
+                />
               </p>
             </div>
             <DialogFooter>

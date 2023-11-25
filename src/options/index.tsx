@@ -4,7 +4,6 @@ import { createRoot } from "react-dom/client";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import optionsStorage, { optionsStorageDefaults } from "@/lib/options-storage";
-import { useTranslation } from "react-i18next";
 import browser from "webextension-polyfill";
 import "./index.css";
 
@@ -33,7 +32,6 @@ function OptionField({
 
 function App() {
   const [options, setOptions] = useState<typeof optionsStorageDefaults>();
-  const { t } = useTranslation();
 
   useEffect(() => {
     const loadOptions = async () => {

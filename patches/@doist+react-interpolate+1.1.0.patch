@@ -1,0 +1,21 @@
+diff --git a/node_modules/@doist/react-interpolate/dist/react-interpolate.mjs b/node_modules/@doist/react-interpolate/dist/react-interpolate.mjs
+index d783a61..9907006 100644
+--- a/node_modules/@doist/react-interpolate/dist/react-interpolate.mjs
++++ b/node_modules/@doist/react-interpolate/dist/react-interpolate.mjs
+@@ -1,5 +1,4 @@
+ import React from 'react';
+-import PropTypes from 'prop-types';
+ import _classCallCheck from '@babel/runtime/helpers/classCallCheck';
+ import _createClass from '@babel/runtime/helpers/createClass';
+ import _objectWithoutProperties from '@babel/runtime/helpers/objectWithoutProperties';
+@@ -474,10 +473,5 @@ function Interpolate(_ref) {
+     }
+   }
+ }
+-Interpolate.propTypes = {
+-  string: PropTypes.string.isRequired,
+-  mapping: PropTypes.object,
+-  graceful: PropTypes.bool
+-};
+ 
+ export { SYNTAX_BUILT_IN, SYNTAX_I18NEXT, TOKEN_CLOSE_TAG, TOKEN_OPEN_TAG, TOKEN_PLACEHOLDER, TOKEN_SELF_TAG, Interpolate as default };
