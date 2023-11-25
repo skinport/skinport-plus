@@ -1,6 +1,7 @@
+import { type Config } from "tailwindcss";
 import animate from "tailwindcss-animate";
 
-const tailwindConfig = {
+const tailwindConfig: Config = {
   content: ["./src/components/**/*.{ts,tsx}"],
   theme: {
     fontFamily: {

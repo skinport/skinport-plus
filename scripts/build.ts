@@ -59,7 +59,10 @@ function getPostcssPlugins(tailwindContent: string[]) {
   return <postcss.AcceptedPlugin[]>[
     tailwind({
       ...tailwindBaseConfig,
-      content: [...tailwindBaseConfig.content, ...tailwindContent],
+      content: [
+        ...(tailwindBaseConfig.content as string[]),
+        ...tailwindContent,
+      ],
     }),
     autoprefixer,
   ];
