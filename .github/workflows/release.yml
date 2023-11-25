@@ -1,0 +1,78 @@
+name: release
+
+on:
+  workflow_dispatch: null
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npx biome ci .
+  types:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run types
+  build-chrome:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-artifact@v3
+        with:
+          name: skinport-plus-chrome
+          path: dist
+  build-firefox:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build:firefox
+      - uses: actions/upload-artifact@v3
+        with:
+          name: skinport-plus-firefox
+          path: dist
+  version:
+    needs: [lint, types, build-chrome, build-firefox]
+    outputs:
+      created: '1.2.3'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # - name: create tag if necessary
+      #   uses: fregante/daily-version-action@v2
+  release-chrome:
+    if: needs.version.outputs.created
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        name: skinport-plus-chrome
+      - run: ls -R
+      - name: Update manifest.json with version ${{ needs.version.outputs.created }}
+        run: npx dot-json@1 manifest.json version "${{ needs.version.outputs.created }}"
+      # - run: npx chrome-webstore-upload-cli@2 upload --auto-publish
+      #   env:
+      #     EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
+      #     CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      #     CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      #     REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
