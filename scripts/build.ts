@@ -44,12 +44,31 @@ async function copySrcFileToDist(srcFile: string) {
         .delete("background.service_worker")
         // Remove keys not supported by Firefox
         .delete("minimum_chrome_version")
-        .delete("web_accessible_resources.use_dynamic_url")
-        .save();
+        .delete("web_accessible_resources.use_dynamic_url");
     } else {
-      // Remove keys not supported by Firefox
-      manifestJson.delete("browser_specific_settings").save();
+      // Remove keys not supported by Chrome
+      manifestJson.delete("browser_specific_settings");
     }
+
+    if (IS_DEV) {
+      manifestJson.set(
+        "content_scripts",
+        manifestJson
+          .get("content_scripts")
+          .map((contentScript: { matches: string[] }) => {
+            if (contentScript.matches.includes("https://skinport.com/*")) {
+              return {
+                ...contentScript,
+                matches: contentScript.matches.concat("http://localhost/*"),
+              };
+            }
+
+            return contentScript;
+          }),
+      );
+    }
+
+    manifestJson.save();
   }
 
   console.log("[info] copied", srcPath.replace("src/", ""));
