@@ -1,7 +1,13 @@
 name: release
 
 on:
-  workflow_dispatch: null
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        type: boolean
+        description: Run without releasing
+        required: false
+        default: false
 
 jobs:
   lint:
@@ -36,7 +42,7 @@ jobs:
       - run: npm run build
       - uses: actions/upload-artifact@v3
         with:
-          name: skinport-plus-chrome
+          name: dist-chrome
           path: dist
   build-firefox:
     runs-on: ubuntu-latest
@@ -50,29 +56,41 @@ jobs:
       - run: npm run build:firefox
       - uses: actions/upload-artifact@v3
         with:
-          name: skinport-plus-firefox
+          name: dist-firefox
           path: dist
   version:
     needs: [lint, types, build-chrome, build-firefox]
     outputs:
-      created: '1.2.3'
+      manifest_version: ${{ env.DAILY_VERSION }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # - name: create tag if necessary
-      #   uses: fregante/daily-version-action@v2
+      - uses: fregante/daily-version-action@v2
   release-chrome:
-    if: needs.version.outputs.created
+    needs: version
+    if: needs.version.outputs.manifest_version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
-        name: skinport-plus-chrome
-      - run: ls -R
-      - name: Update manifest.json with version ${{ needs.version.outputs.created }}
-        run: npx dot-json@1 manifest.json version "${{ needs.version.outputs.created }}"
-      # - run: npx chrome-webstore-upload-cli@2 upload --auto-publish
-      #   env:
-      #     EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
-      #     CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      #     CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-      #     REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+      - run: npx dot-json@1 dist-chrome/manifest.json version "${{ needs.version.outputs.manifest_version }}"
+      - if: ${{ inputs.dry-run == false }}
+        run: npx chrome-webstore-upload-cli@2 upload --auto-publish
+        working-directory: dist-chrome
+        env:
+          EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+  release-firefox:
+    needs: version
+    if: needs.version.outputs.manifest_version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+      - run: npx dot-json@1 dist-firefox/manifest.json version "${{ needs.version.outputs.manifest_version }}"
+      - if: ${{ inputs.dry-run == false }}
+        run: npx web-ext@7 sign --use-submission-api --channel listed
+        working-directory: dist-firefox
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
+          WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
