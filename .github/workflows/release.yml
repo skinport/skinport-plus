@@ -66,11 +66,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: fregante/daily-version-action@v2
+      - if: env.DAILY_VERSION
+        run: gh release create "$DAILY_VERSION" --generate-notes
+        working-directory: ${{ env.DIRECTORY }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   release-chrome:
     needs: version
     if: needs.version.outputs.manifest_version
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v3
       - run: npx dot-json@1 dist-chrome/manifest.json version "${{ needs.version.outputs.manifest_version }}"
       - if: ${{ inputs.dry-run == false }}
@@ -81,11 +87,19 @@ jobs:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+      - run: |
+          FILENAME="skinport-plus-chrome-${{ needs.version.outputs.manifest_version }}.zip"
+          zip -r "$FILENAME" ./*
+          gh release upload "${{ needs.version.outputs.manifest_version }}" "$FILENAME"
+        working-directory: dist-chrome
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   release-firefox:
     needs: version
     if: needs.version.outputs.manifest_version
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v3
       - run: npx dot-json@1 dist-firefox/manifest.json version "${{ needs.version.outputs.manifest_version }}"
       - if: ${{ inputs.dry-run == false }}
@@ -94,3 +108,10 @@ jobs:
         env:
           WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
           WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
+      - run: |
+          FILENAME="skinport-plus-firefox-${{ needs.version.outputs.manifest_version }}.zip"
+          zip -r "$FILENAME" ./*
+          gh release upload "${{ needs.version.outputs.manifest_version }}" "$FILENAME"
+        working-directory: dist-firefox
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
