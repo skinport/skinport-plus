@@ -22,7 +22,7 @@ function getResultRootElement(targetElement: HTMLElement) {
 }
 
 async function googleSkinportResult() {
-  const skinportLinkElement = $('#search a[ping*="https://skinport.com"]');
+  const skinportLinkElement = $('#search a[href^="https://skinport.com"]');
 
   if (!skinportLinkElement) {
     return;
