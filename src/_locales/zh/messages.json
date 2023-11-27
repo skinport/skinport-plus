@@ -37,6 +37,21 @@
   "options_pageTitle": {
     "message": "设置"
   },
+  "phishingBlocker_description_paragraph1": {
+    "message": "Skinport extension has blocked access to <strong>{{blockedHost}}</strong>, because it potentially pretends to be Skinport and may trick you into doing something dangerous like revealing your Steam information such as email, password and Steam Web API key."
+  },
+  "phishingBlocker_description_paragraph2": {
+    "message": "Please make sure to only visit our official website <skinportLink>skinport.com</skinportLink>"
+  },
+  "phishingBlocker_goToSkinport": {
+    "message": "Go to Skinport.com"
+  },
+  "phishingBlocker_title": {
+    "message": "Potential Skinport phishing site ahead"
+  },
+  "phishingBlocker_visitPotentiallyUnsafeSite": {
+    "message": "If you understand the risks to your security, visit this <potentiallyUnsafeSiteLink>potentially unsafe site</potentiallyUnsafeSiteLink>."
+  },
   "steamcommunity_accountSecurityCheck_banner_review": {
     "message": "检查"
   },

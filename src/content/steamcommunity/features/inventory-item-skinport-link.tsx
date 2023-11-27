@@ -2,12 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/components/ui/link";
 import featureManager from "@/content/feature-manager";
 import { createWidgetElement, widgetElementExists } from "@/content/widget";
+import { getI18nMessage } from "@/lib/i18n";
 import { getSkinportItemUrl } from "@/lib/skinport";
 import { supportedSteamAppIds } from "@/lib/steam";
 import elementReady from "element-ready";
 import React from "react";
 import { $ } from "select-dom";
-import browser from "webextension-polyfill";
 
 async function steamInventoryItemSkinportLink() {
   const inventoryContentElement = await elementReady("#tabcontent_inventory", {
@@ -76,7 +76,7 @@ async function steamInventoryItemSkinportLink() {
         () => (
           <Button className="mb-4" asChild>
             <Link href={skinportItemUrl} target="_blank">
-              {browser.i18n.getMessage("common_viewOnSkinport")}
+              {getI18nMessage("common_viewOnSkinport")}
             </Link>
           </Button>
         ),

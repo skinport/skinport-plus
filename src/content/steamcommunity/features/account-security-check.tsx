@@ -14,10 +14,10 @@ import {
 import { Link } from "@/components/ui/link";
 import featureManager from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
+import { getI18nMessage } from "@/lib/i18n";
 import { ExternalLink } from "lucide-react";
 import React from "react";
 import { $ } from "select-dom";
-import browser from "webextension-polyfill";
 
 async function steamAccountSecurityCheck() {
   const webApiKeyRepsonse = await fetch("/dev/apikey").then((response) => {
@@ -40,15 +40,13 @@ async function steamAccountSecurityCheck() {
   const [securityCheckElement] = createWidgetElement(({ shadowRoot }) => (
     <div className="bg-[#e05a59] p-2 flex gap-4 justify-center items-center">
       <p className="font-semibold text-white">
-        {browser.i18n.getMessage(
-          "steamcommunity_accountSecurityCheck_banner_title",
-        )}
+        {getI18nMessage("steamcommunity_accountSecurityCheck_banner_title")}
       </p>
       <div className="flex gap-2">
         <Dialog>
           <DialogTrigger asChild>
             <Button variant="outline" size="sm">
-              {browser.i18n.getMessage(
+              {getI18nMessage(
                 "steamcommunity_accountSecurityCheck_banner_review",
               )}
             </Button>
@@ -57,19 +55,19 @@ async function steamAccountSecurityCheck() {
             <SkinportLogo width={96} />
             <DialogHeader>
               <DialogTitle>
-                {browser.i18n.getMessage(
+                {getI18nMessage(
                   "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_title",
                 )}
               </DialogTitle>
               <DialogDescription>
-                {browser.i18n.getMessage(
+                {getI18nMessage(
                   "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph1",
                 )}
               </DialogDescription>
             </DialogHeader>
             <div className="flex flex-col gap-2">
               <p>
-                {browser.i18n.getMessage(
+                {getI18nMessage(
                   "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph2",
                 )}
               </p>
@@ -79,7 +77,7 @@ async function steamAccountSecurityCheck() {
                     href="https://store.steampowered.com/twofactor/manage"
                     target="_blank"
                   >
-                    {browser.i18n.getMessage(
+                    {getI18nMessage(
                       "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_deauthorizeAllDevices",
                     )}
                     <ExternalLink className="text-white" size={16} />
@@ -87,7 +85,7 @@ async function steamAccountSecurityCheck() {
                 </Button>
               </div>
               <p className="mt-2">
-                {browser.i18n.getMessage(
+                {getI18nMessage(
                   "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph3",
                 )}
               </p>
@@ -97,7 +95,7 @@ async function steamAccountSecurityCheck() {
                     href="https://steamcommunity.com/dev/apikey"
                     target="_blank"
                   >
-                    {browser.i18n.getMessage(
+                    {getI18nMessage(
                       "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_revokeSteamWebApiKey",
                     )}
                     <ExternalLink className="text-white" size={16} />
@@ -105,7 +103,7 @@ async function steamAccountSecurityCheck() {
                 </Button>
               </div>
               <p>
-                {browser.i18n.getMessage(
+                {getI18nMessage(
                   "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_description_paragraph4",
                 )}
               </p>
@@ -115,7 +113,7 @@ async function steamAccountSecurityCheck() {
                     href="https://help.steampowered.com/en/wizard/HelpChangePassword"
                     target="_blank"
                   >
-                    {browser.i18n.getMessage(
+                    {getI18nMessage(
                       "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_changePassword",
                     )}
                     <ExternalLink className="text-white" size={16} />
@@ -125,13 +123,13 @@ async function steamAccountSecurityCheck() {
             </div>
             <div className="flex flex-col gap-2">
               <h3 className="font-semibold text-white text-base">
-                {browser.i18n.getMessage(
+                {getI18nMessage(
                   "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExplained_title",
                 )}
               </h3>
               <p>
                 <InterpolateMessage
-                  message={browser.i18n.getMessage(
+                  message={getI18nMessage(
                     "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExplained_description",
                   )}
                   values={{
@@ -147,13 +145,11 @@ async function steamAccountSecurityCheck() {
             </div>
             <DialogFooter>
               <p className="text-xs text-[#6b6d6e] flex-1">
-                {browser.i18n.getMessage(
-                  "common_securityProvidedBySkinportPlus",
-                )}
+                {getI18nMessage("common_securityProvidedBySkinportPlus")}
               </p>
               <DialogClose asChild>
                 <Button variant="ghost">
-                  {browser.i18n.getMessage("common_close")}
+                  {getI18nMessage("common_close")}
                 </Button>
               </DialogClose>
             </DialogFooter>

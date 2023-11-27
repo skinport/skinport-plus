@@ -1,6 +1,8 @@
+import { InterpolateMessage } from "@/components/interpolate-message";
 import SkinportLogo from "@/components/skinport-logo";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/components/ui/link";
+import { getI18nMessage } from "@/lib/i18n";
 import { ShieldAlert } from "lucide-react";
 import React from "react";
 import { createRoot } from "react-dom/client";
@@ -24,61 +26,71 @@ function App() {
         </div>
         <div className="space-y-2">
           <h1 className="font-semibold text-lg text-white">
-            Potential Skinport phishing site ahead
+            {getI18nMessage("phishingBlocker_title")}
           </h1>
           <p>
-            Skinport extension has blocked access to{" "}
-            {blockedHost ? <strong>{blockedHost}</strong> : "the website"},
-            because it potentially pretends to be Skinport and may trick you
-            into doing something dangerous like revealing your Steam account
-            information such as email, password and Steam Web API key.
+            <InterpolateMessage
+              message={getI18nMessage("phishingBlocker_description_paragraph1")}
+              values={{ blockedHost }}
+            />
           </p>
           <p>
-            Please make sure to only visit our official website{" "}
-            <Link
-              className="text-white hover:text-red transition-colors"
-              href="https://skinport.com"
-            >
-              skinport.com
-            </Link>
+            <InterpolateMessage
+              message={getI18nMessage("phishingBlocker_description_paragraph2")}
+              values={{
+                skinportLink: (
+                  <Link
+                    className="text-white hover:text-red transition-colors"
+                    href="https://skinport.com"
+                  />
+                ),
+              }}
+            />
           </p>
         </div>
         <Button asChild>
-          <Link href="https://skinport.com">Go to Skinport.com</Link>
+          <Link href="https://skinport.com">
+            {getI18nMessage("phishingBlocker_goToSkinport")}
+          </Link>
         </Button>
         {blockedHost && blockedUrl && (
           <p className="text-xs">
-            If you understand the risks to your security, visit{" "}
-            <Link
-              onClick={async (event) => {
-                event.preventDefault();
+            <InterpolateMessage
+              message={getI18nMessage(
+                "phishingBlocker_visitPotentiallyUnsafeSite",
+              )}
+              values={{
+                potentiallyUnsafeSiteLink: (
+                  <Link
+                    onClick={async (event) => {
+                      event.preventDefault();
 
-                const sessionRules =
-                  await browser.declarativeNetRequest.getSessionRules();
+                      const sessionRules =
+                        await browser.declarativeNetRequest.getSessionRules();
 
-                await browser.declarativeNetRequest.updateSessionRules({
-                  addRules: [
-                    {
-                      id: sessionRules.length + 1,
-                      priority: 1,
-                      action: {
-                        type: "allow",
-                      },
-                      condition: {
-                        resourceTypes: ["main_frame", "sub_frame"],
-                        requestDomains: [blockedHost],
-                      },
-                    },
-                  ],
-                });
+                      await browser.declarativeNetRequest.updateSessionRules({
+                        addRules: [
+                          {
+                            id: sessionRules.length + 1,
+                            priority: 1,
+                            action: {
+                              type: "allow",
+                            },
+                            condition: {
+                              resourceTypes: ["main_frame", "sub_frame"],
+                              requestDomains: [blockedHost],
+                            },
+                          },
+                        ],
+                      });
 
-                window.location.href = blockedUrl;
+                      window.location.href = blockedUrl;
+                    }}
+                    href={blockedUrl}
+                  />
+                ),
               }}
-              href={blockedUrl}
-            >
-              this potentially unsafe site
-            </Link>
-            .
+            />
           </p>
         )}
       </div>

@@ -2,12 +2,12 @@ import SkinportLogo from "@/components/skinport-logo";
 import { Button } from "@/components/ui/button";
 import featureManager from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
+import { getI18nMessage } from "@/lib/i18n";
 import skinportApi from "@/lib/skinport";
 import elementReady from "element-ready";
 import { ShieldAlert, ShieldCheck } from "lucide-react";
 import React, { useState } from "react";
 import { $, $$ } from "select-dom";
-import browser from "webextension-polyfill";
 
 function TradePartnerVerified() {
   return (
@@ -19,17 +19,17 @@ function TradePartnerVerified() {
         <ShieldCheck size="64" />
       </div>
       <h3 className="font-semibold text-lg text-white">
-        {browser.i18n.getMessage(
+        {getI18nMessage(
           "steamcommunity_traderOfferCheck_tradePartnerVerified_title",
         )}
       </h3>
       <p className="text-text-foreground">
-        {browser.i18n.getMessage(
+        {getI18nMessage(
           "steamcommunity_traderOfferCheck_tradePartnerVerified_description_paragraph1",
         )}
       </p>
       <p className="text-xs text-[#6b6d6e]">
-        {browser.i18n.getMessage("common_securityProvidedBySkinportPlus")}
+        {getI18nMessage("common_securityProvidedBySkinportPlus")}
       </p>
     </div>
   );
@@ -54,17 +54,17 @@ function TradePartnerUnverified({
         <ShieldAlert size="64" />
       </div>
       <h3 className="font-semibold text-lg text-white">
-        {browser.i18n.getMessage(
+        {getI18nMessage(
           "steamcommunity_traderOfferCheck_tradePartnerUnverified_title",
         )}
       </h3>
       <p className="text-text-foreground">
-        {browser.i18n.getMessage(
+        {getI18nMessage(
           "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph1",
         )}
       </p>
       <p className="text-text-foreground">
-        {browser.i18n.getMessage(
+        {getI18nMessage(
           "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph2",
         )}
       </p>
@@ -75,7 +75,7 @@ function TradePartnerUnverified({
           onContinueTrade();
         }}
       >
-        {browser.i18n.getMessage(
+        {getI18nMessage(
           "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade",
         )}
       </Button>
@@ -85,13 +85,13 @@ function TradePartnerUnverified({
           rel="noopener noreferrer"
           target="_blank"
         >
-          {browser.i18n.getMessage(
+          {getI18nMessage(
             "steamcommunity_traderOfferCheck_tradePartnerUnverified_readSafetyGuide",
           )}
         </a>
       </Button>
       <p className="text-xs text-[#6b6d6e]">
-        {browser.i18n.getMessage("securityProvidedBySkinportPlus")}
+        {getI18nMessage("common_securityProvidedBySkinportPlus")}
       </p>
     </div>
   );

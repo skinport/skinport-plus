@@ -1,10 +1,10 @@
 import SkinportLogo from "@/components/skinport-logo";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { I18nMessageKey, getI18nMessage } from "@/lib/i18n";
 import optionsStorage, { optionsStorageDefaults } from "@/lib/options-storage";
 import React, { useEffect, useId, useState } from "react";
 import { createRoot } from "react-dom/client";
-import browser from "webextension-polyfill";
 import "./index.css";
 
 function OptionField({
@@ -12,16 +12,16 @@ function OptionField({
   descriptionKey,
   ...switchProps
 }: {
-  labelKey: string;
-  descriptionKey?: string;
+  labelKey: I18nMessageKey;
+  descriptionKey?: I18nMessageKey;
 } & React.ComponentPropsWithoutRef<typeof Switch>) {
   const id = useId();
 
   return (
     <div className="bg-card px-8 py-6 flex flex-row items-center gap-8">
       <div className="space-y-1 flex-1">
-        <Label htmlFor={id}>{browser.i18n.getMessage(labelKey)}</Label>
-        {descriptionKey && <p>{browser.i18n.getMessage(descriptionKey)}</p>}
+        <Label htmlFor={id}>{getI18nMessage(labelKey)}</Label>
+        {descriptionKey && <p>{getI18nMessage(descriptionKey)}</p>}
       </div>
       <div>
         <Switch {...switchProps} id={id} />
@@ -53,13 +53,13 @@ function App() {
             >
               <SkinportLogo />
             </a>
-            {browser.i18n.getMessage("options_headerTitle")}
+            {getI18nMessage("options_headerTitle")}
           </div>
         </div>
       </header>
       <div className="bg-background px-8 py-12 mt-[78px] max-w-screen-md mx-auto">
         <h1 className="text-white text-5xl font-semibold mb-8">
-          {browser.i18n.getMessage("options_pageTitle")}
+          {getI18nMessage("options_pageTitle")}
         </h1>
         {options && (
           <>
