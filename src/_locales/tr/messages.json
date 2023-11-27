@@ -37,20 +37,32 @@
   "options_pageTitle": {
     "message": "Ayarlar"
   },
+  "options_permissionsRequired_description_paragraph1": {
+    "message": "Skinport Plus requires permissions in order to work and fully secure your trading experience."
+  },
+  "options_permissionsRequired_description_paragraph2": {
+    "message": "Protecting your privacy is very important to us, therefore Skinport Plus doesn't and will never collect any personal information or read your browser activity."
+  },
+  "options_permissionsRequired_grantPermission": {
+    "message": "Grant permissions"
+  },
+  "options_permissionsRequired_title": {
+    "message": "Permissions required"
+  },
   "phishingBlocker_description_paragraph1": {
-    "message": "Skinport extension has blocked access to <strong>{{blockedHost}}</strong>, because it potentially pretends to be Skinport and may trick you into doing something dangerous like revealing your Steam information such as email, password and Steam Web API key."
+    "message": "Skinport eklentisi, seni kandırarak tehlikeli bir şey yapmana, örneğin e-posta, şifre ve Steam Web API anahtarınız gibi Steam bilgilerini açığa çıkarmana neden olabileceği için <strong>{{blockedHost}}</strong>'a erişimi engelledi, çünkü potansiyel olarak Skinport'un yerini alabilir."
   },
   "phishingBlocker_description_paragraph2": {
-    "message": "Please make sure to only visit our official website <skinportLink>skinport.com</skinportLink>"
+    "message": "Lütfen yalnızca resmi web sitemizi <skinportLink>skinport.com</skinportLink> ziyaret ettiğinizden emin olun."
   },
   "phishingBlocker_goToSkinport": {
-    "message": "Go to Skinport.com"
+    "message": "Skinport.com'a git."
   },
   "phishingBlocker_title": {
-    "message": "Potential Skinport phishing site ahead"
+    "message": "Önünüzde olası bir Skinport phishing sitesi var"
   },
   "phishingBlocker_visitPotentiallyUnsafeSite": {
-    "message": "If you understand the risks to your security, visit this <potentiallyUnsafeSiteLink>potentially unsafe site</potentiallyUnsafeSiteLink>."
+    "message": "Güvenliğinizle ilgili riskleri anlıyorsanız, bu <potentiallyUnsafeSiteLink>potansiyel olarak güvensiz siteye</potentiallyUnsafeSiteLink> gidin."
   },
   "steamcommunity_accountSecurityCheck_banner_review": {
     "message": "Görüntüle"

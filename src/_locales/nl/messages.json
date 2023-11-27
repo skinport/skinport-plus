@@ -37,20 +37,32 @@
   "options_pageTitle": {
     "message": "Instellingen"
   },
+  "options_permissionsRequired_description_paragraph1": {
+    "message": "Skinport Plus requires permissions in order to work and fully secure your trading experience."
+  },
+  "options_permissionsRequired_description_paragraph2": {
+    "message": "Protecting your privacy is very important to us, therefore Skinport Plus doesn't and will never collect any personal information or read your browser activity."
+  },
+  "options_permissionsRequired_grantPermission": {
+    "message": "Grant permissions"
+  },
+  "options_permissionsRequired_title": {
+    "message": "Permissions required"
+  },
   "phishingBlocker_description_paragraph1": {
-    "message": "Skinport extension has blocked access to <strong>{{blockedHost}}</strong>, because it potentially pretends to be Skinport and may trick you into doing something dangerous like revealing your Steam information such as email, password and Steam Web API key."
+    "message": "De Skinport extensie heeft de toegang tot <strong>{{blockedHost}}</strong> geblokkeerd, omdat het mogelijk doet alsof het Skinport is en je kan misleiden tot het doen van iets gevaarlijks zoals het onthullen van je Steam informatie zoals e-mail, wachtwoord en Steam Web API sleutel."
   },
   "phishingBlocker_description_paragraph2": {
-    "message": "Please make sure to only visit our official website <skinportLink>skinport.com</skinportLink>"
+    "message": "Zorg ervoor dat je alleen onze officiële website <skinportLink>skinport.com</skinportLink> bezoekt"
   },
   "phishingBlocker_goToSkinport": {
-    "message": "Go to Skinport.com"
+    "message": "Ga naar Skinport.com"
   },
   "phishingBlocker_title": {
-    "message": "Potential Skinport phishing site ahead"
+    "message": "Mogelijke Skinport phishing site vooruit"
   },
   "phishingBlocker_visitPotentiallyUnsafeSite": {
-    "message": "If you understand the risks to your security, visit this <potentiallyUnsafeSiteLink>potentially unsafe site</potentiallyUnsafeSiteLink>."
+    "message": "Als je de risico's voor je veiligheid begrijpt, bezoek dan deze <potentiallyUnsafeSiteLink>mogelijk onveilige site</potentiallyUnsafeSiteLink>."
   },
   "steamcommunity_accountSecurityCheck_banner_review": {
     "message": "Bekijk"

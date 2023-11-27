@@ -37,20 +37,32 @@
   "options_pageTitle": {
     "message": "Ajustes"
   },
+  "options_permissionsRequired_description_paragraph1": {
+    "message": "Skinport Plus requires permissions in order to work and fully secure your trading experience."
+  },
+  "options_permissionsRequired_description_paragraph2": {
+    "message": "Protecting your privacy is very important to us, therefore Skinport Plus doesn't and will never collect any personal information or read your browser activity."
+  },
+  "options_permissionsRequired_grantPermission": {
+    "message": "Grant permissions"
+  },
+  "options_permissionsRequired_title": {
+    "message": "Permissions required"
+  },
   "phishingBlocker_description_paragraph1": {
-    "message": "Skinport extension has blocked access to <strong>{{blockedHost}}</strong>, because it potentially pretends to be Skinport and may trick you into doing something dangerous like revealing your Steam information such as email, password and Steam Web API key."
+    "message": "La extensión de Skinport ha bloqueado el acceso a <strong>{{blockedHost}}</strong>, porque potencialmente podría hacerse pasar por Skinport y engañarte para que hagas algo peligroso, como revelar tu información de Steam, como el correo electrónico, la contraseña y la clave de la API web de Steam."
   },
   "phishingBlocker_description_paragraph2": {
-    "message": "Please make sure to only visit our official website <skinportLink>skinport.com</skinportLink>"
+    "message": "Por favor, asegúrate de visitar solo nuestro sitio web oficial <skinportLink>skinport.com</skinportLink>"
   },
   "phishingBlocker_goToSkinport": {
-    "message": "Go to Skinport.com"
+    "message": "Ve a Skinport.com"
   },
   "phishingBlocker_title": {
     "message": "Potential Skinport phishing site ahead"
   },
   "phishingBlocker_visitPotentiallyUnsafeSite": {
-    "message": "If you understand the risks to your security, visit this <potentiallyUnsafeSiteLink>potentially unsafe site</potentiallyUnsafeSiteLink>."
+    "message": "Si comprendes los riesgos para tu seguridad, visita este <potentiallyUnsafeSiteLink>sitio potencialmente inseguro</potentiallyUnsafeSiteLink>."
   },
   "steamcommunity_accountSecurityCheck_banner_review": {
     "message": "Verificar"

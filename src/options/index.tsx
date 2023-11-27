@@ -116,16 +116,19 @@ function App() {
       <Dialog open={!hasAllUrlsPermissions}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Permissions required</DialogTitle>
+            <DialogTitle>
+              {getI18nMessage("options_permissionsRequired_title")}
+            </DialogTitle>
           </DialogHeader>
           <p>
-            Skinport Plus requires permissions in order to work and fully secure
-            your trading experience.
+            {getI18nMessage(
+              "options_permissionsRequired_description_paragraph1",
+            )}
           </p>
           <p>
-            Protecting your privacy is very important to us, therefore Skinport
-            Plus doesn't and will never collect any personal information or read
-            your browser activity.
+            {getI18nMessage(
+              "options_permissionsRequired_description_paragraph2",
+            )}
           </p>
           <DialogFooter>
             <Button
@@ -133,7 +136,7 @@ function App() {
                 requestAllUrlsPermission();
               }}
             >
-              Grant permissions
+              {getI18nMessage("options_permissionsRequired_grantPermission")}
             </Button>
           </DialogFooter>
         </DialogContent>
