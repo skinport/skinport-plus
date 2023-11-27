@@ -1,4 +1,4 @@
-import optionsStorage, { Options } from "@/lib/options-storage";
+import { type Options, optionsStorage } from "@/lib/options-storage";
 import domLoaded from "dom-loaded";
 
 type RunFeature = () => Promise<void>;
@@ -59,9 +59,7 @@ async function run() {
   }
 }
 
-const featureManager = {
+export const featureManager = {
   add,
   run,
 };
-
-export default featureManager;

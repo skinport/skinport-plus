@@ -9,7 +9,7 @@ import esbuildInline from "esbuild-plugin-inline-import";
 import esbuildStyle from "esbuild-style-plugin";
 import postcss from "postcss";
 import tailwind from "tailwindcss";
-import tailwindBaseConfig from "../tailwind.config";
+import { tailwindBaseConfig } from "../tailwind.config";
 
 const IS_FIREFOX = process.argv.includes("--firefox");
 const IS_DEV = process.argv.includes("--dev");

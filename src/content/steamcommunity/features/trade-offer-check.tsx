@@ -1,9 +1,9 @@
-import SkinportLogo from "@/components/skinport-logo";
+import { SkinportLogo } from "@/components/skinport-logo";
 import { Button } from "@/components/ui/button";
-import featureManager from "@/content/feature-manager";
+import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { getI18nMessage } from "@/lib/i18n";
-import skinportApi from "@/lib/skinport";
+import { skinportApi } from "@/lib/skinport";
 import elementReady from "element-ready";
 import { ShieldAlert, ShieldCheck } from "lucide-react";
 import React, { useState } from "react";

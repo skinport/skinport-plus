@@ -7,8 +7,6 @@ export const optionsStorageDefaults = {
   checkTradeOffer: true,
 };
 
-const optionsStorage = new OptionsSync({
+export const optionsStorage = new OptionsSync({
   defaults: optionsStorageDefaults,
 });
-
-export default optionsStorage;

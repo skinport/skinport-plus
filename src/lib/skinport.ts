@@ -1,9 +1,7 @@
 import ky from "ky";
 import { steamAppIdNames } from "./steam";
 
-const skinportApi = ky.extend({ prefixUrl: "https://api.skinport.com" });
-
-export default skinportApi;
+export const skinportApi = ky.extend({ prefixUrl: "https://api.skinport.com" });
 
 export function getSkinportItemUrl(steamAppId: string, steamItemName: string) {
   const steamAppName =

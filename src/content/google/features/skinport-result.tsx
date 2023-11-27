@@ -1,5 +1,5 @@
-import SkinportLogo from "@/components/skinport-logo";
-import featureManager from "@/content/feature-manager";
+import { SkinportLogo } from "@/components/skinport-logo";
+import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { injectStyle } from "@/lib/dom";
 import { BadgeCheck } from "lucide-react";

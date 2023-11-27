@@ -1,7 +1,7 @@
 import * as React from "react";
 import { SVGProps } from "react";
 
-export default function SkinportLogo({
+export function SkinportLogo({
   isInverted,
   ...props
 }: { isInverted?: boolean } & SVGProps<SVGSVGElement>) {

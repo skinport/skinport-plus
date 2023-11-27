@@ -1,5 +1,5 @@
 import { InterpolateMessage } from "@/components/interpolate-message";
-import SkinportLogo from "@/components/skinport-logo";
+import { SkinportLogo } from "@/components/skinport-logo";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,7 +12,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Link } from "@/components/ui/link";
-import featureManager from "@/content/feature-manager";
+import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { getI18nMessage } from "@/lib/i18n";
 import { ExternalLink } from "lucide-react";

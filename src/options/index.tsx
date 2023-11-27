@@ -1,4 +1,4 @@
-import SkinportLogo from "@/components/skinport-logo";
+import { SkinportLogo } from "@/components/skinport-logo";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,7 +11,7 @@ import { DialogHeader } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { I18nMessageKey, getI18nMessage } from "@/lib/i18n";
-import optionsStorage, { optionsStorageDefaults } from "@/lib/options-storage";
+import { optionsStorage, optionsStorageDefaults } from "@/lib/options-storage";
 import {
   getHasAllUrlsPermission,
   requestAllUrlsPermission,
@@ -30,6 +30,7 @@ function OptionField({
   descriptionKey?: I18nMessageKey;
 } & React.ComponentPropsWithoutRef<typeof Switch>) {
   const id = useId();
+  const foo = "bar";
 
   return (
     <div className="bg-card px-8 py-6 flex flex-row items-center gap-8">

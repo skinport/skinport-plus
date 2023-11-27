@@ -1,5 +1,5 @@
 import { InterpolateMessage } from "@/components/interpolate-message";
-import SkinportLogo from "@/components/skinport-logo";
+import { SkinportLogo } from "@/components/skinport-logo";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/components/ui/link";
 import { getI18nMessage } from "@/lib/i18n";

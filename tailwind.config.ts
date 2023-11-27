@@ -1,7 +1,7 @@
 import { type Config } from "tailwindcss";
 import animate from "tailwindcss-animate";
 
-const tailwindConfig: Config = {
+export const tailwindBaseConfig: Config = {
   content: ["./src/components/**/*.{ts,tsx}"],
   theme: {
     fontFamily: {
@@ -45,5 +45,3 @@ const tailwindConfig: Config = {
   },
   plugins: [animate],
 };
-
-export default tailwindConfig;
