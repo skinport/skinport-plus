@@ -38,16 +38,16 @@
     "message": "Ajustes"
   },
   "options_permissionsRequired_description_paragraph1": {
-    "message": "Skinport Plus requires permissions in order to work and fully secure your trading experience."
+    "message": "Skinport Plus requiere permisos para funcionar y asegurar completamente tu experiencia de intercambio."
   },
   "options_permissionsRequired_description_paragraph2": {
-    "message": "Protecting your privacy is very important to us, therefore Skinport Plus doesn't and will never collect any personal information or read your browser activity."
+    "message": "Proteger tu privacidad es muy importante para nosotros, por lo tanto, Skinport Plus no recogerá y nunca recogerá ninguna información personal ni leerá tu actividad en el navegador."
   },
   "options_permissionsRequired_grantPermission": {
-    "message": "Grant permissions"
+    "message": "Otorga permisos"
   },
   "options_permissionsRequired_title": {
-    "message": "Permissions required"
+    "message": "Permisos necesarios"
   },
   "phishingBlocker_description_paragraph1": {
     "message": "La extensión de Skinport ha bloqueado el acceso a <strong>{{blockedHost}}</strong>, porque potencialmente podría hacerse pasar por Skinport y engañarte para que hagas algo peligroso, como revelar tu información de Steam, como el correo electrónico, la contraseña y la clave de la API web de Steam."
@@ -59,7 +59,7 @@
     "message": "Ve a Skinport.com"
   },
   "phishingBlocker_title": {
-    "message": "Potential Skinport phishing site ahead"
+    "message": "Sitio potencialmente phishing de Skinport por delante"
   },
   "phishingBlocker_visitPotentiallyUnsafeSite": {
     "message": "Si comprendes los riesgos para tu seguridad, visita este <potentiallyUnsafeSiteLink>sitio potencialmente inseguro</potentiallyUnsafeSiteLink>."

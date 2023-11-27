@@ -38,16 +38,16 @@
     "message": "设置"
   },
   "options_permissionsRequired_description_paragraph1": {
-    "message": "Skinport Plus requires permissions in order to work and fully secure your trading experience."
+    "message": "Skinport Plus需要权限才能正常运行，并完全保护你的交易体验。"
   },
   "options_permissionsRequired_description_paragraph2": {
-    "message": "Protecting your privacy is very important to us, therefore Skinport Plus doesn't and will never collect any personal information or read your browser activity."
+    "message": "保护您的隐私对我们非常重要，因此Skinport Plus不会也永远不会收集任何个人信息或阅读您的浏览器活动。"
   },
   "options_permissionsRequired_grantPermission": {
-    "message": "Grant permissions"
+    "message": "授予权限"
   },
   "options_permissionsRequired_title": {
-    "message": "Permissions required"
+    "message": "需要的权限"
   },
   "phishingBlocker_description_paragraph1": {
     "message": "Skinport扩展程序已阻止对<strong>{{blockedHost}}</strong>的访问，因为它可能假装是Skinport，并可能诱导你做出像透露你的Steam信息（例如邮箱，密码和Steam Web API密钥）之类的危险行为。"

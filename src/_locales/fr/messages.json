@@ -38,16 +38,16 @@
     "message": "Paramètres"
   },
   "options_permissionsRequired_description_paragraph1": {
-    "message": "Skinport Plus requires permissions in order to work and fully secure your trading experience."
+    "message": "Skinport Plus nécessite des autorisations pour fonctionner et sécuriser complètement votre expérience de trading."
   },
   "options_permissionsRequired_description_paragraph2": {
-    "message": "Protecting your privacy is very important to us, therefore Skinport Plus doesn't and will never collect any personal information or read your browser activity."
+    "message": "La protection de votre vie privée est très importante pour nous, donc Skinport Plus ne collectera jamais d'informations personnelles et ne lira jamais votre activité de navigation."
   },
   "options_permissionsRequired_grantPermission": {
-    "message": "Grant permissions"
+    "message": "Accorde les permissions"
   },
   "options_permissionsRequired_title": {
-    "message": "Permissions required"
+    "message": "Autorisations requises"
   },
   "phishingBlocker_description_paragraph1": {
     "message": "L'extension Skinport a bloqué l'accès à <strong>{{blockedHost}}</strong>, car il prétend potentiellement être Skinport et pourrait vous inciter à faire quelque chose de dangereux, comme révéler vos informations Steam telles que l'email, le mot de passe et la clé API Web Steam."

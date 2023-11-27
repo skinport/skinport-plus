@@ -38,22 +38,22 @@
     "message": "Indstillinger"
   },
   "options_permissionsRequired_description_paragraph1": {
-    "message": "Skinport Plus requires permissions in order to work and fully secure your trading experience."
+    "message": "Skinport Plus kræver tilladelser for at fungere og sikre din handelsoplevelse fuldt ud."
   },
   "options_permissionsRequired_description_paragraph2": {
-    "message": "Protecting your privacy is very important to us, therefore Skinport Plus doesn't and will never collect any personal information or read your browser activity."
+    "message": "At beskytte din privatliv er meget vigtigt for os, derfor vil Skinport Plus aldrig indsamle personlige oplysninger eller læse din browseraktivitet."
   },
   "options_permissionsRequired_grantPermission": {
-    "message": "Grant permissions"
+    "message": "Giv tilladelser"
   },
   "options_permissionsRequired_title": {
-    "message": "Permissions required"
+    "message": "Krævede tilladelser"
   },
   "phishingBlocker_description_paragraph1": {
     "message": "Skinport-udvidelsen har blokeret adgang til <strong>{{blockedHost}}</strong>, fordi den potentielt udgiver sig for at være Skinport og måske kan narre dig til at gøre noget farligt, som at afsløre dine Steam-informationer såsom email, adgangskode og Steam Web API nøgle."
   },
   "phishingBlocker_description_paragraph2": {
-    "message": "Please make sure to only visit our official website <skinportLink>skinport.com</skinportLink>"
+    "message": "Sørg for kun at besøge vores officielle hjemmeside <skinportLink>skinport.com</skinportLink>"
   },
   "phishingBlocker_goToSkinport": {
     "message": "Gå til Skinport.com"

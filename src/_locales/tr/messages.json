@@ -38,16 +38,16 @@
     "message": "Ayarlar"
   },
   "options_permissionsRequired_description_paragraph1": {
-    "message": "Skinport Plus requires permissions in order to work and fully secure your trading experience."
+    "message": "Skinport Plus'ın tamamen güvence altına alınmış bir ticaret deneyimi sunabilmesi için izinlere ihtiyacı vardır."
   },
   "options_permissionsRequired_description_paragraph2": {
-    "message": "Protecting your privacy is very important to us, therefore Skinport Plus doesn't and will never collect any personal information or read your browser activity."
+    "message": "Gizliliğinizi korumak bizim için çok önemlidir, bu yüzden Skinport Plus hiçbir zaman kişisel bilgilerinizi toplamaz ve tarayıcı aktivitenizi okumaz."
   },
   "options_permissionsRequired_grantPermission": {
-    "message": "Grant permissions"
+    "message": "İzinleri ver"
   },
   "options_permissionsRequired_title": {
-    "message": "Permissions required"
+    "message": "Gerekli izinler"
   },
   "phishingBlocker_description_paragraph1": {
     "message": "Skinport eklentisi, seni kandırarak tehlikeli bir şey yapmana, örneğin e-posta, şifre ve Steam Web API anahtarınız gibi Steam bilgilerini açığa çıkarmana neden olabileceği için <strong>{{blockedHost}}</strong>'a erişimi engelledi, çünkü potansiyel olarak Skinport'un yerini alabilir."
