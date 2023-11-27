@@ -56,8 +56,6 @@ function App() {
     const initAllUrlsPermission = async () => {
       setHasAllUrlsPermission(await getHasAllUrlsPermission());
 
-      Browser.runtime.on;
-
       setInterval(async () => {
         setHasAllUrlsPermission(await getHasAllUrlsPermission());
       }, 1000);
