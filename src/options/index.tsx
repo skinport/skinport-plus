@@ -1,10 +1,24 @@
 import SkinportLogo from "@/components/skinport-logo";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { DialogHeader } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { I18nMessageKey, getI18nMessage } from "@/lib/i18n";
 import optionsStorage, { optionsStorageDefaults } from "@/lib/options-storage";
+import {
+  getHasAllUrlsPermission,
+  requestAllUrlsPermission,
+} from "@/lib/permissions";
 import React, { useEffect, useId, useState } from "react";
 import { createRoot } from "react-dom/client";
+import Browser from "webextension-polyfill";
 import "./index.css";
 
 function OptionField({
@@ -32,13 +46,25 @@ function OptionField({
 
 function App() {
   const [options, setOptions] = useState<typeof optionsStorageDefaults>();
+  const [hasAllUrlsPermissions, setHasAllUrlsPermission] = useState(true);
 
   useEffect(() => {
-    const loadOptions = async () => {
+    const initOptions = async () => {
       setOptions(await optionsStorage.getAll());
     };
 
-    loadOptions();
+    const initAllUrlsPermission = async () => {
+      setHasAllUrlsPermission(await getHasAllUrlsPermission());
+
+      Browser.runtime.on;
+
+      setInterval(async () => {
+        setHasAllUrlsPermission(await getHasAllUrlsPermission());
+      }, 1000);
+    };
+
+    initOptions();
+    initAllUrlsPermission();
   }, []);
 
   return (
@@ -87,6 +113,31 @@ function App() {
           </>
         )}
       </div>
+      <Dialog open={!hasAllUrlsPermissions}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Permissions required</DialogTitle>
+          </DialogHeader>
+          <p>
+            Skinport Plus requires permissions in order to work and fully secure
+            your trading experience.
+          </p>
+          <p>
+            Protecting your privacy is very important to us, therefore Skinport
+            Plus doesn't and will never collect any personal information or read
+            your browser activity.
+          </p>
+          <DialogFooter>
+            <Button
+              onClick={() => {
+                requestAllUrlsPermission();
+              }}
+            >
+              Grant permissions
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

@@ -5,6 +5,7 @@
     "prepare": "husky install",
     "i18n": "tsx ./scripts/i18n.ts",
     "dev": "tsx ./scripts/build.ts --dev",
+    "dev:firefox": "tsx ./scripts/build.ts --dev --firefox",
     "load:chrome": "web-ext run --target=chromium",
     "lint": "biome check .",
     "types": "tsc",

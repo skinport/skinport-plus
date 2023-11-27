@@ -14,7 +14,7 @@
   "icons": {
     "48": "icon.png"
   },
-  "host_permissions": ["<all_urls>"],
+  "host_permissions": ["*://*/*"],
   "permissions": ["storage", "declarativeNetRequest"],
   "background": {
     "service_worker": "background/index.js",

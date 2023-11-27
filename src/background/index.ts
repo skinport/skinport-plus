@@ -1,3 +1,4 @@
+import { getHasAllUrlsPermission } from "@/lib/permissions";
 import browser from "webextension-polyfill";
 
 browser.declarativeNetRequest.updateDynamicRules({
@@ -23,4 +24,12 @@ browser.declarativeNetRequest.updateDynamicRules({
       },
     },
   ],
+});
+
+browser.runtime.onInstalled.addListener(async ({ reason }) => {
+  if (reason === "install") {
+    if (!(await getHasAllUrlsPermission())) {
+      browser.runtime.openOptionsPage();
+    }
+  }
 });
