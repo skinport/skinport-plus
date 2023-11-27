@@ -1,42 +1,76 @@
-import { InterpolateMessage } from "@/components/interpolate-message";
 import SkinportLogo from "@/components/skinport-logo";
 import featureManager from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { injectStyle } from "@/lib/dom";
 import { BadgeCheck } from "lucide-react";
 import React from "react";
-import { $$ } from "select-dom";
-import browser from "webextension-polyfill";
+import { $, elementExists } from "select-dom";
+
+function getResultRootElement(targetElement: HTMLElement) {
+  if (
+    !targetElement?.parentElement ||
+    targetElement.parentElement.classList.contains("v7W49e")
+  ) {
+    return;
+  }
+
+  if (targetElement.parentElement.classList.contains("MjjYud")) {
+    return targetElement.parentElement;
+  }
+
+  return getResultRootElement(targetElement.parentElement);
+}
 
 async function googleSkinportResult() {
-  const skinportLinkElements = $$('a[href^="https://skinport.com/"]');
+  const skinportLinkElement = $('#search a[ping*="https://skinport.com"]');
 
-  if (skinportLinkElements.length === 0) {
+  if (!skinportLinkElement) {
     return;
   }
 
   injectStyle(".uEierd { display: none !important; }");
 
+  const skinportResultElement = getResultRootElement(skinportLinkElement);
+
+  if (skinportResultElement) {
+    const googleResultsElement = skinportResultElement.parentElement;
+
+    if (googleResultsElement) {
+      googleResultsElement.prepend(skinportResultElement);
+    }
+  }
+
+  const isGoogleDarkMode = elementExists(
+    '[data-darkmode="true"]',
+    skinportResultElement,
+  );
+
   const [officialSkinportWebsiteElement] = createWidgetElement(() => {
     return (
-      <div className="inline-flex gap-2 rounded bg-blue p-2 text-xs text-white font-semibold uppercase items-center mb-2 tracking-widest">
-        <BadgeCheck size={16} />
-        <span className="inline-flex gap-1.5 items-center">
-          <InterpolateMessage
-            message={browser.i18n.getMessage("google_officialSkinportWebsite")}
-            values={{
-              skinportLogo: <SkinportLogo width={77.5} height={10} />,
-            }}
-          />
-        </span>
+      <div className="flex gap-2 text-blue items-center absolute left-0 top-0 cursor-pointer">
+        <SkinportLogo isInverted={!isGoogleDarkMode} />
+        <BadgeCheck size={20} />
       </div>
     );
   });
 
-  for (const skinportLinkElement of skinportLinkElements) {
-    skinportLinkElement.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.prepend(
-      officialSkinportWebsiteElement,
-    );
+  const skinportLinkInfoElement = $("div", skinportLinkElement);
+
+  if (skinportLinkInfoElement) {
+    skinportLinkInfoElement.replaceWith(officialSkinportWebsiteElement);
+  }
+
+  const skinportLinkHeadingElement = $("h3", skinportLinkElement);
+
+  if (skinportLinkHeadingElement) {
+    skinportLinkHeadingElement.style.marginTop = "0px";
+  }
+
+  const skinportLinkMoreOptionsElement =
+    skinportLinkElement.parentElement?.nextElementSibling;
+
+  if (skinportLinkMoreOptionsElement) {
+    skinportLinkMoreOptionsElement.remove();
   }
 }
 
