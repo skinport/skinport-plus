@@ -9,7 +9,7 @@ import { $$ } from "select-dom";
 import browser from "webextension-polyfill";
 
 async function googleSkinportResult() {
-  const skinportLinkElements = $$('a[href="https://skinport.com/"]');
+  const skinportLinkElements = $$('a[href^="https://skinport.com/"]');
 
   if (skinportLinkElements.length === 0) {
     return;
