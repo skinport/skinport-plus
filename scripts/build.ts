@@ -44,7 +44,17 @@ async function copySrcFileToDist(srcFile: string) {
         .delete("background.service_worker")
         // Remove keys not supported by Firefox
         .delete("minimum_chrome_version")
-        .delete("web_accessible_resources.use_dynamic_url");
+        .set(
+          "web_accessible_resources",
+          manifestJson
+            .get("web_accessible_resources")
+            .map(
+              ({
+                use_dynamic_url,
+                ...webAccessibleResource
+              }: { use_dynamic_url: boolean }) => webAccessibleResource,
+            ),
+        );
     } else {
       // Remove keys not supported by Chrome
       manifestJson.delete("browser_specific_settings");
