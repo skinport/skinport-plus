@@ -16,7 +16,6 @@ import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { getI18nMessage } from "@/lib/i18n";
 import { ExternalLink } from "lucide-react";
-import React from "react";
 import { $ } from "select-dom";
 
 async function steamAccountSecurityCheck() {

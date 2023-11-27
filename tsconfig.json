@@ -2,7 +2,7 @@
   "extends": "@tsconfig/node20",
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "jsx": "react",
+    "jsx": "react-jsx",
     "module": "ESNext",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
@@ -10,7 +10,7 @@
     "paths": {
       "@/*": ["./*"]
     },
-    "noEmit": true,
+    "noEmit": true
   },
   "include": ["scripts", "src", "types", "tailwind.config.ts"]
 }

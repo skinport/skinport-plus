@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/components/ui/link";
 import { getI18nMessage } from "@/lib/i18n";
 import { ShieldAlert } from "lucide-react";
-import React from "react";
 import { createRoot } from "react-dom/client";
 import browser from "webextension-polyfill";
 import "./index.css";

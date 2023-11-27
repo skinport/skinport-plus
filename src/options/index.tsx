@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -18,7 +17,6 @@ import {
 } from "@/lib/permissions";
 import React, { useEffect, useId, useState } from "react";
 import { createRoot } from "react-dom/client";
-import Browser from "webextension-polyfill";
 import "./index.css";
 
 function OptionField({

@@ -6,7 +6,7 @@ import { getI18nMessage } from "@/lib/i18n";
 import { skinportApi } from "@/lib/skinport";
 import elementReady from "element-ready";
 import { ShieldAlert, ShieldCheck } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { $, $$ } from "select-dom";
 
 function TradePartnerVerified() {

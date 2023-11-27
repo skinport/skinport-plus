@@ -5,7 +5,6 @@ import { createWidgetElement } from "@/content/widget";
 import { getI18nMessage } from "@/lib/i18n";
 import { getSkinportItemUrl } from "@/lib/skinport";
 import { supportedSteamAppIds } from "@/lib/steam";
-import React from "react";
 import { $ } from "select-dom";
 
 async function steamMarketItemSkinportLink() {

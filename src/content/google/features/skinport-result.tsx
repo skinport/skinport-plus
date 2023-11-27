@@ -3,7 +3,6 @@ import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { injectStyle } from "@/lib/dom";
 import { BadgeCheck } from "lucide-react";
-import React from "react";
 import { $, elementExists } from "select-dom";
 
 function getResultRootElement(targetElement: HTMLElement) {
