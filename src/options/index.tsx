@@ -1,4 +1,4 @@
-import { SkinportLogo } from "@/components/skinport-logo";
+import SkinportPlusLogo from "@/components/skinport-plus-logo";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -74,9 +74,8 @@ function App() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <SkinportLogo />
+              <SkinportPlusLogo />
             </a>
-            {getI18nMessage("options_headerTitle")}
           </div>
         </div>
       </header>
