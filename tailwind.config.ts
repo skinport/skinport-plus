@@ -41,6 +41,14 @@ export const tailwindBaseConfig: Config = {
           foreground: "#9fa1a2",
         },
       },
+      fontSize: {
+        "2xs": [
+          "0.625rem",
+          {
+            lineHeight: "0.75rem",
+          },
+        ],
+      },
     },
   },
   plugins: [animate],

@@ -2,6 +2,8 @@ import { type Options, optionsStorage } from "@/lib/options-storage";
 import domLoaded from "dom-loaded";
 
 export type Feature = (props: {
+  featureAttribute: string;
+  getNotMatchingFeatureAttributeSelector: (selector: string) => string;
   setFeatureAttribute(target: HTMLElement): {
     removeFeatureAttribute: () => void;
   };
@@ -59,6 +61,9 @@ async function run() {
       )}`;
 
       feature({
+        featureAttribute,
+        getNotMatchingFeatureAttributeSelector: (selector) =>
+          `${selector}:not([${featureAttribute}])`,
         getHasFeatureAttribute: (target) =>
           target.hasAttribute(featureAttribute),
         setFeatureAttribute: (target) => {

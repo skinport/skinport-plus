@@ -1,3 +1,4 @@
+import { TooltipProvider } from "@/components/ui/tooltip";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { elementExists } from "select-dom";
@@ -23,7 +24,9 @@ export function createWidgetElement(
   const reactRoot = createRoot(shadowRoot);
 
   reactRoot.render(
-    <Widget shadowRoot={shadowRoot as unknown as HTMLElement} />,
+    <TooltipProvider>
+      <Widget shadowRoot={shadowRoot as unknown as HTMLElement} />
+    </TooltipProvider>,
   );
 
   const removeWidgetElement = () => {

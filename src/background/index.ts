@@ -50,11 +50,12 @@ browser.runtime.onInstalled.addListener(async ({ reason }) => {
 browser.runtime.onMessage.addListener(async (message) => {
   if (message.skinportApi) {
     try {
-      const response = await ky(
+      const body = await ky(
         `https://api.skinport.com/${message.skinportApi}`,
+        message.options,
       ).json();
 
-      return { response };
+      return { body };
     } catch (error) {
       return {
         error: error instanceof Error ? error.message : error,
@@ -68,5 +69,7 @@ browser.runtime.onMessage.addListener(async (message) => {
     if (hasAllUrlsPermission) {
       await registerContentScripts();
     }
+
+    return;
   }
 });
