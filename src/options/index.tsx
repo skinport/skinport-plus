@@ -1,4 +1,4 @@
-import SkinportPlusLogo from "@/components/skinport-plus-logo";
+import { SkinportPlusLogo } from "@/components/skinport-plus-logo";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
