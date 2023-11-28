@@ -70,6 +70,57 @@ npm run build # Build for Chrome
 npm run build:firefox # Build for Firefox
 ```
 
+## Translations
+
+Translations are fully managed on [WebTranslateIt](https://webtranslateit.com/projects/24296-skinport-extension) and imported with a script to `src/_locales`. While this project utilizes the [WebExtension API for internationalion](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Internationalization), messages follow the i18next formatting syntax for interpolating values and tags.
+
+### Example
+
+`src/_locales/en/messages.json`
+
+```json
+{
+  "example_welcome": {
+    "message": "Welcome!"
+  },
+  "example_helloName": {
+    "message": "Hello, {{ name }}"
+  },
+  "example_whatsNext": {
+    "message": "See what's next <whatsNextLink>here</whatsNextLink>"
+  },
+}
+```
+
+Anywhere in the extension, you can use the [`i18n API`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/i18n) to retrieve the message string and interpolate it with [`<InterpolateMessage />`](https://github.com/skinport/skinport-plus/blob/main/src/components/interpolate-message.tsx). For convenience and type safety, we're providing a [`getI18nMessage(key: I18nMessageKey)`](https://github.com/skinport/skinport-plus/blob/main/src/lib/i18n.ts) helper function, which should be used instead of the i18n API.
+
+`src/options/index.tsx`
+
+```tsx
+import { getI18nMessage } from "@/lib/i18n";
+import { InterpolateMessage } from "@/components/interpolate-message";
+
+const Example = (
+  <div>
+    <p>{getI18nMessage("example_welcome")}<p>
+    <p>
+      <InterpolateMessage 
+        message={getI18nMessage("example_helloName")} 
+        values={{ name: 'John' }} 
+      />
+    <p>
+    <p>
+      <InterpolateMessage 
+        message={getI18nMessage("example_whatsNext")} 
+        values={{ 
+          whatsNext: <a href="/whats-next" /> 
+        }} 
+      />
+    <p>
+  </div>
+);
+```
+
 ## Releasing
 
 A release workflow in GitHub actions will automatically build, version, create a tag and release on GitHub, Chrome Web Store and Add-ons for Firefox.
