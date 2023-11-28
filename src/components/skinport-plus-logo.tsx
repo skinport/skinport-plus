@@ -8,8 +8,8 @@ export function SkinportPlusLogo({
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 809.26 163.2"
-      width={124}
-      height={25}
+      width={134}
+      height={27}
       {...props}
     >
       <title>Skinport Plus</title>
