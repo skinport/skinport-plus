@@ -65,10 +65,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: fregante/daily-version-action@v2
-      - if: env.DAILY_VERSION
+      - if: ${{ inputs.dry-run == false }}
+        uses: fregante/daily-version-action@v2
+      - if: ${{ inputs.dry-run == true }}
+        run: echo "manifest_version=dry_run" >> "$GITHUB_OUTPUT"
+      - if: env.DAILY_VERSION_CREATED
         run: gh release create "$DAILY_VERSION" --generate-notes
-        working-directory: ${{ env.DIRECTORY }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   release-chrome:
@@ -77,21 +79,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
       - uses: actions/download-artifact@v3
-      - run: npx dot-json@1 dist-chrome/manifest.json version "${{ needs.version.outputs.manifest_version }}"
+        with:
+          name: dist-chrome
+          path: dist
+      - run: npm run manifest:version -- "${{ needs.version.outputs.manifest_version }}"
       - if: ${{ inputs.dry-run == false }}
-        run: npx chrome-webstore-upload-cli@2 upload --auto-publish
-        working-directory: dist-chrome
+        run: npm run release
         env:
           EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
-      - run: |
+      - if: ${{ inputs.dry-run == false }}
+        run: |
           FILENAME="skinport-plus-chrome-${{ needs.version.outputs.manifest_version }}.zip"
           zip -r "$FILENAME" ./*
           gh release upload "${{ needs.version.outputs.manifest_version }}" "$FILENAME"
-        working-directory: dist-chrome
+        working-directory: dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   release-firefox:
@@ -100,18 +110,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
       - uses: actions/download-artifact@v3
-      - run: npx dot-json@1 dist-firefox/manifest.json version "${{ needs.version.outputs.manifest_version }}"
+        with:
+          name: dist-firefox
+          path: dist
+      - run: npm run manifest:version -- "${{ needs.version.outputs.manifest_version }}"
       - if: ${{ inputs.dry-run == false }}
-        run: npx web-ext@7 sign --use-submission-api --channel listed
-        working-directory: dist-firefox
+        run: npm run release:firefox
         env:
           WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
           WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
-      - run: |
+      - if: ${{ inputs.dry-run == false }}
+        run: |
           FILENAME="skinport-plus-firefox-${{ needs.version.outputs.manifest_version }}.zip"
           zip -r "$FILENAME" ./*
           gh release upload "${{ needs.version.outputs.manifest_version }}" "$FILENAME"
-        working-directory: dist-firefox
+        working-directory: dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
