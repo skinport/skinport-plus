@@ -88,6 +88,8 @@ jobs:
         with:
           name: dist-chrome
           path: dist
+      - run: ls -R
+        working-directory: dist
       - run: npm run manifest:version -- "${{ needs.version.outputs.manifest_version }}"
       - if: ${{ inputs.dry-run == false }}
         run: npm run release
@@ -119,6 +121,8 @@ jobs:
         with:
           name: dist-firefox
           path: dist
+      - run: ls -R
+        working-directory: dist
       - run: npm run manifest:version -- "${{ needs.version.outputs.manifest_version }}"
       - if: ${{ inputs.dry-run == false }}
         run: npm run release:firefox
