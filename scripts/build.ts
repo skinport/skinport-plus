@@ -13,6 +13,8 @@ import { tailwindBaseConfig } from "../tailwind.config";
 
 const IS_FIREFOX = process.argv.includes("--firefox");
 const IS_DEV = process.argv.includes("--dev");
+// Keep in sync with src/manifest.json!
+const TARGET_BROWSER = IS_FIREFOX ? "firefox 114" : "chrome 105";
 
 function getSrcPath(srcPath = "") {
   return path.join("./src", srcPath);
@@ -93,7 +95,9 @@ function getPostcssPlugins(tailwindContent: string[]) {
         ...tailwindContent,
       ],
     }),
-    autoprefixer,
+    autoprefixer({
+      overrideBrowserslist: TARGET_BROWSER,
+    }),
   ];
 }
 
@@ -134,6 +138,7 @@ async function buildExtensionContext(
     minify: !IS_DEV,
     metafile: true,
     plugins: [],
+    target: TARGET_BROWSER.replace(" ", ""),
   };
 
   if (tailwind) {
