@@ -1,3 +1,7 @@
+import {
+  getIsContentScriptsRegistered,
+  registerContentScripts,
+} from "@/lib/content-scripts";
 import { getHasAllUrlsPermission } from "@/lib/permissions";
 import ky from "ky";
 import browser from "webextension-polyfill";
@@ -29,9 +33,17 @@ browser.declarativeNetRequest.updateDynamicRules({
 
 browser.runtime.onInstalled.addListener(async ({ reason }) => {
   if (reason === "install") {
-    if (!(await getHasAllUrlsPermission())) {
-      browser.runtime.openOptionsPage();
-    }
+    browser.runtime.openOptionsPage();
+
+    return;
+  }
+
+  if (
+    reason === "update" &&
+    (await getHasAllUrlsPermission()) &&
+    (await getIsContentScriptsRegistered()) === false
+  ) {
+    await registerContentScripts();
   }
 });
 
@@ -47,6 +59,16 @@ browser.runtime.onMessage.addListener(async (message) => {
       return {
         error: error instanceof Error ? error.message : error,
       };
+    }
+  }
+});
+
+browser.runtime.onMessage.addListener(async (message) => {
+  if (message.action === "registerContentScripts") {
+    const hasAllUrlsPermission = await getHasAllUrlsPermission();
+
+    if (hasAllUrlsPermission) {
+      await registerContentScripts();
     }
   }
 });
