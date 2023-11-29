@@ -7,6 +7,12 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "suspicious": {
+        "noConsoleLog": "error"
+      },
+      "correctness": {
+        "noUnusedVariables": "error"
+      },
       "nursery": {
         "noDefaultExport": "error",
         "noUnusedImports": "error"

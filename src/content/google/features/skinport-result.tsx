@@ -34,9 +34,6 @@ async function googleSkinportResult() {
   if (skinportResultElement) {
     const googleResultsElement = skinportResultElement.parentElement;
 
-    console.log(skinportResultElement);
-
-    console.log(googleResultsElement);
     if (googleResultsElement) {
       googleResultsElement.prepend(skinportResultElement);
     }

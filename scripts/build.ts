@@ -52,7 +52,7 @@ async function copySrcFileToDist(srcFile: string) {
             .get("web_accessible_resources")
             .map(
               ({
-                use_dynamic_url,
+                use_dynamic_url: _,
                 ...webAccessibleResource
               }: { use_dynamic_url: boolean }) => webAccessibleResource,
             ),
@@ -91,6 +91,7 @@ async function copySrcFileToDist(srcFile: string) {
     manifestJson.save();
   }
 
+  // biome-ignore lint/suspicious/noConsoleLog:
   console.log("[info] copied", srcPath.replace("src/", ""));
 }
 
@@ -181,6 +182,7 @@ async function buildExtensionContext(
       build.onEnd((result) => {
         if (result.metafile?.outputs) {
           for (const outputFile of Object.keys(result.metafile.outputs)) {
+            // biome-ignore lint/suspicious/noConsoleLog:
             console.log("[info] compiled", outputFile.replace("dist/", ""));
           }
         }
@@ -203,6 +205,7 @@ async function buildExtensionContext(
 
     await mkdir(getDistPath());
 
+    // biome-ignore lint/suspicious/noConsoleLog:
     console.log("[info] building for", IS_FIREFOX ? "firefox" : "chrome");
 
     await Promise.all([

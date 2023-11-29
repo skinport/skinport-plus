@@ -51,6 +51,7 @@ async function run() {
       runFeature();
 
       if (process.env.NODE_ENV !== "production") {
+        // biome-ignore lint/suspicious/noConsoleLog: Development only
         console.log("feature-manager:", `running feature ${runFeature.name}`);
       }
     } catch (error) {

@@ -28,7 +28,6 @@ function OptionField({
   descriptionKey?: I18nMessageKey;
 } & React.ComponentPropsWithoutRef<typeof Switch>) {
   const id = useId();
-  const foo = "bar";
 
   return (
     <div className="bg-card px-8 py-6 flex flex-row items-center gap-8">

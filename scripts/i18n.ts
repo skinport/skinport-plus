@@ -16,6 +16,7 @@ try {
 const API_URL = "https://webtranslateit.com/api";
 const PROJECT_API_KEY = process.env.WEBTRANSLATEIT_PROJECT_API_KEY;
 
+// biome-ignore lint/suspicious/noConsoleLog:
 console.log("start loading language file");
 
 (async () => {
@@ -30,6 +31,7 @@ console.log("start loading language file");
     const data = await response.arrayBuffer();
 
     const zipFile = Buffer.from(data);
+    // biome-ignore lint/suspicious/noConsoleLog:
     console.log("received language file");
     const zip = new AdmZip(zipFile);
 
@@ -38,13 +40,14 @@ console.log("start loading language file");
     await Promise.all(
       entries.map(async (zipEntry) => {
         const lang = zipEntry.name.replace(".json", "");
+        // biome-ignore lint/suspicious/noConsoleLog:
         console.log(`found language file for: ${lang}`);
 
         const basePath = path.resolve(`src/_locales/${lang}`);
 
         try {
           await access(basePath);
-        } catch (e) {
+        } catch (_error) {
           await mkdir(basePath);
         }
 
@@ -57,6 +60,7 @@ console.log("start loading language file");
           ),
         );
 
+        // biome-ignore lint/suspicious/noConsoleLog:
         console.log(`Saved language file to ${lang}.json`);
       }),
     );
@@ -65,5 +69,6 @@ console.log("start loading language file");
     process.exit(1);
   }
 
+  // biome-ignore lint/suspicious/noConsoleLog:
   console.log("Done prebuilding!");
 })();
