@@ -16,10 +16,6 @@
     "48": "icon48.png",
     "128": "icon128.png"
   },
-  "host_permissions": [
-    "https://api.skinport.com/*",
-    "https://steamcommunity.com/*"
-  ],
   "optional_host_permissions": ["*://*/*"],
   "permissions": ["storage", "declarativeNetRequest", "scripting"],
   "background": {
