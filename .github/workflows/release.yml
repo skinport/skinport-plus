@@ -68,7 +68,7 @@ jobs:
       - if: ${{ inputs.dry-run == false }}
         uses: fregante/daily-version-action@v2
       - if: ${{ inputs.dry-run == true }}
-        run: echo "manifest_version=dry_run" >> "$GITHUB_OUTPUT"
+        run: echo "DAILY_VERSION=dry_run" >> "$GITHUB_ENV"
       - if: env.DAILY_VERSION_CREATED
         run: gh release create "$DAILY_VERSION" --generate-notes
         env:
