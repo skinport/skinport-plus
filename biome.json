@@ -1,10 +1,7 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.4.0/schema.json",
-  "organizeImports": {
-    "enabled": true
-  },
   "files": {
-    "ignore": ["dist"]
+    "ignore": ["dist", "package-lock.json"]
   },
   "linter": {
     "enabled": true,
@@ -19,5 +16,8 @@
   "formatter": {
     "enabled": true,
     "indentStyle": "space"
+  },
+  "organizeImports": {
+    "enabled": true
   }
 }
