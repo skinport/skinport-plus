@@ -13,7 +13,7 @@
     "build": "tsx ./scripts/build.ts",
     "build:firefox": "tsx ./scripts/build.ts --firefox",
     "manifest:version": "dot-json dist/manifest.json version",
-    "release": "chrome-webstore-upload-cli upload --source dist --auto-publish",
+    "release": "chrome-webstore-upload upload --source dist --auto-publish",
     "release:firefox": "web-ext sign --source-dir dist --use-submission-api --channel listed"
   },
   "dependencies": {
