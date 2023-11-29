@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { getI18nMessage } from "@/lib/i18n";
-import { skinportApi } from "@/lib/skinport";
+import { verifyTradingPartner } from "@/lib/steam";
 import elementReady from "element-ready";
 import { ShieldAlert, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -129,13 +129,7 @@ async function steamTradeOfferCheck() {
 
   if (tradePartnerSteamId) {
     try {
-      const { verified } = await skinportApi(
-        `v1/extension/bot/${tradePartnerSteamId}`,
-      ).json<{ verified: boolean }>();
-
-      if (verified) {
-        tradePartnerIsVerified = true;
-      }
+      tradePartnerIsVerified = await verifyTradingPartner(tradePartnerSteamId);
     } catch (error) {
       console.error(error);
       // TODO: Handle error with e.g. Sentry

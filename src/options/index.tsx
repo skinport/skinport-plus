@@ -54,10 +54,6 @@ function App() {
 
     const initAllUrlsPermission = async () => {
       setHasAllUrlsPermission(await getHasAllUrlsPermission());
-
-      setInterval(async () => {
-        setHasAllUrlsPermission(await getHasAllUrlsPermission());
-      }, 1000);
     };
 
     initOptions();
@@ -128,8 +124,8 @@ function App() {
           </p>
           <DialogFooter>
             <Button
-              onClick={() => {
-                requestAllUrlsPermission();
+              onClick={async () => {
+                setHasAllUrlsPermission(await requestAllUrlsPermission());
               }}
             >
               {getI18nMessage("options_permissionsRequired_grantPermission")}

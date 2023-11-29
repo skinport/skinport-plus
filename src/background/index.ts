@@ -1,4 +1,5 @@
 import { getHasAllUrlsPermission } from "@/lib/permissions";
+import ky from "ky";
 import browser from "webextension-polyfill";
 
 browser.declarativeNetRequest.updateDynamicRules({
@@ -30,6 +31,22 @@ browser.runtime.onInstalled.addListener(async ({ reason }) => {
   if (reason === "install") {
     if (!(await getHasAllUrlsPermission())) {
       browser.runtime.openOptionsPage();
+    }
+  }
+});
+
+browser.runtime.onMessage.addListener(async (message) => {
+  if (message.skinportApi) {
+    try {
+      const response = await ky(
+        `https://api.skinport.com/${message.skinportApi}`,
+      ).json();
+
+      return { response };
+    } catch (error) {
+      return {
+        error: error instanceof Error ? error.message : error,
+      };
     }
   }
 });

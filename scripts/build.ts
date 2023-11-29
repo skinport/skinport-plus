@@ -56,7 +56,15 @@ async function copySrcFileToDist(srcFile: string) {
                 ...webAccessibleResource
               }: { use_dynamic_url: boolean }) => webAccessibleResource,
             ),
-        );
+        )
+        // Firefox only supports `optional_permissions` instead of `optional_host_permissions`:
+        // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/optional_permissions#host_permissions
+        // TODO: Remove once `optional_host_permissions` is supported
+        .set(
+          "optional_permissions",
+          manifestJson.get("optional_host_permissions"),
+        )
+        .delete("optional_host_permissions");
     } else {
       // Remove keys not supported by Chrome
       manifestJson.delete("browser_specific_settings");
