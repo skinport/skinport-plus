@@ -133,6 +133,7 @@ async function steamTradeOfferCheck() {
     } catch (error) {
       console.error(error);
       // TODO: Handle error with e.g. Sentry
+      return;
     }
   }
 
