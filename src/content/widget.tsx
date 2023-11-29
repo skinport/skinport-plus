@@ -10,7 +10,7 @@ export function createWidgetElement(
   const widgetElement = document.createElement("div");
 
   if (widgetName) {
-    widgetElement.setAttribute("data-widget-name", widgetName);
+    widgetElement.setAttribute("data-skinport-widget-name", widgetName);
   }
 
   const shadowRoot = widgetElement.attachShadow({ mode: "closed" });
@@ -40,5 +40,8 @@ export function widgetElementExists(
   widgetName: string,
   baseElement?: Parameters<typeof elementExists>[1],
 ) {
-  return elementExists(`[data-widget-name='${widgetName}']`, baseElement);
+  return elementExists(
+    `[data-skinport-widget-name='${widgetName}']`,
+    baseElement,
+  );
 }
