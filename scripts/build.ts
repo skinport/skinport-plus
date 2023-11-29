@@ -175,13 +175,13 @@ async function buildExtensionContext(
     },
   });
 
-  const esbuildContext = await esbuild.context(esbuildOptions);
+  if (IS_DEV) {
+    const esbuildContext = await esbuild.context(esbuildOptions);
 
-  await esbuildContext.watch();
-
-  if (!IS_DEV) {
-    await esbuildContext.dispose();
+    return esbuildContext.watch();
   }
+
+  return esbuild.build(esbuildOptions);
 }
 
 (async () => {
