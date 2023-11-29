@@ -195,12 +195,14 @@ async function buildExtensionContext(
     await Promise.all([
       copyStaticFiles([
         "_locales/",
-        "phishing-blocker/index.html",
         "options/index.html",
+        "phishing-blocker/index.html",
         "favicon.ico",
-        "manifest.json",
-        "icon.png",
         "fonts.css",
+        "icon16.png",
+        "icon48.png",
+        "icon128.png",
+        "manifest.json",
       ]),
       buildExtensionContext("background", { indexSuffix: "ts" }),
       buildExtensionContext("content/google", {
