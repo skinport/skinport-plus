@@ -195,7 +195,6 @@ async function buildExtensionContext(
     await Promise.all([
       copyStaticFiles([
         "_locales/",
-        "phishing-blocker/rulesets.json",
         "phishing-blocker/index.html",
         "options/index.html",
         "favicon.ico",
