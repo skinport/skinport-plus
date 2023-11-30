@@ -17,6 +17,9 @@ export async function getIsContentScriptsRegistered() {
   return isContentScriptsRegistered;
 }
 
+/**
+ * Only use in `background/index.ts`!
+ */
 export function registerContentScripts() {
   return browser.scripting.registerContentScripts([
     {
