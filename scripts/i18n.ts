@@ -16,11 +16,11 @@ try {
 const API_URL = "https://webtranslateit.com/api";
 const PROJECT_API_KEY = process.env.WEBTRANSLATEIT_PROJECT_API_KEY;
 
-// biome-ignore lint/suspicious/noConsoleLog:
-console.log("start loading language file");
-
 (async () => {
   try {
+    // biome-ignore lint/suspicious/noConsoleLog:
+    console.log("[Info] Fetching Webtranslateit Zip File");
+
     const response = await fetch(
       `${API_URL}/projects/${PROJECT_API_KEY}/zip_file`,
     );
@@ -32,7 +32,7 @@ console.log("start loading language file");
 
     const zipFile = Buffer.from(data);
     // biome-ignore lint/suspicious/noConsoleLog:
-    console.log("received language file");
+    console.log("[Info] Received Webtranslateit Zip File");
     const zip = new AdmZip(zipFile);
 
     const entries = zip.getEntries();
@@ -41,7 +41,7 @@ console.log("start loading language file");
       entries.map(async (zipEntry) => {
         const lang = zipEntry.name.replace(".json", "");
         // biome-ignore lint/suspicious/noConsoleLog:
-        console.log(`found language file for: ${lang}`);
+        console.log(`[Info] Extracted ${lang} Json File`);
 
         const basePath = path.resolve(`src/_locales/${lang}`);
 
@@ -51,8 +51,10 @@ console.log("start loading language file");
           await mkdir(basePath);
         }
 
+        const filePath = path.resolve(`${basePath}/messages.json`);
+
         await writeFile(
-          path.resolve(`${basePath}/messages.json`),
+          filePath,
           JSON.stringify(
             JSON.parse(zipEntry.getData().toString("utf8")),
             null,
@@ -61,7 +63,7 @@ console.log("start loading language file");
         );
 
         // biome-ignore lint/suspicious/noConsoleLog:
-        console.log(`Saved language file to ${lang}.json`);
+        console.log(`[Info] Stored ${lang} File to ${filePath}`);
       }),
     );
   } catch (e) {
@@ -70,5 +72,5 @@ console.log("start loading language file");
   }
 
   // biome-ignore lint/suspicious/noConsoleLog:
-  console.log("Done prebuilding!");
+  console.log("[Info] All translations files stored.");
 })();
