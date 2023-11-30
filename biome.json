@@ -1,7 +1,7 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.4.0/schema.json",
   "files": {
-    "ignore": ["dist", "package-lock.json"]
+    "ignore": ["dist", "package-lock.json", "*.png"]
   },
   "linter": {
     "enabled": true,
