@@ -66,6 +66,6 @@
     "sourceDir": "./dist"
   },
   "lint-staged": {
-    "*": "biome check --apply"
+    "*.{js,ts,tsx,json}": "biome check --apply"
   }
 }
