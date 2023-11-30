@@ -3,6 +3,20 @@ name: release
 on:
   workflow_dispatch:
     inputs:
+      retry-version:
+        type: string
+        description: Retry version
+        required: false
+      retry-chrome:
+        type: boolean
+        description: Retry Chrome release (Requires retry version)
+        required: false
+        default: false
+      retry-firefox:
+        type: boolean
+        description: Retry Firefox release (Requires retry version)
+        required: false
+        default: false
       dry-run:
         type: boolean
         description: Run without releasing
@@ -65,9 +79,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - if: ${{ inputs.dry-run == false }}
+      - if: ${{ inputs.dry-run == false && ! inputs.retry-version }}
         uses: fregante/daily-version-action@v2
-      - if: ${{ inputs.dry-run == true }}
+      - if: ${{ inputs.retry-version }}
+        run: echo "DAILY_VERSION=${{ inputs.retry-version }}" >> "$GITHUB_ENV"
+      - if: ${{ inputs.dry-run == true && ! inputs.retry-version }}
         run: echo "DAILY_VERSION=dry_run" >> "$GITHUB_ENV"
       - if: env.DAILY_VERSION_CREATED
         run: gh release create "$DAILY_VERSION" --generate-notes
@@ -75,7 +91,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   release-chrome:
     needs: version
-    if: needs.version.outputs.manifest_version
+    if: ${{ needs.version.outputs.manifest_version && (! inputs.retry-version || inputs.retry-version && inputs.retry-chrome) }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -108,7 +124,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   release-firefox:
     needs: version
-    if: needs.version.outputs.manifest_version
+    if: ${{ needs.version.outputs.manifest_version && (! inputs.retry-version || inputs.retry-version && inputs.retry-firefox) }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
