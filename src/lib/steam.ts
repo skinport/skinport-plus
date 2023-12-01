@@ -20,3 +20,9 @@ export async function verifyTradingPartner(steamId: string) {
 
   return response.verified;
 }
+
+export function getHasItemExterior(itemName: string) {
+  return /\(Battle-Scarred|Factory New|Field-Tested|Minimal Wear|Well-Worn\)$/.test(
+    decodeURIComponent(itemName),
+  );
+}

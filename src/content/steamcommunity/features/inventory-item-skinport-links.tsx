@@ -10,7 +10,7 @@ import { Feature, featureManager } from "@/content/feature-manager";
 import { createWidgetElement, widgetElementExists } from "@/content/widget";
 import { getI18nMessage } from "@/lib/i18n";
 import { getSkinportItemUrl } from "@/lib/skinport";
-import { supportedSteamAppIds } from "@/lib/steam";
+import { getHasItemExterior, supportedSteamAppIds } from "@/lib/steam";
 import elementReady from "element-ready";
 import { ChevronDown } from "lucide-react";
 import { $ } from "select-dom";
@@ -69,24 +69,33 @@ const steamInventoryItemSkinportLinks: Feature = async ({
       return;
     }
 
-    const inspectIngameElement = $("a[href*='csgo_econ_action_preview']");
-
-    const inspectIngameElementHref = inspectIngameElement?.getAttribute("href");
+    const inspectIngameElementHref =
+      getHasItemExterior(itemName) &&
+      $("a[href*='csgo_econ_action_preview']", itemInfoElement)?.getAttribute(
+        "href",
+      );
 
     const [viewOnSkinportElement, removeViewOnSkinportElement] =
-      createWidgetElement(
-        ({ shadowRoot }) => (
-          <div className="flex mb-4 [&>*:first-child]:rounded-tr-none [&>*:first-child]:rounded-br-none [&>*:not(:first-child)]:rounded-tl-none [&>*:not(:first-child)]:rounded-bl-none [&>*:not(:first-child)]:border-l [&>*:not(:first-child)]:border-l-background">
-            <Button asChild>
-              <Link href={skinportItemUrl} target="_blank">
-                {getI18nMessage("common_viewOnSkinport")}
-              </Link>
-            </Button>
-            {inspectIngameElementHref && (
+      createWidgetElement(({ shadowRoot }) => {
+        const viewOnSkinportButton = (
+          <Button
+            className={!inspectIngameElementHref ? "mb-4" : undefined}
+            asChild
+          >
+            <Link href={skinportItemUrl} target="_blank">
+              {getI18nMessage("common_viewOnSkinport")}
+            </Link>
+          </Button>
+        );
+
+        if (inspectIngameElementHref)
+          return (
+            <div className="flex mb-4 [&>*:first-child]:rounded-tr-none [&>*:first-child]:rounded-br-none [&>*:not(:first-child)]:rounded-tl-none [&>*:not(:first-child)]:rounded-bl-none [&>*:not(:first-child)]:border-l [&>*:not(:first-child)]:border-l-background">
+              {viewOnSkinportButton}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button className="py-2 px-2">
-                    <ChevronDown />
+                    <ChevronDown size={16} />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent container={shadowRoot}>
@@ -102,11 +111,11 @@ const steamInventoryItemSkinportLinks: Feature = async ({
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            )}
-          </div>
-        ),
-        widgetName,
-      );
+            </div>
+          );
+
+        return viewOnSkinportButton;
+      }, widgetName);
 
     cleanupItemFns.push(removeViewOnSkinportElement);
 
