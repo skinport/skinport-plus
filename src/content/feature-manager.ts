@@ -1,7 +1,12 @@
 import { type Options, optionsStorage } from "@/lib/options-storage";
 import domLoaded from "dom-loaded";
 
-type RunFeature = () => Promise<void>;
+export type Feature = (props: {
+  setFeatureAttribute(target: HTMLElement): {
+    removeFeatureAttribute: () => void;
+  };
+  getHasFeatureAttribute(target: HTMLElement): boolean;
+}) => Promise<void>;
 
 interface FeatureConfig {
   matchPathname?: string | RegExp;
@@ -9,17 +14,17 @@ interface FeatureConfig {
   awaitDomReady?: boolean;
 }
 
-const features: [RunFeature, FeatureConfig][] = [];
+const features: [Feature, FeatureConfig][] = [];
 
-function add(runFeature: RunFeature, featureConfig: FeatureConfig = {}) {
-  features.push([runFeature, featureConfig]);
+function add(feature: Feature, featureConfig: FeatureConfig = {}) {
+  features.push([feature, featureConfig]);
 }
 
 let options: Options | undefined;
 
 async function run() {
   for (const [
-    runFeature,
+    feature,
     { matchPathname, optionKey, awaitDomReady },
   ] of features) {
     if (
@@ -48,11 +53,27 @@ async function run() {
         await domLoaded;
       }
 
-      runFeature();
+      const featureAttribute = `data-skinport-feature-${feature.name.replace(
+        /([A-Z])/g,
+        "-$1",
+      )}`;
+
+      feature({
+        getHasFeatureAttribute: (target) =>
+          target.hasAttribute(featureAttribute),
+        setFeatureAttribute: (target) => {
+          target.setAttribute(featureAttribute, "");
+
+          return {
+            removeFeatureAttribute: () =>
+              target.removeAttribute(featureAttribute),
+          };
+        },
+      });
 
       if (process.env.NODE_ENV !== "production") {
         // biome-ignore lint/suspicious/noConsoleLog: Development only
-        console.log("feature-manager:", `running feature ${runFeature.name}`);
+        console.log("feature-manager:", `running feature ${feature.name}`);
       }
     } catch (error) {
       console.error(error);
