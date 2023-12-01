@@ -100,6 +100,9 @@
   "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_title": {
     "message": "Clave de API Web de Steam expuesta"
   },
+  "steamcommunity_inventoryItemSkinportLinks_viewScreenshot": {
+    "message": "Ver captura de pantalla"
+  },
   "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
     "message": "Continuar intercambio"
   },

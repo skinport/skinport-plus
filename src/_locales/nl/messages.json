@@ -100,6 +100,9 @@
   "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_title": {
     "message": "Steam Web API Sleutel Blootgesteld"
   },
+  "steamcommunity_inventoryItemSkinportLinks_viewScreenshot": {
+    "message": "Bekijk screenshot"
+  },
   "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
     "message": "Ga door met de handel"
   },

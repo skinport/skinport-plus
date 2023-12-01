@@ -100,6 +100,9 @@
   "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_title": {
     "message": "Steam Web API Key Exposed"
   },
+  "steamcommunity_inventoryItemSkinportLinks_viewScreenshot": {
+    "message": "View screenshot"
+  },
   "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
     "message": "Continue trade"
   },

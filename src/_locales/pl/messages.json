@@ -100,6 +100,9 @@
   "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_title": {
     "message": "Klucz do Steam Web API ujawniony"
   },
+  "steamcommunity_inventoryItemSkinportLinks_viewScreenshot": {
+    "message": "Zobacz zrzut ekranu"
+  },
   "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
     "message": "Kontynuuj wymianę"
   },

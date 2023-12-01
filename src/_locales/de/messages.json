@@ -100,6 +100,9 @@
   "steamcommunity_accountSecurityCheck_dialog_steamWebApiKeyExposed_title": {
     "message": "Steam Web-API-Schlüssel entdeckt"
   },
+  "steamcommunity_inventoryItemSkinportLinks_viewScreenshot": {
+    "message": "Screenshot anzeigen"
+  },
   "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
     "message": "Handel fortsetzen"
   },
