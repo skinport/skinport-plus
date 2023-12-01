@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link } from "@/components/ui/link";
 import { Feature, featureManager } from "@/content/feature-manager";
-import { createWidgetElement, widgetElementExists } from "@/content/widget";
+import { createWidgetElement } from "@/content/widget";
 import { getI18nMessage } from "@/lib/i18n";
 import { getSkinportItemUrl } from "@/lib/skinport";
 import { getHasItemExterior, supportedSteamAppIds } from "@/lib/steam";
@@ -61,13 +61,6 @@ const steamInventoryItemSkinportLinks: Feature = async ({
     }
 
     const skinportItemUrl = getSkinportItemUrl(appId, itemName);
-    const widgetName = `steam-inventory-item-skinport-link-${skinportItemUrl
-      .split("/")
-      .pop()}`;
-
-    if (widgetElementExists(widgetName, itemInfoElement)) {
-      return;
-    }
 
     const inspectIngameElementHref =
       getHasItemExterior(itemName) &&
@@ -115,7 +108,7 @@ const steamInventoryItemSkinportLinks: Feature = async ({
           );
 
         return viewOnSkinportButton;
-      }, widgetName);
+      });
 
     cleanupItemFns.push(removeViewOnSkinportElement);
 
