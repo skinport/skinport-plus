@@ -61,9 +61,7 @@ browser.runtime.onMessage.addListener(async (message) => {
       };
     }
   }
-});
 
-browser.runtime.onMessage.addListener(async (message) => {
   if (message.action === "registerContentScripts") {
     const hasAllUrlsPermission = await getHasAllUrlsPermission();
 
