@@ -45,9 +45,10 @@ export function getSkinportItemPrices(
     currency: string;
   }>("v1/extension/price", {
     searchParams: [
-      ...(typeof items === "string"
-        ? [["items[]", items]]
-        : items.map((item) => ["items[]", item])),
+      ...(typeof items === "string" ? [items] : items).map((item) => [
+        "items[]",
+        item,
+      ]),
       ["currency", currency || getSteamUserWalletCurrency()],
     ],
   });
