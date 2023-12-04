@@ -1,18 +1,10 @@
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Link } from "@/components/ui/link";
+import { ItemSkinportActions } from "@/components/item-skinport-actions";
+import { ItemSkinportPrice } from "@/components/item-skinport-price";
 import { Feature, featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
-import { getI18nMessage } from "@/lib/i18n";
-import { getSkinportItemUrl } from "@/lib/skinport";
-import { getHasItemExterior, supportedSteamAppIds } from "@/lib/steam";
+import { getSkinportItemPrices } from "@/lib/skinport";
+import { getHasItemExterior, getItemFromSteamMarketUrl } from "@/lib/steam";
 import elementReady from "element-ready";
-import { ChevronDown } from "lucide-react";
 import { $ } from "select-dom";
 
 const steamInventoryItemSkinportLinks: Feature = async ({
@@ -27,7 +19,7 @@ const steamInventoryItemSkinportLinks: Feature = async ({
     }
   };
 
-  const addWidgetElements = () => {
+  const addWidgetElements = async () => {
     const itemInfoElement = $(
       ".inventory_page_right .inventory_iteminfo[style*='z-index: 1']",
       inventoryContentElement,
@@ -47,68 +39,45 @@ const steamInventoryItemSkinportLinks: Feature = async ({
       ".item_market_actions a[href*='/market/listings/']",
       itemInfoElement,
     );
+    const marketLinkElementHref = marketLinkElement?.getAttribute("href");
 
-    if (!marketLinkElement) {
+    if (!marketLinkElement || !marketLinkElementHref) {
       return;
     }
 
-    const urlPathName = marketLinkElement.getAttribute("href")?.split("/");
-    const itemName = urlPathName?.pop();
-    const appId = urlPathName?.pop();
+    const item = getItemFromSteamMarketUrl(marketLinkElementHref);
 
-    if (!itemName || !(appId && supportedSteamAppIds.includes(appId))) {
+    if (!item) {
       return;
     }
 
-    const skinportItemUrl = getSkinportItemUrl(appId, itemName);
+    const skinportPrices = await getSkinportItemPrices(item.name);
+    const itemSkinportPrice = skinportPrices.items[item.name];
 
-    const inspectIngameElementHref =
-      getHasItemExterior(itemName) &&
-      $("a[href*='csgo_econ_action_preview']", itemInfoElement)?.getAttribute(
-        "href",
-      );
+    const inspectIngameLink =
+      (getHasItemExterior(item.name) &&
+        $("a[href*='csgo_econ_action_preview']", itemInfoElement)?.getAttribute(
+          "href",
+        )) ||
+      undefined;
 
     const [viewOnSkinportElement, removeViewOnSkinportElement] =
-      createWidgetElement(({ shadowRoot }) => {
-        const viewOnSkinportButton = (
-          <Button
-            className={!inspectIngameElementHref ? "mb-4" : undefined}
-            asChild
-          >
-            <Link href={skinportItemUrl} target="_blank">
-              {getI18nMessage("common_viewOnSkinport")}
-            </Link>
-          </Button>
-        );
-
-        if (inspectIngameElementHref)
-          return (
-            <div className="flex mb-4 [&>*:first-child]:rounded-tr-none [&>*:first-child]:rounded-br-none [&>*:not(:first-child)]:rounded-tl-none [&>*:not(:first-child)]:rounded-bl-none [&>*:not(:first-child)]:border-l [&>*:not(:first-child)]:border-l-background">
-              {viewOnSkinportButton}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button className="py-2 px-2">
-                    <ChevronDown size={16} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent container={shadowRoot}>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href={`https://screenshot.skinport.com/direct?link=${inspectIngameElementHref}`}
-                      target="_blank"
-                    >
-                      {getI18nMessage(
-                        "steamcommunity_inventoryItemSkinportLinks_viewScreenshot",
-                      )}
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          );
-
-        return viewOnSkinportButton;
-      });
+      createWidgetElement(({ shadowRoot }) => (
+        <div className="space-y-1 mb-4">
+          {itemSkinportPrice && (
+            <ItemSkinportPrice
+              price={itemSkinportPrice}
+              currency={skinportPrices.currency}
+            />
+          )}
+          <ItemSkinportActions
+            item={item}
+            inspectIngameLink={inspectIngameLink}
+            container={shadowRoot}
+            action="sell"
+          />
+        </div>
+      ));
 
     cleanupItemFns.push(removeViewOnSkinportElement);
 

@@ -33,16 +33,23 @@ export function getHasItemExterior(itemName: string) {
   );
 }
 
+export type Item = { name: string; appId: keyof typeof steamAppIdNames };
+
 export function getItemFromSteamMarketUrl(
   url: string = window.location.pathname,
 ) {
   const paths = url.split("/");
-  const itemName = paths.pop();
+  const name = paths.pop();
+  const appId = paths.pop();
+
+  if (!name || !appId || !getIsSupportedSteamAppId(appId)) {
+    return;
+  }
 
   return {
-    itemName: itemName && decodeURIComponent(itemName),
-    appId: paths.pop(),
-  };
+    name: decodeURIComponent(name),
+    appId,
+  } as Item;
 }
 
 export function getSteamUserWalletCurrency(defaultCurrency = "USD") {

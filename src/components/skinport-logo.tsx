@@ -2,14 +2,16 @@ import { SVGProps } from "react";
 
 export function SkinportLogo({
   isInverted,
+  size,
   ...props
-}: { isInverted?: boolean } & SVGProps<SVGSVGElement>) {
+}: { isInverted?: boolean; size?: number } & SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={124}
       height={16}
       viewBox="0 0 731 88.1"
+      style={size ? { height: size, width: "auto" } : undefined}
       {...props}
     >
       <title>Skinport</title>

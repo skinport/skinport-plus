@@ -14,5 +14,5 @@ export function getPercentageDecrease(oldNumber: number, newNumber: number) {
     ((newNumber - oldNumber) / oldNumber) * 100,
   );
 
-  return percentageDecrease < 0 ? `${percentageDecrease}%` : null;
+  return percentageDecrease < 0 ? `${percentageDecrease}%` : undefined;
 }

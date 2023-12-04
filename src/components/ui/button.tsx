@@ -4,7 +4,7 @@ import React from "react";
 import { cn } from "../../lib/utils";
 
 const buttonVariants = cva(
-  "rounded uppercase font-bold tracking-widest text-xs transition text-white border border-transparent outline-none inline-flex gap-2 items-center justify-center",
+  "rounded uppercase font-bold tracking-widest text-xs transition text-white border border-transparent outline-none inline-flex gap-1.5 items-center justify-center",
   {
     variants: {
       variant: {

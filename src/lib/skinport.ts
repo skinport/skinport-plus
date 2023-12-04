@@ -1,6 +1,6 @@
 import { KyOptions } from "ky/distribution/types/options";
 import browser from "webextension-polyfill";
-import { getSteamUserWalletCurrency, steamAppIdNames } from "./steam";
+import { Item, getSteamUserWalletCurrency, steamAppIdNames } from "./steam";
 
 export function getSkinportItemSlug(itemName: string) {
   return decodeURIComponent(itemName)
@@ -10,13 +10,12 @@ export function getSkinportItemSlug(itemName: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-export function getSkinportItemUrl(steamAppId: string, steamItemName: string) {
-  const steamAppName =
-    steamAppIdNames[steamAppId as keyof typeof steamAppIdNames];
+export function getSkinportItemUrl(item: Item) {
+  const steamAppName = steamAppIdNames[item.appId];
 
   return `https://skinport.com${
     steamAppName !== "cs2" ? `/${steamAppName}` : ""
-  }/item/${getSkinportItemSlug(steamItemName)}`;
+  }/item/${getSkinportItemSlug(item.name)}`;
 }
 
 export async function skinportApi<ResponseBody>(
@@ -41,7 +40,7 @@ export function getSkinportItemPrices(
   currency?: string,
 ) {
   return skinportApi<{
-    items: Record<string, number>;
+    items: Partial<Record<string, number>>;
     currency: string;
   }>("v1/extension/price", {
     searchParams: [

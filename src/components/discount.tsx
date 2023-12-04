@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { VariantProps, cva } from "class-variance-authority";
 
-const priceDiscountVariants = cva(
+const discountVariants = cva(
   "bg-[linear-gradient(135deg,#0073d5,#fa490a)] skew-x-[-15deg] rounded-[3px] inline-flex items-center text-white",
   {
     variants: {
@@ -16,13 +16,16 @@ const priceDiscountVariants = cva(
   },
 );
 
-export const PriceDiscount = ({
-  children,
+export const Discount = ({
+  discount,
   className,
   size,
-}: React.ButtonHTMLAttributes<HTMLDivElement> &
-  VariantProps<typeof priceDiscountVariants>) => (
-  <div className={cn(priceDiscountVariants({ className, size }))}>
-    <span className="skew-x-[15deg]">{children}</span>
+}: { discount: string } & Omit<
+  React.ButtonHTMLAttributes<HTMLDivElement>,
+  "children"
+> &
+  VariantProps<typeof discountVariants>) => (
+  <div className={cn(discountVariants({ className, size }))}>
+    <span className="skew-x-[15deg]">{discount}</span>
   </div>
 );

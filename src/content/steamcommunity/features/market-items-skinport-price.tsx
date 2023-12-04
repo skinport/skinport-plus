@@ -1,4 +1,4 @@
-import { PriceDiscount } from "@/components/price-discount";
+import { Discount } from "@/components/discount";
 import { SkinportLogo } from "@/components/skinport-logo";
 import { Link } from "@/components/ui/link";
 import {
@@ -11,10 +11,7 @@ import { createWidgetElement } from "@/content/widget";
 import { formatPrice } from "@/lib/format";
 import { getI18nMessage } from "@/lib/i18n";
 import { getSkinportItemPrices, getSkinportItemUrl } from "@/lib/skinport";
-import {
-  getIsSupportedSteamAppId,
-  getItemFromSteamMarketUrl,
-} from "@/lib/steam";
+import { getItemFromSteamMarketUrl } from "@/lib/steam";
 import { getPercentageDecrease, parseNumberFromString } from "@/lib/utils";
 import { $, $$ } from "select-dom";
 
@@ -58,7 +55,10 @@ const marketItemsSkinportPrice: Feature = async ({
       return;
     }
 
-    const marketListingItems: [string, string, HTMLElement][] = [];
+    const marketListings: {
+      item: ReturnType<typeof getItemFromSteamMarketUrl>;
+      element: HTMLElement;
+    }[] = [];
 
     for (const marketListingElement of marketListingElements) {
       setFeatureAttribute(marketListingElement);
@@ -70,24 +70,16 @@ const marketItemsSkinportPrice: Feature = async ({
         continue;
       }
 
-      const { itemName, appId } = getItemFromSteamMarketUrl(
-        marketListingElementHref,
-      );
+      const item = getItemFromSteamMarketUrl(marketListingElementHref);
 
-      if (itemName && appId) {
-        marketListingItems.push([
-          appId,
-          decodeURIComponent(itemName),
-          marketListingElement,
-        ]);
-      }
+      marketListings.push({ item, element: marketListingElement });
     }
 
-    const skinportSupportedItems: string[] = [];
+    const skinportItemPricesItems: string[] = [];
 
-    for (const [appId, itemName] of marketListingItems) {
-      if (getIsSupportedSteamAppId(appId)) {
-        skinportSupportedItems.push(itemName);
+    for (const { item } of marketListings) {
+      if (item) {
+        skinportItemPricesItems.push(item.name);
       }
     }
 
@@ -95,10 +87,10 @@ const marketItemsSkinportPrice: Feature = async ({
       | Awaited<ReturnType<typeof getSkinportItemPrices>>
       | undefined;
 
-    if (skinportSupportedItems.length > 0) {
+    if (skinportItemPricesItems.length > 0) {
       try {
         skinportItemPrices = await getSkinportItemPrices(
-          skinportSupportedItems,
+          skinportItemPricesItems,
         );
       } catch (error) {
         console.error(error);
@@ -106,38 +98,35 @@ const marketItemsSkinportPrice: Feature = async ({
       }
     }
 
-    for (const [
-      marketListingAppId,
-      marketListingItemName,
-      marketListingElement,
-    ] of marketListingItems) {
+    for (const marketListing of marketListings) {
       const marketListingColumnsElement = $(
         ".market_listing_price_listings_block",
-        marketListingElement,
+        marketListing.element,
       );
 
       if (!marketListingColumnsElement) {
         continue;
       }
 
-      const marketListingItemPriceElement = $(
-        ".market_table_value .normal_price",
-        marketListingColumnsElement,
-      );
-
-      const marketListingItemPrice =
-        marketListingItemPriceElement?.innerText &&
-        parseNumberFromString(marketListingItemPriceElement.innerText);
+      const skinportItemPrice =
+        marketListing.item &&
+        skinportItemPrices?.items[marketListing.item.name];
 
       const [skinportStartingAtElement] = createWidgetElement(() => {
-        if (!skinportItemPrices?.items[marketListingItemName]) {
+        if (!marketListing.item || !skinportItemPrices || !skinportItemPrice) {
           return (
             <div className="flex items-center justify-center h-full">–</div>
           );
         }
 
-        const skinportItemPrice =
-          skinportItemPrices.items[marketListingItemName];
+        const marketListingItemPriceElement = $(
+          ".market_table_value .normal_price",
+          marketListingColumnsElement,
+        );
+
+        const marketListingItemPrice =
+          marketListingItemPriceElement?.innerText &&
+          parseNumberFromString(marketListingItemPriceElement.innerText);
 
         const skinportItemPricePercentageDecrease =
           typeof marketListingItemPrice === "number" &&
@@ -151,10 +140,7 @@ const marketItemsSkinportPrice: Feature = async ({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href={getSkinportItemUrl(
-                    marketListingAppId,
-                    marketListingItemName,
-                  )}
+                  href={getSkinportItemUrl(marketListing.item)}
                   target="_blank"
                   onClick={(event) => {
                     event.stopPropagation();
@@ -168,9 +154,9 @@ const marketItemsSkinportPrice: Feature = async ({
                       )}
                     </div>
                     {skinportItemPricePercentageDecrease && (
-                      <PriceDiscount>
-                        {skinportItemPricePercentageDecrease}
-                      </PriceDiscount>
+                      <Discount
+                        discount={skinportItemPricePercentageDecrease}
+                      />
                     )}
                   </div>
                 </Link>
