@@ -44,10 +44,12 @@ export function getSkinportItemPrices(
     items: Record<string, number>;
     currency: string;
   }>("v1/extension/price", {
-    searchParams: {
-      items: typeof items === "string" ? items : items.join(","),
-      currency: currency || getSteamUserWalletCurrency(),
-    },
+    searchParams: [
+      ...(typeof items === "string"
+        ? [["items[]", items]]
+        : items.map((item) => ["items[]", item])),
+      ["currency", currency || getSteamUserWalletCurrency()],
+    ],
   });
 }
 

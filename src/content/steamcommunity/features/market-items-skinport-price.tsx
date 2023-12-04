@@ -15,43 +15,41 @@ import {
   getIsSupportedSteamAppId,
   getItemFromSteamMarketUrl,
 } from "@/lib/steam";
-import { getPercentageDecrease } from "@/lib/utils";
+import { getPercentageDecrease, parseNumberFromString } from "@/lib/utils";
 import { $, $$ } from "select-dom";
 
 const marketItemsSkinportPrice: Feature = async ({
   getNotMatchingFeatureAttributeSelector,
   setFeatureAttribute,
 }) => {
-  const addSkinportTableHeader = async () => {
+  const addWidgets = async () => {
     const marketTableHeaderElement = $(
       getNotMatchingFeatureAttributeSelector(
         ".market_listing_table_header .market_listing_price_listings_block",
       ),
     );
 
-    if (!marketTableHeaderElement) {
-      return;
+    if (marketTableHeaderElement) {
+      setFeatureAttribute(marketTableHeaderElement);
+
+      const [marketTableHeaderSkinportColumnElement] = createWidgetElement(
+        () => (
+          <div className="flex items-center h-full">
+            <SkinportLogo style={{ height: 10 }} />
+          </div>
+        ),
+      );
+
+      marketTableHeaderSkinportColumnElement.classList.add(
+        "market_listing_right_cell",
+      );
+
+      marketTableHeaderSkinportColumnElement.style.width = "120px";
+      marketTableHeaderSkinportColumnElement.style.height = "1.9em";
+
+      marketTableHeaderElement.prepend(marketTableHeaderSkinportColumnElement);
     }
 
-    setFeatureAttribute(marketTableHeaderElement);
-
-    const [marketTableHeaderSkinportColumnElement] = createWidgetElement(() => (
-      <div className="flex items-center h-full">
-        <SkinportLogo style={{ height: 10 }} />
-      </div>
-    ));
-
-    marketTableHeaderSkinportColumnElement.classList.add(
-      "market_listing_right_cell",
-    );
-
-    marketTableHeaderSkinportColumnElement.style.width = "120px";
-    marketTableHeaderSkinportColumnElement.style.height = "1.9em";
-
-    marketTableHeaderElement.prepend(marketTableHeaderSkinportColumnElement);
-  };
-
-  const addSkinportItemPrices = async () => {
     const marketListingElements = $$(
       getNotMatchingFeatureAttributeSelector("a[href*='/market/listings/']"),
     );
@@ -93,16 +91,20 @@ const marketItemsSkinportPrice: Feature = async ({
       }
     }
 
-    const skinportItemPrices =
-      skinportSupportedItems.length > 0
-        ? await getSkinportItemPrices(skinportSupportedItems)
-        : null;
+    let skinportItemPrices:
+      | Awaited<ReturnType<typeof getSkinportItemPrices>>
+      | undefined;
 
-    const setMarketListingCellStyles = (cellElement: HTMLElement) => {
-      cellElement.style.width = "120px";
-      cellElement.style.height = "73px";
-      cellElement.style.float = "right";
-    };
+    if (skinportSupportedItems.length > 0) {
+      try {
+        skinportItemPrices = await getSkinportItemPrices(
+          skinportSupportedItems,
+        );
+      } catch (error) {
+        console.error(error);
+        // TODO: Handle error with e.g. Sentry
+      }
+    }
 
     for (const [
       marketListingAppId,
@@ -118,18 +120,6 @@ const marketItemsSkinportPrice: Feature = async ({
         continue;
       }
 
-      if (!skinportItemPrices?.items[marketListingItemName]) {
-        const [noPriceElement] = createWidgetElement(() => (
-          <div className="flex items-center justify-center h-full">–</div>
-        ));
-
-        setMarketListingCellStyles(noPriceElement);
-
-        marketListingColumnsElement.prepend(noPriceElement);
-
-        continue;
-      }
-
       const marketListingItemPriceElement = $(
         ".market_table_value .normal_price",
         marketListingColumnsElement,
@@ -137,81 +127,86 @@ const marketItemsSkinportPrice: Feature = async ({
 
       const marketListingItemPrice =
         marketListingItemPriceElement?.innerText &&
-        parseFloat(
-          marketListingItemPriceElement.innerText.replace(/[^\d.]/g, ""),
-        );
+        parseNumberFromString(marketListingItemPriceElement.innerText);
 
-      const skinportItemPrice = skinportItemPrices.items[marketListingItemName];
+      const [skinportStartingAtElement] = createWidgetElement(() => {
+        if (!skinportItemPrices?.items[marketListingItemName]) {
+          return (
+            <div className="flex items-center justify-center h-full">–</div>
+          );
+        }
 
-      const skinportItemPricePercentageDecrease =
-        typeof marketListingItemPrice === "number" &&
-        getPercentageDecrease(marketListingItemPrice, skinportItemPrice);
+        const skinportItemPrice =
+          skinportItemPrices.items[marketListingItemName];
 
-      const [skinportStartingAtElement] = createWidgetElement(() => (
-        <div className="h-full flex flex-col justify-center">
-          <div className="text-xs text-center">Starting at</div>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link
-                href={getSkinportItemUrl(
-                  marketListingAppId,
-                  marketListingItemName,
-                )}
-                target="_blank"
-                onClick={(event) => {
-                  event.stopPropagation();
-                }}
-              >
-                <div className="flex justify-center items-center gap-2">
-                  <div className="font-semibold">
-                    {formatPrice(
-                      skinportItemPrices.items[marketListingItemName],
-                      skinportItemPrices.currency,
+        const skinportItemPricePercentageDecrease =
+          typeof marketListingItemPrice === "number" &&
+          getPercentageDecrease(marketListingItemPrice, skinportItemPrice);
+
+        return (
+          <div className="h-full flex flex-col justify-center">
+            <div className="text-xs text-center">
+              {getI18nMessage("common_startingAt")}
+            </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href={getSkinportItemUrl(
+                    marketListingAppId,
+                    marketListingItemName,
+                  )}
+                  target="_blank"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                  }}
+                >
+                  <div className="flex justify-center items-center gap-2">
+                    <div className="font-semibold">
+                      {formatPrice(
+                        skinportItemPrice,
+                        skinportItemPrices.currency,
+                      )}
+                    </div>
+                    {skinportItemPricePercentageDecrease && (
+                      <PriceDiscount>
+                        {skinportItemPricePercentageDecrease}
+                      </PriceDiscount>
                     )}
                   </div>
-                  {skinportItemPricePercentageDecrease && (
-                    <PriceDiscount>
-                      {skinportItemPricePercentageDecrease}
-                    </PriceDiscount>
-                  )}
-                </div>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{getI18nMessage("common_viewOnSkinport")}</p>
-            </TooltipContent>
-          </Tooltip>
-        </div>
-      ));
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{getI18nMessage("common_viewOnSkinport")}</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        );
+      });
 
-      setMarketListingCellStyles(skinportStartingAtElement);
+      skinportStartingAtElement.style.width = "120px";
+      skinportStartingAtElement.style.height = "73px";
+      skinportStartingAtElement.style.float = "right";
 
       marketListingColumnsElement.prepend(skinportStartingAtElement);
     }
   };
 
   if (window.location.pathname.includes("/search")) {
-    const observer = new MutationObserver(() => {
-      addSkinportTableHeader();
-      addSkinportItemPrices();
-    });
-
     const searchResultsTable = $("#searchResultsTable");
 
     if (!searchResultsTable) {
       return;
     }
 
-    observer.observe(searchResultsTable, {
+    return new MutationObserver(() => {
+      addWidgets();
+    }).observe(searchResultsTable, {
       childList: true,
       subtree: true,
     });
-
-    return;
   }
 
-  addSkinportTableHeader();
-  addSkinportItemPrices();
+  addWidgets();
 };
 
 featureManager.add(marketItemsSkinportPrice, {
