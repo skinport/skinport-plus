@@ -5,6 +5,9 @@
   "common_securityProvidedBySkinportPlus": {
     "message": "Skinport Plus tarafından sağlanan güvenlik"
   },
+  "common_startingAt": {
+    "message": "Başlamak üzere"
+  },
   "common_viewOnSkinport": {
     "message": "Skinport'ta Görüntüle"
   },

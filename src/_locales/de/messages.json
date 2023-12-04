@@ -5,6 +5,9 @@
   "common_securityProvidedBySkinportPlus": {
     "message": "Sicherheit durch Skinport Plus"
   },
+  "common_startingAt": {
+    "message": "Ab"
+  },
   "common_viewOnSkinport": {
     "message": "Auf Skinport betrachten"
   },

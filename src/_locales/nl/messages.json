@@ -5,6 +5,9 @@
   "common_securityProvidedBySkinportPlus": {
     "message": "Beveiliging geboden door Skinport Plus"
   },
+  "common_startingAt": {
+    "message": "Beginnend bij"
+  },
   "common_viewOnSkinport": {
     "message": "Bekijk op Skinport"
   },

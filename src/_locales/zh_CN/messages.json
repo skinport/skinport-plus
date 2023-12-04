@@ -5,6 +5,9 @@
   "common_securityProvidedBySkinportPlus": {
     "message": "由Skinport Plus提供的安全保障"
   },
+  "common_startingAt": {
+    "message": "从"
+  },
   "common_viewOnSkinport": {
     "message": "在Skinport上查看"
   },
@@ -62,7 +65,7 @@
     "message": "潜在的 Skinport 钓鱼网站在前方"
   },
   "phishingBlocker_visitPotentiallyUnsafeSite": {
-    "message": "如果你了解对你的安全的风险，请访问这个<可能不安全的网站链接>可能不安全的网站</可能不安全的网站链接>。"
+    "message": "如果你了解对你的安全的风险，请访问这个<potentiallyUnsafeSiteLink>可能不安全的网站</potentiallyUnsafeSiteLink>。"
   },
   "steamcommunity_accountSecurityCheck_banner_review": {
     "message": "检查"
@@ -101,7 +104,7 @@
     "message": "Steam Web API 密钥已泄露"
   },
   "steamcommunity_inventoryItemSkinportLinks_viewScreenshot": {
-    "message": "View screenshot"
+    "message": "查看截图"
   },
   "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
     "message": "继续交易"
