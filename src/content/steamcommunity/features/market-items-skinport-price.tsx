@@ -1,16 +1,8 @@
-import { Discount } from "@/components/discount";
+import { ItemSkinportPrice } from "@/components/item-skinport-price";
 import { SkinportLogo } from "@/components/skinport-logo";
-import { Link } from "@/components/ui/link";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Feature, featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
-import { formatPrice } from "@/lib/format";
-import { getI18nMessage } from "@/lib/i18n";
-import { getSkinportItemPrices, getSkinportItemUrl } from "@/lib/skinport";
+import { useSkinportItemPrices } from "@/lib/skinport";
 import { getItemFromSteamMarketUrl } from "@/lib/steam";
 import { getPercentageDecrease, parseNumberFromString } from "@/lib/utils";
 import { $, $$ } from "select-dom";
@@ -83,21 +75,6 @@ const marketItemsSkinportPrice: Feature = async ({
       }
     }
 
-    let skinportItemPrices:
-      | Awaited<ReturnType<typeof getSkinportItemPrices>>
-      | undefined;
-
-    if (skinportItemPricesItems.length > 0) {
-      try {
-        skinportItemPrices = await getSkinportItemPrices(
-          skinportItemPricesItems,
-        );
-      } catch (error) {
-        console.error(error);
-        // TODO: Handle error with e.g. Sentry
-      }
-    }
-
     for (const marketListing of marketListings) {
       const marketListingColumnsElement = $(
         ".market_listing_price_listings_block",
@@ -108,12 +85,19 @@ const marketItemsSkinportPrice: Feature = async ({
         continue;
       }
 
-      const skinportItemPrice =
-        marketListing.item &&
-        skinportItemPrices?.items[marketListing.item.name];
-
       const [skinportStartingAtElement] = createWidgetElement(() => {
-        if (!marketListing.item || !skinportItemPrices || !skinportItemPrice) {
+        const skinportItemPrices = useSkinportItemPrices(
+          skinportItemPricesItems,
+        );
+
+        const skinportItemPrice =
+          marketListing.item &&
+          skinportItemPrices.data?.items[marketListing.item.name];
+
+        if (
+          !marketListing.item ||
+          (!skinportItemPrices.isLoading && !skinportItemPrice)
+        ) {
           return (
             <div className="flex items-center justify-center h-full">–</div>
           );
@@ -124,47 +108,26 @@ const marketItemsSkinportPrice: Feature = async ({
           marketListingColumnsElement,
         );
 
-        const marketListingItemPrice =
-          marketListingItemPriceElement?.innerText &&
-          parseNumberFromString(marketListingItemPriceElement.innerText);
+        const marketListingItemPrice = marketListingItemPriceElement?.innerText
+          ? parseNumberFromString(marketListingItemPriceElement.innerText)
+          : undefined;
 
         const skinportItemPricePercentageDecrease =
-          typeof marketListingItemPrice === "number" &&
-          getPercentageDecrease(marketListingItemPrice, skinportItemPrice);
+          marketListingItemPrice && skinportItemPrice
+            ? getPercentageDecrease(marketListingItemPrice, skinportItemPrice)
+            : undefined;
 
         return (
           <div className="h-full flex flex-col justify-center">
-            <div className="text-xs text-center">
-              {getI18nMessage("common_startingAt")}
-            </div>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href={getSkinportItemUrl(marketListing.item)}
-                  target="_blank"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <div className="flex justify-center items-center gap-2">
-                    <div className="font-semibold">
-                      {formatPrice(
-                        skinportItemPrice,
-                        skinportItemPrices.currency,
-                      )}
-                    </div>
-                    {skinportItemPricePercentageDecrease && (
-                      <Discount
-                        discount={skinportItemPricePercentageDecrease}
-                      />
-                    )}
-                  </div>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{getI18nMessage("common_viewOnSkinport")}</p>
-              </TooltipContent>
-            </Tooltip>
+            <ItemSkinportPrice
+              price={skinportItemPrice}
+              currency={skinportItemPrices.data?.currency}
+              discount={skinportItemPricePercentageDecrease}
+              size="sm"
+              linkItem={marketListing.item}
+              className="justify-center"
+              startingAtClassName="text-center"
+            />
           </div>
         );
       });

@@ -2,6 +2,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { elementExists } from "select-dom";
+import { SWRConfig } from "swr";
 import styles from "tailwind:./widget.css";
 
 export function createWidgetElement(
@@ -24,9 +25,11 @@ export function createWidgetElement(
   const reactRoot = createRoot(shadowRoot);
 
   reactRoot.render(
-    <TooltipProvider>
-      <Widget shadowRoot={shadowRoot as unknown as HTMLElement} />
-    </TooltipProvider>,
+    <SWRConfig>
+      <TooltipProvider>
+        <Widget shadowRoot={shadowRoot as unknown as HTMLElement} />
+      </TooltipProvider>
+    </SWRConfig>,
   );
 
   const removeWidgetElement = () => {

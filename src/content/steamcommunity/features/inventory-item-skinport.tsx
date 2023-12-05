@@ -2,12 +2,12 @@ import { ItemSkinportActions } from "@/components/item-skinport-actions";
 import { ItemSkinportPrice } from "@/components/item-skinport-price";
 import { Feature, featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
-import { getSkinportItemPrices } from "@/lib/skinport";
+import { useSkinportItemPrices } from "@/lib/skinport";
 import { getHasItemExterior, getItemFromSteamMarketUrl } from "@/lib/steam";
 import elementReady from "element-ready";
 import { $ } from "select-dom";
 
-const steamInventoryItemSkinportLinks: Feature = async ({
+const inventoryItemSkinport: Feature = async ({
   getHasFeatureAttribute,
   setFeatureAttribute,
 }) => {
@@ -19,7 +19,7 @@ const steamInventoryItemSkinportLinks: Feature = async ({
     }
   };
 
-  const addWidgetElements = async () => {
+  const addWidgetElements = () => {
     const itemInfoElement = $(
       ".inventory_page_right .inventory_iteminfo[style*='z-index: 1']",
       inventoryContentElement,
@@ -51,9 +51,6 @@ const steamInventoryItemSkinportLinks: Feature = async ({
       return;
     }
 
-    const skinportPrices = await getSkinportItemPrices(item.name);
-    const itemSkinportPrice = skinportPrices.items[item.name];
-
     const inspectIngameLink =
       (getHasItemExterior(item.name) &&
         $("a[href*='csgo_econ_action_preview']", itemInfoElement)?.getAttribute(
@@ -62,22 +59,24 @@ const steamInventoryItemSkinportLinks: Feature = async ({
       undefined;
 
     const [viewOnSkinportElement, removeViewOnSkinportElement] =
-      createWidgetElement(({ shadowRoot }) => (
-        <div className="space-y-1 mb-4">
-          {itemSkinportPrice && (
+      createWidgetElement(({ shadowRoot }) => {
+        const skinportItemPrices = useSkinportItemPrices(item.name);
+
+        return (
+          <div className="space-y-1 mb-4">
             <ItemSkinportPrice
-              price={itemSkinportPrice}
-              currency={skinportPrices.currency}
+              price={skinportItemPrices.data?.items[item.name]}
+              currency={skinportItemPrices.data?.currency}
             />
-          )}
-          <ItemSkinportActions
-            item={item}
-            inspectIngameLink={inspectIngameLink}
-            container={shadowRoot}
-            action="sell"
-          />
-        </div>
-      ));
+            <ItemSkinportActions
+              item={item}
+              inspectIngameLink={inspectIngameLink}
+              container={shadowRoot}
+              action="sell"
+            />
+          </div>
+        );
+      });
 
     cleanupItemFns.push(removeViewOnSkinportElement);
 
@@ -112,7 +111,7 @@ const steamInventoryItemSkinportLinks: Feature = async ({
   });
 };
 
-featureManager.add(steamInventoryItemSkinportLinks, {
+featureManager.add(inventoryItemSkinport, {
   matchPathname: /\/(id|profiles)\/\w+\/inventory/,
   awaitDomReady: true,
 });

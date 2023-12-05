@@ -2,7 +2,7 @@ import { ItemSkinportActions } from "@/components/item-skinport-actions";
 import { ItemSkinportPrice } from "@/components/item-skinport-price";
 import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
-import { getSkinportItemPrices } from "@/lib/skinport";
+import { useSkinportItemPrices } from "@/lib/skinport";
 import {
   getHasItemExterior,
   getItemFromSteamMarketUrl,
@@ -17,29 +17,6 @@ async function marketItemSkinportPrice() {
   if (!item) {
     return;
   }
-
-  const skinportItemPrices = await getSkinportItemPrices(item.name);
-
-  const itemSkinportPrice = skinportItemPrices.items[item.name];
-
-  if (!itemSkinportPrice) {
-    return;
-  }
-
-  const cheapestMarketListingItemElement = $(
-    ".market_table_value .market_listing_price_with_fee",
-  );
-  const cheapestMarketListingItemPrice =
-    cheapestMarketListingItemElement &&
-    parseNumberFromString(cheapestMarketListingItemElement.innerText);
-
-  const itemSkinportPercentageDecrease =
-    (cheapestMarketListingItemPrice &&
-      getPercentageDecrease(
-        cheapestMarketListingItemPrice,
-        itemSkinportPrice,
-      )) ||
-    undefined;
 
   const itemDescriptionElement = $(
     ".market_listing_iteminfo .item_desc_descriptors",
@@ -56,20 +33,42 @@ async function marketItemSkinportPrice() {
       )?.getAttribute("href")) ||
     undefined;
 
-  const [widgetElement] = createWidgetElement(({ shadowRoot }) => (
-    <div className="space-y-1 mb-4">
-      <ItemSkinportPrice
-        price={itemSkinportPrice}
-        currency={skinportItemPrices.currency}
-        discount={itemSkinportPercentageDecrease}
-      />
-      <ItemSkinportActions
-        item={item}
-        inspectIngameLink={inspectIngameLink}
-        container={shadowRoot}
-      />
-    </div>
-  ));
+  const cheapestMarketListingItemElement = $(
+    ".market_table_value .market_listing_price_with_fee",
+  );
+
+  const [widgetElement] = createWidgetElement(({ shadowRoot }) => {
+    const skinportItemPrices = useSkinportItemPrices(item.name);
+
+    const itemSkinportPrice = skinportItemPrices.data?.items[item.name];
+
+    const cheapestMarketListingItemPrice =
+      cheapestMarketListingItemElement &&
+      parseNumberFromString(cheapestMarketListingItemElement.innerText);
+
+    const itemSkinportPercentageDecrease =
+      cheapestMarketListingItemPrice && itemSkinportPrice
+        ? getPercentageDecrease(
+            cheapestMarketListingItemPrice,
+            itemSkinportPrice,
+          )
+        : undefined;
+
+    return (
+      <div className="space-y-1 mb-4">
+        <ItemSkinportPrice
+          price={itemSkinportPrice}
+          currency={skinportItemPrices.data?.currency}
+          discount={itemSkinportPercentageDecrease}
+        />
+        <ItemSkinportActions
+          item={item}
+          inspectIngameLink={inspectIngameLink}
+          container={shadowRoot}
+        />
+      </div>
+    );
+  });
 
   itemDescriptionElement.insertAdjacentElement("beforebegin", widgetElement);
 }
