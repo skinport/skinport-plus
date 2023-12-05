@@ -15,6 +15,7 @@ import {
   getHasAllUrlsPermission,
   requestAllUrlsPermission,
 } from "@/lib/permissions";
+import { getSkinportUrl } from "@/lib/skinport";
 import React, { useEffect, useId, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
@@ -65,7 +66,7 @@ function App() {
         <div className="bg-[#232728] border-b-2 border-[#1d2021] px-8 py-6 tracking-widest">
           <div className="flex flex-row gap-4 uppercase text-white font-bold text-xl items-center">
             <a
-              href="https://skinport.com"
+              href={getSkinportUrl()}
               target="_blank"
               rel="noopener noreferrer"
             >

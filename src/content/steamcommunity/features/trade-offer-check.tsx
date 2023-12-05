@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { getI18nMessage } from "@/lib/i18n";
-import { getIsSteamIdSkinportVerified } from "@/lib/skinport";
+import { getIsSteamIdSkinportVerified, getSkinportUrl } from "@/lib/skinport";
 import elementReady from "element-ready";
 import { ShieldAlert, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -81,7 +81,7 @@ function TradePartnerUnverified({
       </Button>
       <Button variant="ghost" asChild>
         <a
-          href="https://skinport.com/blog/how-to-never-get-scammed"
+          href={getSkinportUrl("blog/how-to-never-get-scammed")}
           rel="noopener noreferrer"
           target="_blank"
         >

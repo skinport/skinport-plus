@@ -2,6 +2,7 @@ import { SkinportLogo } from "@/components/skinport-logo";
 import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { injectStyle } from "@/lib/dom";
+import { SKINPORT_BASE_URL } from "@/lib/skinport";
 import { BadgeCheck } from "lucide-react";
 import { $, elementExists } from "select-dom";
 
@@ -21,7 +22,7 @@ function getResultRootElement(targetElement: HTMLElement) {
 }
 
 async function googleSkinportResult() {
-  const skinportLinkElement = $('#search a[href^="https://skinport.com"]');
+  const skinportLinkElement = $(`#search a[href^="${SKINPORT_BASE_URL}"]`);
 
   if (!skinportLinkElement) {
     return;

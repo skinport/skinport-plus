@@ -1,5 +1,5 @@
 import { getI18nMessage } from "@/lib/i18n";
-import { getSkinportItemUrl } from "@/lib/skinport";
+import { getSkinportItemUrl, getSkinportScreenshotUrl } from "@/lib/skinport";
 import { Item } from "@/lib/steam";
 import { ChevronDown } from "lucide-react";
 import { ReactNode } from "react";
@@ -56,7 +56,9 @@ export function ItemSkinportActions({
             {inspectIngameLink && (
               <DropdownMenuItem asChild>
                 <Link
-                  href={`https://screenshot.skinport.com/direct?link=${inspectIngameLink}`}
+                  href={getSkinportScreenshotUrl(
+                    `direct?link=${inspectIngameLink}`,
+                  )}
                   target="_blank"
                 >
                   {getI18nMessage(

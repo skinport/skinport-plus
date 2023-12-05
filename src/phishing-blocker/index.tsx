@@ -3,6 +3,7 @@ import { SkinportLogo } from "@/components/skinport-logo";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/components/ui/link";
 import { getI18nMessage } from "@/lib/i18n";
+import { getSkinportUrl } from "@/lib/skinport";
 import { ShieldAlert } from "lucide-react";
 import { createRoot } from "react-dom/client";
 import browser from "webextension-polyfill";
@@ -40,7 +41,7 @@ function App() {
                 skinportLink: (
                   <Link
                     className="text-white hover:text-red transition-colors"
-                    href="https://skinport.com"
+                    href={getSkinportUrl()}
                   />
                 ),
               }}
@@ -48,7 +49,7 @@ function App() {
           </p>
         </div>
         <Button asChild>
-          <Link href="https://skinport.com">
+          <Link href={getSkinportUrl()}>
             {getI18nMessage("phishingBlocker_goToSkinport")}
           </Link>
         </Button>

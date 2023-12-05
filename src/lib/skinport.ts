@@ -2,6 +2,14 @@ import { KyOptions } from "ky/distribution/types/options";
 import browser from "webextension-polyfill";
 import { Item, getSteamUserWalletCurrency, steamAppIdNames } from "./steam";
 
+export const SKINPORT_BASE_URL = "https://skinport.com";
+
+export const SKINPORT_SCREENSHOT_BASE_URL = "https://screenshot.skinport.com";
+
+function setUtmParams(url: URL) {
+  url.searchParams.set("utm_source", "skinportplus");
+}
+
 export function getSkinportItemSlug(itemName: string) {
   return decodeURIComponent(itemName)
     .toLowerCase()
@@ -10,12 +18,33 @@ export function getSkinportItemSlug(itemName: string) {
     .replace(/^-+|-+$/g, "");
 }
 
+export function getSkinportUrl(input?: string) {
+  const url = new URL(input || SKINPORT_BASE_URL, input && SKINPORT_BASE_URL);
+
+  setUtmParams(url);
+
+  return url.toString();
+}
+
 export function getSkinportItemUrl(item: Item) {
   const steamAppName = steamAppIdNames[item.appId];
 
-  return `https://skinport.com${
-    steamAppName !== "cs2" ? `/${steamAppName}` : ""
-  }/item/${getSkinportItemSlug(item.name)}`;
+  return getSkinportUrl(
+    `${
+      steamAppName !== "cs2" ? `/${steamAppName}` : ""
+    }/item/${getSkinportItemSlug(item.name)}`,
+  );
+}
+
+export function getSkinportScreenshotUrl(input?: string) {
+  const url = new URL(
+    input || SKINPORT_SCREENSHOT_BASE_URL,
+    input && SKINPORT_SCREENSHOT_BASE_URL,
+  );
+
+  setUtmParams(url);
+
+  return url.toString();
 }
 
 export async function skinportApi<ResponseBody>(
