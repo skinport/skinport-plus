@@ -69,10 +69,9 @@ export function useSkinportApi<ResponseBody>(
   input: string,
   options?: KyOptions,
 ) {
-  return useSWR([input, options], async (args) => {
-    await new Promise((r) => setTimeout(r, 5000));
-    return skinportApi<ResponseBody>(args[0], args[1]);
-  });
+  return useSWR([input, options], async (args) =>
+    skinportApi<ResponseBody>(args[0], args[1]),
+  );
 }
 
 export function useSkinportItemPrices(
