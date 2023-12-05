@@ -1,15 +1,21 @@
 {
+  "common_buyOnSkinport": {
+    "message": "Compra en <skinportLogo />"
+  },
   "common_close": {
     "message": "Cerrar"
   },
   "common_securityProvidedBySkinportPlus": {
     "message": "Seguridad proporcionada por Skinport Plus"
   },
+  "common_sellOnSkinport": {
+    "message": "Vende en <skinportLogo />"
+  },
   "common_startingAt": {
     "message": "Empezando en"
   },
   "common_viewOnSkinport": {
-    "message": "Ver en Skinport"
+    "message": "Ver en <skinportLogo />"
   },
   "extensionDescription": {
     "description": "A short description of the extension, intended for display in the browser's user interface. In Firefox and Chrome this value can be up to 132 characters.",

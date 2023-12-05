@@ -1,15 +1,21 @@
 {
+  "common_buyOnSkinport": {
+    "message": "<skinportLogo /> üzerinden satın al"
+  },
   "common_close": {
     "message": "Kapat"
   },
   "common_securityProvidedBySkinportPlus": {
     "message": "Skinport Plus tarafından sağlanan güvenlik"
   },
+  "common_sellOnSkinport": {
+    "message": "<skinportLogo /> 'da Satış Yap"
+  },
   "common_startingAt": {
     "message": "Başlamak üzere"
   },
   "common_viewOnSkinport": {
-    "message": "Skinport'ta Görüntüle"
+    "message": "<skinportLogo />'ta Görüntüle"
   },
   "extensionDescription": {
     "description": "A short description of the extension, intended for display in the browser's user interface. In Firefox and Chrome this value can be up to 132 characters.",

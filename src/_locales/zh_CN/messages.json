@@ -1,15 +1,21 @@
 {
+  "common_buyOnSkinport": {
+    "message": "在 <skinportLogo /> 购买"
+  },
   "common_close": {
     "message": "关闭"
   },
   "common_securityProvidedBySkinportPlus": {
     "message": "由Skinport Plus提供的安全保障"
   },
+  "common_sellOnSkinport": {
+    "message": "在 <skinportLogo /> 上出售"
+  },
   "common_startingAt": {
     "message": "从"
   },
   "common_viewOnSkinport": {
-    "message": "在Skinport上查看"
+    "message": "在<skinportLogo />上查看"
   },
   "extensionDescription": {
     "description": "A short description of the extension, intended for display in the browser's user interface. In Firefox and Chrome this value can be up to 132 characters.",
