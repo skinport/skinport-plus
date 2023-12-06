@@ -5,6 +5,9 @@
   "common_close": {
     "message": "关闭"
   },
+  "common_errorOccurred": {
+    "message": "发生了一个错误"
+  },
   "common_securityProvidedBySkinportPlus": {
     "message": "由Skinport Plus提供的安全保障"
   },
@@ -111,6 +114,9 @@
   },
   "steamcommunity_inventoryItemSkinportLinks_viewScreenshot": {
     "message": "查看截图"
+  },
+  "steamcommunity_traderOfferCheck_error_description": {
+    "message": "在验证交易伙伴时出了问题。请稍后再试，或谨慎继续。"
   },
   "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
     "message": "继续交易"

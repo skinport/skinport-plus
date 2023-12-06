@@ -5,6 +5,9 @@
   "common_close": {
     "message": "Schließen"
   },
+  "common_errorOccurred": {
+    "message": "Es ist ein Fehler aufgetreten."
+  },
   "common_securityProvidedBySkinportPlus": {
     "message": "Sicherheit durch Skinport Plus"
   },
@@ -111,6 +114,9 @@
   },
   "steamcommunity_inventoryItemSkinportLinks_viewScreenshot": {
     "message": "Screenshot anzeigen"
+  },
+  "steamcommunity_traderOfferCheck_error_description": {
+    "message": "Etwas ist schief gelaufen bei der Überprüfung des Handelspartners. Bitte versuche es später erneut oder fahre mit Vorsicht fort."
   },
   "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
     "message": "Handel fortsetzen"

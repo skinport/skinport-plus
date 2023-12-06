@@ -5,6 +5,9 @@
   "common_close": {
     "message": "Sluiten"
   },
+  "common_errorOccurred": {
+    "message": "Er is een fout opgetreden"
+  },
   "common_securityProvidedBySkinportPlus": {
     "message": "Beveiliging geboden door Skinport Plus"
   },
@@ -111,6 +114,9 @@
   },
   "steamcommunity_inventoryItemSkinportLinks_viewScreenshot": {
     "message": "Bekijk screenshot"
+  },
+  "steamcommunity_traderOfferCheck_error_description": {
+    "message": "Er is iets misgegaan bij het verifiëren van de handelspartner. Probeer het later opnieuw of ga met voorzichtigheid verder."
   },
   "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
     "message": "Ga door met de handel"

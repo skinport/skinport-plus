@@ -5,6 +5,9 @@
   "common_close": {
     "message": "Kapat"
   },
+  "common_errorOccurred": {
+    "message": "Bir hata oluştu"
+  },
   "common_securityProvidedBySkinportPlus": {
     "message": "Skinport Plus tarafından sağlanan güvenlik"
   },
@@ -111,6 +114,9 @@
   },
   "steamcommunity_inventoryItemSkinportLinks_viewScreenshot": {
     "message": "Ekran görüntüsünü görüntüle"
+  },
+  "steamcommunity_traderOfferCheck_error_description": {
+    "message": "Ticaret ortağını doğrularken bir şeyler ters gitti. Lütfen daha sonra tekrar dene ya da dikkatli bir şekilde devam et."
   },
   "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
     "message": "Ticarete devam et"

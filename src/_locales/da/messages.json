@@ -5,6 +5,9 @@
   "common_close": {
     "message": "Luk"
   },
+  "common_errorOccurred": {
+    "message": "En fejl er opstået"
+  },
   "common_securityProvidedBySkinportPlus": {
     "message": "Sikkerhed leveret af Skinport Plus"
   },
@@ -111,6 +114,9 @@
   },
   "steamcommunity_inventoryItemSkinportLinks_viewScreenshot": {
     "message": "Se skærmbillede"
+  },
+  "steamcommunity_traderOfferCheck_error_description": {
+    "message": "Noget gik galt, mens vi verificerede handelspartneren. Prøv igen senere eller fortsæt med forsigtighed."
   },
   "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
     "message": "Fortsæt handel"

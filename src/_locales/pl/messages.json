@@ -5,6 +5,9 @@
   "common_close": {
     "message": "Zamknij"
   },
+  "common_errorOccurred": {
+    "message": "Wystąpił błąd"
+  },
   "common_securityProvidedBySkinportPlus": {
     "message": "Bezpieczeństwo zapewnione przez Skinport Plus"
   },
@@ -111,6 +114,9 @@
   },
   "steamcommunity_inventoryItemSkinportLinks_viewScreenshot": {
     "message": "Zobacz zrzut ekranu"
+  },
+  "steamcommunity_traderOfferCheck_error_description": {
+    "message": "Coś poszło nie tak podczas weryfikacji partnera handlowego. Spróbuj ponownie później lub kontynuuj z ostrożnością."
   },
   "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade": {
     "message": "Kontynuuj wymianę"
