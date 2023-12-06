@@ -19,7 +19,7 @@ const inventoryItemSkinport: Feature = async ({
     }
   };
 
-  const addWidgetElements = () => {
+  const addWidgetElements = async () => {
     const itemInfoElement = $(
       ".inventory_page_right .inventory_iteminfo[style*='z-index: 1']",
       inventoryContentElement,
@@ -53,9 +53,13 @@ const inventoryItemSkinport: Feature = async ({
 
     const inspectIngameLink =
       (getHasItemExterior(item.name) &&
-        $("a[href*='csgo_econ_action_preview']", itemInfoElement)?.getAttribute(
-          "href",
-        )) ||
+        (
+          await elementReady("a[href*='csgo_econ_action_preview']", {
+            target: itemInfoElement,
+            stopOnDomReady: false,
+            timeout: 5000,
+          })
+        )?.getAttribute("href")) ||
       undefined;
 
     const [viewOnSkinportElement, removeViewOnSkinportElement] =

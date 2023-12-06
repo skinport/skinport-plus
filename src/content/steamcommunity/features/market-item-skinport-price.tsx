@@ -9,6 +9,7 @@ import {
   supportedSteamAppIds,
 } from "@/lib/steam";
 import { getPercentageDecrease, parseNumberFromString } from "@/lib/utils";
+import elementReady from "element-ready";
 import { $ } from "select-dom";
 
 async function marketItemSkinportPrice() {
@@ -28,8 +29,11 @@ async function marketItemSkinportPrice() {
 
   const inspectIngameLink =
     (getHasItemExterior(item.name) &&
-      $(
-        ".market_listing_iteminfo a[href*='csgo_econ_action_preview']",
+      (
+        await elementReady("a[href*='csgo_econ_action_preview']", {
+          stopOnDomReady: false,
+          timeout: 5000,
+        })
       )?.getAttribute("href")) ||
     undefined;
 
