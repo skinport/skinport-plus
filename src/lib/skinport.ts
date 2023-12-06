@@ -92,12 +92,8 @@ export function useSkinportItemPrices(
   });
 }
 
-export async function getIsSteamIdSkinportVerified(steamId: string) {
-  const { verified } = await skinportApi<{ verified: boolean }>(
-    `v1/extension/bot/${steamId}`,
-  );
-
-  return verified;
+export async function getSkinportSteamBot(steamId: string) {
+  return skinportApi<{ verified: boolean }>(`v1/extension/bot/${steamId}`);
 }
 
 export function useSkinportSteamBot(steamId: string) {
