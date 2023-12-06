@@ -6,7 +6,11 @@ import { SWRConfig } from "swr";
 import styles from "tailwind:./widget.css";
 
 export function createWidgetElement(
-  Widget: React.ComponentType<{ shadowRoot: HTMLElement }>,
+  Widget: React.ComponentType<{
+    shadowRoot: HTMLElement;
+    widgetElement: HTMLDivElement;
+    removeWidgetElement: () => void;
+  }>,
   widgetName?: string,
 ) {
   const widgetElement = document.createElement("div");
@@ -24,20 +28,24 @@ export function createWidgetElement(
 
   const reactRoot = createRoot(shadowRoot);
 
-  reactRoot.render(
-    <SWRConfig>
-      <TooltipProvider>
-        <Widget shadowRoot={shadowRoot as unknown as HTMLElement} />
-      </TooltipProvider>
-    </SWRConfig>,
-  );
-
   const removeWidgetElement = () => {
     if (reactRoot) {
       reactRoot.unmount();
     }
     widgetElement.remove();
   };
+
+  reactRoot.render(
+    <SWRConfig>
+      <TooltipProvider>
+        <Widget
+          shadowRoot={shadowRoot as unknown as HTMLElement}
+          widgetElement={widgetElement}
+          removeWidgetElement={removeWidgetElement}
+        />
+      </TooltipProvider>
+    </SWRConfig>,
+  );
 
   return [widgetElement, removeWidgetElement] as const;
 }

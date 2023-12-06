@@ -1,98 +1,46 @@
-import { SkinportLogo } from "@/components/skinport-logo";
+import { ErrorEmoji } from "@/components/icons/error-emoji";
+import { SkinportPlusLogo } from "@/components/skinport-plus-logo";
 import { Button } from "@/components/ui/button";
+import { Link } from "@/components/ui/link";
 import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
+import { findInScriptElements } from "@/lib/dom";
 import { getI18nMessage } from "@/lib/i18n";
-import { getIsSteamIdSkinportVerified, getSkinportUrl } from "@/lib/skinport";
+import { getSkinportUrl, useSkinportSteamBot } from "@/lib/skinport";
+import { cn } from "@/lib/utils";
 import elementReady from "element-ready";
-import { ShieldAlert, ShieldCheck } from "lucide-react";
-import { useState } from "react";
+import { Loader2, LucideIcon, ShieldAlert, ShieldCheck } from "lucide-react";
+import { ReactNode, useEffect } from "react";
 import { $, $$ } from "select-dom";
 
-function TradePartnerVerified() {
-  return (
-    <div className="p-4 text-center flex flex-col gap-4 mb-6">
-      <div className="flex flex-col items-center">
-        <SkinportLogo />
-      </div>
-      <div className="flex flex-col items-center text-[#00a67c]">
-        <ShieldCheck size="64" />
-      </div>
-      <h3 className="font-semibold text-lg text-white">
-        {getI18nMessage(
-          "steamcommunity_traderOfferCheck_tradePartnerVerified_title",
-        )}
-      </h3>
-      <p className="text-text-foreground">
-        {getI18nMessage(
-          "steamcommunity_traderOfferCheck_tradePartnerVerified_description_paragraph1",
-        )}
-      </p>
-      <p className="text-xs text-[#6b6d6e]">
-        {getI18nMessage("common_securityProvidedBySkinportPlus")}
-      </p>
-    </div>
-  );
-}
-
-function TradePartnerUnverified({
-  onContinueTrade,
+function TradePartnerCheckResult({
+  children,
+  icon,
+  type,
+  title,
 }: {
-  onContinueTrade: () => void;
+  children?: ReactNode;
+  icon: LucideIcon | typeof ErrorEmoji;
+  type: "loading" | "success" | "danger";
+  title: string;
 }) {
-  const [isContinuingTrade, setIsContinuingTrade] = useState(false);
-  if (isContinuingTrade) {
-    return null;
-  }
+  const Icon = icon;
 
   return (
-    <div className="p-4 text-center flex flex-col gap-4">
-      <div className="flex flex-col items-center">
-        <SkinportLogo />
+    <div className="flex flex-col items-center gap-4 mb-6 text-center">
+      <SkinportPlusLogo />
+      <Icon
+        size={64}
+        className={cn({
+          "text-red-light": type === "danger",
+          "text-[#00a67c]": type === "success",
+          "animate-spin": type === "loading",
+        })}
+      />
+      <div className="space-y-2">
+        <h3 className="font-semibold text-lg text-white">{title}</h3>
+        {children}
       </div>
-      <div className="flex flex-col items-center text-[#e05a59]">
-        <ShieldAlert size="64" />
-      </div>
-      <h3 className="font-semibold text-lg text-white">
-        {getI18nMessage(
-          "steamcommunity_traderOfferCheck_tradePartnerUnverified_title",
-        )}
-      </h3>
-      <p className="text-text-foreground">
-        {getI18nMessage(
-          "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph1",
-        )}
-      </p>
-      <p className="text-text-foreground">
-        {getI18nMessage(
-          "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph2",
-        )}
-      </p>
-      <Button
-        variant="destructive"
-        onClick={() => {
-          setIsContinuingTrade(true);
-          onContinueTrade();
-        }}
-      >
-        {getI18nMessage(
-          "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade",
-        )}
-      </Button>
-      <Button variant="ghost" asChild>
-        <a
-          href={getSkinportUrl("blog/how-to-never-get-scammed")}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          {getI18nMessage(
-            "steamcommunity_traderOfferCheck_tradePartnerUnverified_readSafetyGuide",
-          )}
-        </a>
-      </Button>
-      <p className="text-xs text-[#6b6d6e]">
-        {getI18nMessage("common_securityProvidedBySkinportPlus")}
-      </p>
     </div>
   );
 }
@@ -113,54 +61,135 @@ async function steamTradeOfferCheck() {
     return;
   }
 
-  let tradePartnerIsVerified = false;
-  let tradePartnerSteamId: string | undefined;
+  const tradePartnerSteamId = findInScriptElements(
+    /var g_ulTradePartnerSteamID = '([0-9]+)'/,
+  );
+  const tradeUserItemBoxElement = $("#trade_yours .trade_item_box");
+  const tradeUserConfirmContentsElement = $(".tutorial_arrow_ctn");
 
-  for (const scriptElement of $$('script[type="text/javascript"]')) {
-    const tradePartnerSteamIdMatch = scriptElement.textContent?.match(
-      /var g_ulTradePartnerSteamID = '([0-9]+)'/,
+  if (
+    !tradePartnerSteamId ||
+    !tradeUserItemBoxElement ||
+    !tradeUserConfirmContentsElement
+  ) {
+    return;
+  }
+
+  const setTradeUserConfirmDisplay = (display: boolean) => {
+    tradeUserConfirmContentsElement.style.display = display ? "" : "none";
+  };
+
+  setTradeUserConfirmDisplay(false);
+
+  const [widgetElement] = createWidgetElement(({ removeWidgetElement }) => {
+    const skinportSteamBot = useSkinportSteamBot(tradePartnerSteamId);
+
+    useEffect(() => {
+      if (skinportSteamBot.data?.verified) {
+        setTradeUserConfirmDisplay(true);
+      }
+    }, [skinportSteamBot.data?.verified]);
+
+    const renderContinueTrade = () => (
+      <div className="pt-2 space-x-2">
+        <Button asChild>
+          <Link
+            href={getSkinportUrl("blog/how-to-never-get-scammed")}
+            target="_blank"
+          >
+            {getI18nMessage(
+              "steamcommunity_traderOfferCheck_tradePartnerUnverified_readSafetyGuide",
+            )}
+          </Link>
+        </Button>
+        <Button
+          variant="destructive"
+          onClick={() => {
+            setTradeUserConfirmDisplay(true);
+            removeWidgetElement();
+          }}
+        >
+          {getI18nMessage(
+            "steamcommunity_traderOfferCheck_tradePartnerUnverified_continueTrade",
+          )}
+        </Button>
+      </div>
     );
 
-    if (tradePartnerSteamIdMatch) {
-      tradePartnerSteamId = tradePartnerSteamIdMatch[1];
-      break;
+    if (skinportSteamBot.error) {
+      return (
+        <TradePartnerCheckResult
+          type="danger"
+          icon={ErrorEmoji}
+          title={getI18nMessage("common_errorOccurred")}
+        >
+          <p>
+            {getI18nMessage(
+              "steamcommunity_traderOfferCheck_error_description",
+            )}
+          </p>
+          <p>
+            {getI18nMessage(
+              "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph2",
+            )}
+          </p>
+          {renderContinueTrade()}
+        </TradePartnerCheckResult>
+      );
     }
-  }
 
-  if (tradePartnerSteamId) {
-    try {
-      tradePartnerIsVerified =
-        await getIsSteamIdSkinportVerified(tradePartnerSteamId);
-    } catch (error) {
-      console.error(error);
-      // TODO: Handle error with e.g. Sentry
-      return;
-    }
-  }
-
-  const tradeYoursElement = $("#trade_yours");
-  const tradeConfirmYourContentsElement = $(".tutorial_arrow_ctn");
-
-  if (tradeYoursElement && tradeConfirmYourContentsElement) {
-    if (tradePartnerIsVerified) {
-      const [tradePartnerVerifiedElement] =
-        createWidgetElement(TradePartnerVerified);
-
-      tradeConfirmYourContentsElement.prepend(tradePartnerVerifiedElement);
-    } else {
-      tradeConfirmYourContentsElement.style.display = "none";
-
-      const [TradePartnerUnverifiedElement] = createWidgetElement(() => (
-        <TradePartnerUnverified
-          onContinueTrade={() => {
-            tradeConfirmYourContentsElement.style.display = "";
-          }}
+    if (!skinportSteamBot.data) {
+      return (
+        <TradePartnerCheckResult
+          type="loading"
+          icon={Loader2}
+          title="Verifying trade partner"
         />
-      ));
-
-      tradeYoursElement.append(TradePartnerUnverifiedElement);
+      );
     }
-  }
+
+    if (skinportSteamBot.data.verified) {
+      return (
+        <TradePartnerCheckResult
+          type="success"
+          icon={ShieldCheck}
+          title={getI18nMessage(
+            "steamcommunity_traderOfferCheck_tradePartnerVerified_title",
+          )}
+        >
+          <p>
+            {getI18nMessage(
+              "steamcommunity_traderOfferCheck_tradePartnerVerified_description_paragraph1",
+            )}
+          </p>
+        </TradePartnerCheckResult>
+      );
+    }
+
+    return (
+      <TradePartnerCheckResult
+        icon={ShieldAlert}
+        title={getI18nMessage(
+          "steamcommunity_traderOfferCheck_tradePartnerUnverified_title",
+        )}
+        type="danger"
+      >
+        <p className="text-text-foreground">
+          {getI18nMessage(
+            "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph1",
+          )}
+        </p>
+        <p className="text-text-foreground">
+          {getI18nMessage(
+            "steamcommunity_traderOfferCheck_tradePartnerUnverified_description_paragraph2",
+          )}
+        </p>
+        {renderContinueTrade()}
+      </TradePartnerCheckResult>
+    );
+  });
+
+  tradeUserItemBoxElement.insertAdjacentElement("afterend", widgetElement);
 }
 
 featureManager.add(steamTradeOfferCheck, {

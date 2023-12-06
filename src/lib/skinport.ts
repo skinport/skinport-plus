@@ -99,3 +99,7 @@ export async function getIsSteamIdSkinportVerified(steamId: string) {
 
   return verified;
 }
+
+export function useSkinportSteamBot(steamId: string) {
+  return useSkinportApi<{ verified: boolean }>(`v1/extension/bot/${steamId}`);
+}
