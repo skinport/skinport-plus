@@ -115,6 +115,9 @@
   "steamcommunity_inventoryItemSkinportLinks_viewScreenshot": {
     "message": "View screenshot"
   },
+  "steamcommunity_profileVerified_verifiedSkinportBot": {
+    "message": "This is a verified Skinport bot"
+  },
   "steamcommunity_traderOfferCheck_error_description": {
     "message": "Something went wrong while verifying the trade partner. Please try again later or continue with caution."
   },

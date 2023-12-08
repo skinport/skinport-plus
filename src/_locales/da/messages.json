@@ -115,6 +115,9 @@
   "steamcommunity_inventoryItemSkinportLinks_viewScreenshot": {
     "message": "Se skærmbillede"
   },
+  "steamcommunity_profileVerified_verifiedSkinportBot": {
+    "message": "Dette er en verificeret Skinport-bot"
+  },
   "steamcommunity_traderOfferCheck_error_description": {
     "message": "Noget gik galt, mens vi verificerede handelspartneren. Prøv igen senere eller fortsæt med forsigtighed."
   },
