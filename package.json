@@ -10,6 +10,7 @@
     "load:firefox": "web-ext run",
     "lint": "biome check .",
     "types": "tsc",
+    "test": "tsx ./scripts/test.ts",
     "build": "tsx ./scripts/build.ts",
     "build:firefox": "tsx ./scripts/build.ts --firefox",
     "manifest:version": "dot-json dist/manifest.json version",
@@ -40,6 +41,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.4.0",
+    "@japa/assert": "^2.0.0-2",
+    "@japa/runner": "^3.0.0-9",
     "@tsconfig/node20": "^20.1.2",
     "@types/adm-zip": "^0.5.4",
     "@types/dotenv-safe": "^8.1.5",

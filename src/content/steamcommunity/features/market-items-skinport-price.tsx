@@ -4,7 +4,7 @@ import { Feature, featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { useSkinportItemPrices } from "@/lib/skinport";
 import { getItemFromSteamMarketUrl } from "@/lib/steam";
-import { getPercentageDecrease, parseNumberFromString } from "@/lib/utils";
+import { getPercentageDecrease, parseCurrency } from "@/lib/utils";
 import { $, $$ } from "select-dom";
 
 const marketItemsSkinportPrice: Feature = async ({
@@ -109,7 +109,7 @@ const marketItemsSkinportPrice: Feature = async ({
         );
 
         const marketListingItemPrice = marketListingItemPriceElement?.innerText
-          ? parseNumberFromString(marketListingItemPriceElement.innerText)
+          ? parseCurrency(marketListingItemPriceElement.innerText)
           : undefined;
 
         const skinportItemPricePercentageDecrease =

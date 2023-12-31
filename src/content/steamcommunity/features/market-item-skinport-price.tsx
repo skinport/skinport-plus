@@ -8,7 +8,7 @@ import {
   getItemFromSteamMarketUrl,
   supportedSteamAppIds,
 } from "@/lib/steam";
-import { getPercentageDecrease, parseNumberFromString } from "@/lib/utils";
+import { getPercentageDecrease, parseCurrency } from "@/lib/utils";
 import elementReady from "element-ready";
 import { $ } from "select-dom";
 
@@ -48,7 +48,7 @@ async function marketItemSkinportPrice() {
 
     const cheapestMarketListingItemPrice =
       cheapestMarketListingItemElement &&
-      parseNumberFromString(cheapestMarketListingItemElement.innerText);
+      parseCurrency(cheapestMarketListingItemElement.innerText);
 
     const itemSkinportPercentageDecrease =
       cheapestMarketListingItemPrice && itemSkinportPrice
