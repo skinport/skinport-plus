@@ -41,7 +41,7 @@ function App() {
                 skinportLink: (
                   <Link
                     className="text-white hover:text-red transition-colors"
-                    href={getSkinportUrl()}
+                    href={getSkinportUrl(`?pps=${blockedHost}`)}
                   />
                 ),
               }}
@@ -49,7 +49,7 @@ function App() {
           </p>
         </div>
         <Button asChild>
-          <Link href={getSkinportUrl()}>
+          <Link href={getSkinportUrl(`?pps=${blockedHost}`)}>
             {getI18nMessage("phishingBlocker_goToSkinport")}
           </Link>
         </Button>
