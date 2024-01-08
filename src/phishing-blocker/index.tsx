@@ -48,7 +48,7 @@ function App() {
             />
           </p>
         </div>
-        <Button asChild>
+        <Button className="py-6 px-24 my-8" asChild>
           <Link href={getSkinportUrl(`?pps=${blockedHost}`)}>
             {getI18nMessage("phishingBlocker_goToSkinport")}
           </Link>
