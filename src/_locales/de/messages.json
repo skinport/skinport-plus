@@ -17,6 +17,9 @@
   "common_startingAt": {
     "message": "Ab"
   },
+  "common_suggestedPrice": {
+    "message": "Vorgeschlagener Preis"
+  },
   "common_viewOnSkinport": {
     "message": "Auf <skinportLogo /> betrachten"
   },

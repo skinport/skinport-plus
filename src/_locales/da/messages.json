@@ -17,6 +17,9 @@
   "common_startingAt": {
     "message": "Starter ved"
   },
+  "common_suggestedPrice": {
+    "message": "Foreslået pris"
+  },
   "common_viewOnSkinport": {
     "message": "Se på <skinportLogo />"
   },

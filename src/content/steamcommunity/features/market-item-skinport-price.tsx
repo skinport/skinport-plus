@@ -10,6 +10,7 @@ import {
 } from "@/lib/steam";
 import { getPercentageDecrease, parseCurrency } from "@/lib/utils";
 import elementReady from "element-ready";
+import { useEffect, useState } from "react";
 import { $ } from "select-dom";
 
 async function marketItemSkinportPrice() {
@@ -37,38 +38,51 @@ async function marketItemSkinportPrice() {
       )?.getAttribute("href")) ||
     undefined;
 
-  const cheapestMarketListingItemElement = $(
-    ".market_table_value .market_listing_price_with_fee",
-  );
-
   const [widgetElement] = createWidgetElement(({ shadowRoot }) => {
     const skinportItemPrices = useSkinportItemPrices(item.name);
+    const [marketForSalePriceElementText, setMarketForSalePriceElementText] =
+      useState<string>();
+
+    useEffect(() => {
+      (async () => {
+        const marketForSalePriceElement = await elementReady(
+          "#market_commodity_forsale > span:last-child",
+          {
+            stopOnDomReady: false,
+            timeout: 5000,
+          },
+        );
+
+        if (marketForSalePriceElement) {
+          setMarketForSalePriceElementText(marketForSalePriceElement.innerText);
+        }
+      })();
+    }, []);
 
     const itemSkinportPrice = skinportItemPrices.data?.items[item.name];
 
-    const cheapestMarketListingItemPrice =
-      cheapestMarketListingItemElement &&
-      parseCurrency(cheapestMarketListingItemElement.innerText);
+    const marketStartingAtPrice =
+      marketForSalePriceElementText &&
+      parseCurrency(marketForSalePriceElementText);
 
     const itemSkinportPercentageDecrease =
-      cheapestMarketListingItemPrice && itemSkinportPrice
-        ? getPercentageDecrease(
-            cheapestMarketListingItemPrice,
-            itemSkinportPrice,
-          )
+      marketStartingAtPrice && itemSkinportPrice?.[0]
+        ? getPercentageDecrease(marketStartingAtPrice, itemSkinportPrice[0])
         : undefined;
 
     return (
       <div className="space-y-1 mb-4">
         <ItemSkinportPrice
-          price={itemSkinportPrice}
+          price={itemSkinportPrice?.[0]}
           currency={skinportItemPrices.data?.currency}
           discount={itemSkinportPercentageDecrease}
+          priceTitle="starting_at"
         />
         <ItemSkinportActions
           item={item}
           inspectIngameLink={inspectIngameLink}
           container={shadowRoot}
+          action="buy"
         />
       </div>
     );

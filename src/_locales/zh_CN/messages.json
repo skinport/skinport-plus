@@ -17,6 +17,9 @@
   "common_startingAt": {
     "message": "从"
   },
+  "common_suggestedPrice": {
+    "message": "建议价格"
+  },
   "common_viewOnSkinport": {
     "message": "在<skinportLogo />上查看"
   },

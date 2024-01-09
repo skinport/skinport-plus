@@ -61,18 +61,18 @@ export function ItemSkinportPrice({
   currency,
   discount,
   size,
-  withStartingAt = true,
   className,
   startingAtClassName,
   linkItem,
+  priceTitle = "starting_at",
 }: {
-  price?: number;
+  price?: number | null;
   currency?: string;
   discount?: string;
-  withStartingAt?: boolean;
   className?: string;
   startingAtClassName?: string;
   linkItem?: Item;
+  priceTitle?: "starting_at" | "suggested_price" | false;
 } & VariantProps<typeof priceVariants>) {
   const linkPriceToItem = (children: ReactNode) =>
     linkItem ? (
@@ -91,7 +91,11 @@ export function ItemSkinportPrice({
         </TooltipTrigger>
         <TooltipContent className="flex gap-1 items-center">
           <InterpolateMessage
-            message={getI18nMessage("common_viewOnSkinport")}
+            message={getI18nMessage(
+              priceTitle === "starting_at"
+                ? "common_buyOnSkinport"
+                : "common_viewOnSkinport",
+            )}
             values={{ skinportLogo: <SkinportLogo size={10} isInverted /> }}
           />
         </TooltipContent>
@@ -102,15 +106,17 @@ export function ItemSkinportPrice({
 
   const priceElement = (
     <div className={cn("flex gap-2 items-center", className)}>
-      {price && currency ? (
+      {price !== undefined && currency ? (
         linkPriceToItem(
           <>
             <div
               className={cn(priceVariants({ size, asLink: Boolean(linkItem) }))}
             >
-              {formatPrice(price, currency)}
+              {typeof price === "number" ? formatPrice(price, currency) : "-"}
             </div>
-            {discount && <Discount discount={discount} />}
+            {discount && typeof price === "number" && (
+              <Discount discount={discount} />
+            )}
           </>,
         )
       ) : (
@@ -119,10 +125,14 @@ export function ItemSkinportPrice({
     </div>
   );
 
-  return withStartingAt ? (
+  return priceTitle ? (
     <div>
       <div className={cn(startingAtVariants({ size }), startingAtClassName)}>
-        {getI18nMessage("common_startingAt")}
+        {getI18nMessage(
+          priceTitle === "starting_at"
+            ? "common_startingAt"
+            : "common_suggestedPrice",
+        )}
       </div>
       {priceElement}
     </div>

@@ -79,9 +79,9 @@ export function useSkinportItemPrices(
   currency?: string,
 ) {
   return useSkinportApi<{
-    items: Partial<Record<string, number>>;
+    items: Record<string, [number | null, number | null]>; // [lowestPrice, suggestedPrice]
     currency: string;
-  }>("v1/extension/price", {
+  }>("v1/extension/prices", {
     searchParams: [
       ...(typeof items === "string" ? [items] : items).map((item) => [
         "items[]",

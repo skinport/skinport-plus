@@ -17,6 +17,9 @@
   "common_startingAt": {
     "message": "Başlamak üzere"
   },
+  "common_suggestedPrice": {
+    "message": "Önerilen Fiyat"
+  },
   "common_viewOnSkinport": {
     "message": "<skinportLogo />'ta Görüntüle"
   },

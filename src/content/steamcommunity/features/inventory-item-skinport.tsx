@@ -69,7 +69,8 @@ const inventoryItemSkinport: Feature = async ({
         return (
           <div className="space-y-1 mb-4">
             <ItemSkinportPrice
-              price={skinportItemPrices.data?.items[item.name]}
+              price={skinportItemPrices.data?.items[item.name]?.[1]}
+              priceTitle="suggested_price"
               currency={skinportItemPrices.data?.currency}
             />
             <ItemSkinportActions

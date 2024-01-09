@@ -94,7 +94,7 @@ const marketItemsSkinportPrice: Feature = async ({
 
         const skinportItemPrice =
           marketListing.item &&
-          skinportItemPrices.data?.items[marketListing.item.name];
+          skinportItemPrices.data?.items[marketListing.item.name][0];
 
         if (
           !marketListing.item ||
