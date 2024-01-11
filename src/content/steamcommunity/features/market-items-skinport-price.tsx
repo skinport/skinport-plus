@@ -11,10 +11,10 @@ const marketItemsSkinportPrice: Feature = async ({
   getNotMatchingFeatureAttributeSelector,
   setFeatureAttribute,
 }) => {
-  const addWidgets = async () => {
+  const addWidgets = async (contextSelector: string) => {
     const marketTableHeaderElement = $(
       getNotMatchingFeatureAttributeSelector(
-        ".market_listing_table_header .market_listing_price_listings_block",
+        `${contextSelector} .market_listing_table_header .market_listing_price_listings_block`,
       ),
     );
 
@@ -40,7 +40,9 @@ const marketItemsSkinportPrice: Feature = async ({
     }
 
     const marketListingElements = $$(
-      getNotMatchingFeatureAttributeSelector("a[href*='/market/listings/']"),
+      getNotMatchingFeatureAttributeSelector(
+        `${contextSelector} a[href*='/market/listings/']`,
+      ),
     );
 
     if (marketListingElements.length === 0) {
@@ -141,21 +143,22 @@ const marketItemsSkinportPrice: Feature = async ({
   };
 
   if (window.location.pathname.includes("/search")) {
-    const searchResultsTable = $("#searchResultsTable");
+    const searchResultsSelector = "#searchResultsTable";
+    const searchResultsTable = $(searchResultsSelector);
 
     if (!searchResultsTable) {
       return;
     }
 
     return new MutationObserver(() => {
-      addWidgets();
+      addWidgets(searchResultsSelector);
     }).observe(searchResultsTable, {
       childList: true,
       subtree: true,
     });
   }
 
-  addWidgets();
+  addWidgets("#sellListings");
 };
 
 featureManager.add(marketItemsSkinportPrice, {
