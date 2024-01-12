@@ -23,7 +23,7 @@ browser.declarativeNetRequest.updateDynamicRules({
       condition: {
         resourceTypes: ["main_frame", "sub_frame"],
         regexFilter:
-          "^https?://((?:[-0-9a-z.]+)?(?:s|[0-9])(?:[-0-9a-z.]+)?k(?:[-0-9a-z.]+)?(?:i|[0-9])(?:[-0-9a-z.]+)?n(?:[-0-9a-z.]+)?p(?:[-0-9a-z.]+)?(?:o|[0-9])(?:[-0-9a-z.]+)?r(?:[-0-9a-z.]+)?(?:t|[0-9])(?:[-0-9a-z.]+)?\\.[a-z]+)",
+          "^https?://((?:[-0-9a-z.])?(?:s|[0-9])(?:[-0-9a-z.])?k(?:[-0-9a-z.])?(?:i|[0-9])(?:[-0-9a-z.])?n(?:[-0-9a-z.])?p(?:[-0-9a-z.])?(?:o|[0-9])(?:[-0-9a-z.])?r(?:[-0-9a-z.])?(?:t|[0-9])(?:[-0-9a-z.])?\\.[a-z]+)",
         excludedRequestDomains: [
           "skinport.com",
           "skinport.app",
