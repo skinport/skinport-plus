@@ -27,6 +27,12 @@ browser.declarativeNetRequest.updateDynamicRules({
         excludedRequestDomains: [
           "skinport.com",
           "skinport.app",
+          "skinport.gg",
+          "skinport.de",
+          "skinport.nl",
+          "skinport.fr",
+          "skinport.ch",
+          "skinportmedia.com",
           "skinport.zendesk.com",
           "skinport.grafana.net",
           "skinport.cloudflareaccess.com",
