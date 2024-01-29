@@ -40,10 +40,7 @@ async function googleSkinportResult() {
     }
   }
 
-  const isGoogleDarkMode = elementExists(
-    '[data-darkmode="true"]',
-    skinportResultElement,
-  );
+  const isGoogleDarkMode = elementExists('[data-darkmode="true"]');
 
   const [officialSkinportWebsiteElement] = createWidgetElement(() => {
     return (
