@@ -15,6 +15,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 const startingAtVariants = cva(undefined, {
   variants: {
     size: {
+      xs: "text-xs",
       sm: "text-xs",
       base: null,
     },
@@ -27,7 +28,8 @@ const startingAtVariants = cva(undefined, {
 const priceVariants = cva("font-semibold", {
   variants: {
     size: {
-      sm: null,
+      xs: "text-xs",
+      sm: "text-sm",
       base: "text-3xl",
     },
     asLink: {
@@ -44,6 +46,7 @@ const priceVariants = cva("font-semibold", {
 const skeletonVariants = cva(undefined, {
   variants: {
     size: {
+      xs: "w-8 h-3 my-0.5",
       sm: "w-9 h-3.5 my-[0.1875rem]",
       base: "w-20 h-[1.875rem] my-[0.1875rem]",
     },
@@ -72,7 +75,7 @@ export function ItemSkinportPrice({
   className?: string;
   startingAtClassName?: string;
   linkItem?: Item;
-  priceTitle?: "starting_at" | "suggested_price" | false;
+  priceTitle?: "starting_at" | "suggested_price" | "none";
 } & VariantProps<typeof priceVariants>) {
   const linkPriceToItem = (children: ReactNode) =>
     linkItem ? (
@@ -125,7 +128,7 @@ export function ItemSkinportPrice({
     </div>
   );
 
-  return priceTitle ? (
+  return priceTitle !== "none" ? (
     <div>
       <div className={cn(startingAtVariants({ size }), startingAtClassName)}>
         {getI18nMessage(
