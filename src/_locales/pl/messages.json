@@ -8,6 +8,9 @@
   "common_errorOccurred": {
     "message": "Wystąpił błąd"
   },
+  "common_pricingBySkinportPlus": {
+    "message": "Pricing by <skinportPlusLogo />"
+  },
   "common_securityProvidedBySkinportPlus": {
     "message": "Bezpieczeństwo zapewnione przez Skinport Plus"
   },
