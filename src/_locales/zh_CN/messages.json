@@ -9,7 +9,7 @@
     "message": "发生了一个错误"
   },
   "common_pricingBySkinportPlus": {
-    "message": "Pricing by <skinportPlusLogo />"
+    "message": "由 <skinportPlusLogo /> 定价"
   },
   "common_securityProvidedBySkinportPlus": {
     "message": "由Skinport Plus提供的安全保障"
