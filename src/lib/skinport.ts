@@ -1,4 +1,4 @@
-import { KyOptions } from "ky/distribution/types/options";
+import type { Options as KyOptions } from "ky";
 import useSWR from "swr";
 import browser from "webextension-polyfill";
 import {
