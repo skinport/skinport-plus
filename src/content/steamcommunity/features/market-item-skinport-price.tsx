@@ -92,6 +92,7 @@ async function marketItemSkinportPrice() {
 }
 
 featureManager.add(marketItemSkinportPrice, {
+  name: "market-item-skinport-price",
   matchPathname: new RegExp(
     `/market/listings/(${supportedSteamAppIds.join(")|(")})`,
   ),

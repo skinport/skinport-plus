@@ -284,6 +284,7 @@ async function tradeOffersItemsInfo() {
 }
 
 featureManager.add(tradeOffersItemsInfo, {
+  name: "trade-offers-items-info",
   matchPathname: /\/tradeoffers\/$/,
   awaitDomReady: true,
 });

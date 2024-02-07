@@ -117,6 +117,7 @@ const inventoryItemSkinport: Feature = async ({
 };
 
 featureManager.add(inventoryItemSkinport, {
+  name: "inventory-item-skinport",
   matchPathname: /\/(id|profiles)\/\w+\/inventory/,
   awaitDomReady: true,
 });

@@ -59,6 +59,7 @@ async function profileVerified() {
 }
 
 featureManager.add(profileVerified, {
+  name: "profile-verified",
   matchPathname: /\/(id|profiles)\/[\w]+/,
   awaitDomReady: true,
 });

@@ -20,7 +20,7 @@ import { $ } from "select-dom";
 
 const WIDGET_NAME = "account-security-check";
 
-async function steamAccountSecurityCheck() {
+async function accountSecurityCheck() {
   if (widgetElementExists(WIDGET_NAME)) {
     return;
   }
@@ -180,7 +180,8 @@ async function steamAccountSecurityCheck() {
   }
 }
 
-featureManager.add(steamAccountSecurityCheck, {
+featureManager.add(accountSecurityCheck, {
+  name: "account-security-check",
   optionKey: "checkSteamAccountSecurity",
   awaitDomReady: true,
 });

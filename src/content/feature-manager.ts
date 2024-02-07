@@ -11,6 +11,7 @@ export type Feature = (props: {
 }) => Promise<void>;
 
 interface FeatureConfig {
+  name: string;
   matchPathname?: string | RegExp;
   optionKey?: keyof Options;
   awaitDomReady?: boolean;
@@ -18,7 +19,7 @@ interface FeatureConfig {
 
 const features: [Feature, FeatureConfig][] = [];
 
-function add(feature: Feature, featureConfig: FeatureConfig = {}) {
+function add(feature: Feature, featureConfig: FeatureConfig) {
   features.push([feature, featureConfig]);
 }
 
@@ -27,7 +28,7 @@ let options: Options | undefined;
 async function run() {
   for (const [
     feature,
-    { matchPathname, optionKey, awaitDomReady },
+    { name: featureName, matchPathname, optionKey, awaitDomReady },
   ] of features) {
     if (
       (matchPathname instanceof RegExp &&
@@ -55,10 +56,7 @@ async function run() {
         await domLoaded;
       }
 
-      const featureAttribute = `data-skinport-feature-${feature.name.replace(
-        /([A-Z])/g,
-        "-$1",
-      )}`;
+      const featureAttribute = `data-skinport-feature-${featureName}`;
 
       feature({
         featureAttribute,
@@ -78,7 +76,7 @@ async function run() {
 
       if (process.env.NODE_ENV !== "production") {
         // biome-ignore lint/suspicious/noConsoleLog: Development only
-        console.log("feature-manager:", `running feature ${feature.name}`);
+        console.log("feature-manager:", `running feature ${featureName}`);
       }
     } catch (error) {
       console.error(error);

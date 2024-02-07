@@ -162,6 +162,7 @@ const marketItemsSkinportPrice: Feature = async ({
 };
 
 featureManager.add(marketItemsSkinportPrice, {
+  name: "market-items-skinport-price",
   awaitDomReady: true,
   matchPathname: /\/market(?:\/?$|\/search)/,
 });

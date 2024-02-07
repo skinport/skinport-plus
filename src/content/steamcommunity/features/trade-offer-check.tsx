@@ -45,7 +45,7 @@ function TradePartnerCheckResult({
   );
 }
 
-async function steamTradeOfferCheck() {
+async function tradeOfferCheck() {
   const tradeYoursReadyElement = await elementReady("#trade_yours.ready", {
     stopOnDomReady: false,
     timeout: 30000,
@@ -192,7 +192,8 @@ async function steamTradeOfferCheck() {
   tradeUserItemBoxElement.insertAdjacentElement("afterend", widgetElement);
 }
 
-featureManager.add(steamTradeOfferCheck, {
+featureManager.add(tradeOfferCheck, {
+  name: "trade-offer-check",
   matchPathname: "/tradeoffer",
   optionKey: "checkTradeOffer",
   awaitDomReady: true,

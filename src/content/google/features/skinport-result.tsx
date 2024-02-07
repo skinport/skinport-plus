@@ -21,7 +21,7 @@ function getResultRootElement(targetElement: HTMLElement) {
   return getResultRootElement(targetElement.parentElement);
 }
 
-async function googleSkinportResult() {
+async function skinportResult() {
   const skinportLinkElement = $(`#search a[href^="${SKINPORT_BASE_URL}"]`);
 
   if (!skinportLinkElement) {
@@ -71,4 +71,7 @@ async function googleSkinportResult() {
   }
 }
 
-featureManager.add(googleSkinportResult, { awaitDomReady: true });
+featureManager.add(skinportResult, {
+  name: "skinport-result",
+  awaitDomReady: true,
+});
