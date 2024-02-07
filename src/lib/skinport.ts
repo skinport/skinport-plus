@@ -1,7 +1,12 @@
 import { KyOptions } from "ky/distribution/types/options";
 import useSWR from "swr";
 import browser from "webextension-polyfill";
-import { Item, getSteamUserWalletCurrency, steamAppIdNames } from "./steam";
+import {
+  Item,
+  getSteamUserWalletCurrencyFromMarket,
+  getSteamUserWalletCurrencyFromPage,
+  steamAppIdNames,
+} from "./steam";
 
 export const SKINPORT_BASE_URL = "https://skinport.com";
 
@@ -65,6 +70,35 @@ export async function skinportApi<ResponseBody>(
   return body;
 }
 
+export type SkinportItemPricesResponse = {
+  items: Record<string, [number | null, number | null]>; // [lowestPrice, suggestedPrice]
+  currency: string;
+};
+
+export const SKINPORT_ITEM_PRICES_REQUEST_LIMIT = 50;
+
+export const SKINPORT_ITEM_PRICES_FALLBACK_CURRENCY = "USD";
+
+export async function getSkinportItemPrices(
+  items: string | string[], // Item market hash names
+  fallbackCurrency = SKINPORT_ITEM_PRICES_FALLBACK_CURRENCY,
+) {
+  return skinportApi<SkinportItemPricesResponse>("v1/extension/prices", {
+    searchParams: [
+      ...(typeof items === "string" ? [items] : items).map((item) => [
+        "items[]",
+        item,
+      ]),
+      [
+        "currency",
+        getSteamUserWalletCurrencyFromPage() ||
+          (await getSteamUserWalletCurrencyFromMarket()) ||
+          fallbackCurrency,
+      ],
+    ],
+  });
+}
+
 export function useSkinportApi<ResponseBody>(
   input: string,
   options?: KyOptions,
@@ -75,19 +109,16 @@ export function useSkinportApi<ResponseBody>(
 }
 
 export function useSkinportItemPrices(
-  items: string | string[],
-  currency?: string,
+  items: string | string[], // Item market hash names
+  fallbackCurrency = SKINPORT_ITEM_PRICES_FALLBACK_CURRENCY,
 ) {
-  return useSkinportApi<{
-    items: Record<string, [number | null, number | null]>; // [lowestPrice, suggestedPrice]
-    currency: string;
-  }>("v1/extension/prices", {
+  return useSkinportApi<SkinportItemPricesResponse>("v1/extension/prices", {
     searchParams: [
       ...(typeof items === "string" ? [items] : items).map((item) => [
         "items[]",
         item,
       ]),
-      ["currency", currency || getSteamUserWalletCurrency()],
+      ["currency", getSteamUserWalletCurrencyFromPage() || fallbackCurrency],
     ],
   });
 }

@@ -16,6 +16,9 @@ export const tailwindBaseConfig: Config = {
           dark: "#36809a",
           DEFAULT: "#4db5da",
         },
+        green: {
+          light: "#5eb648",
+        },
         red: {
           DEFAULT: "#fa490a",
           light: "#E05A59",

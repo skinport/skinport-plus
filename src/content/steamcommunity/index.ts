@@ -5,5 +5,6 @@ import "./features/market-item-skinport-price";
 import "./features/market-items-skinport-price";
 import "./features/profile-verified";
 import "./features/trade-offer-check";
+import "./features/trade-offers-items-info";
 
 featureManager.run();

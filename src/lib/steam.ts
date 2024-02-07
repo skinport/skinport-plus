@@ -1,3 +1,6 @@
+import ky from "ky";
+import memoize from "memoize";
+import pMemoize from "p-memoize";
 import { $$ } from "select-dom";
 import browser from "webextension-polyfill";
 import { countryCurrencies } from "./country-currencies";
@@ -52,19 +55,34 @@ export function getItemFromSteamMarketUrl(
   } as Item;
 }
 
-export function getSteamUserWalletCurrency(defaultCurrency = "USD") {
-  let steamUserWalletCurrency = defaultCurrency;
+function findWalletCountryCode(text: string) {
+  const walletCountryCode = text?.match(/"wallet_country":"([A-Z]+)"/)?.[1];
 
+  if (walletCountryCode && countryCurrencies[walletCountryCode]) {
+    return countryCurrencies[walletCountryCode];
+  }
+}
+
+export const getSteamUserWalletCurrencyFromPage = memoize(() => {
   for (const scriptElement of $$('script[type="text/javascript"]')) {
-    const walletCountryCode = scriptElement.textContent?.match(
-      /"wallet_country":"([A-Z]+)"/,
-    )?.[1];
+    const walletCountryCode =
+      scriptElement.textContent &&
+      findWalletCountryCode(scriptElement.textContent);
 
-    if (walletCountryCode && countryCurrencies[walletCountryCode]) {
-      steamUserWalletCurrency = countryCurrencies[walletCountryCode];
-      break;
+    if (walletCountryCode) {
+      return walletCountryCode;
     }
   }
 
-  return steamUserWalletCurrency;
-}
+  return null;
+});
+
+export const getSteamUserWalletCurrencyFromMarket = pMemoize(async () => {
+  const walletCountryCode = findWalletCountryCode(await ky("/market").text());
+
+  if (walletCountryCode) {
+    return walletCountryCode;
+  }
+
+  return null;
+});

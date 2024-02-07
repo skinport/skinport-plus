@@ -20,3 +20,15 @@ export function findInScriptElements(regexp: string | RegExp) {
     }
   }
 }
+
+export function setSkinportAttribute(
+  element: HTMLElement,
+  attribute: string,
+  value: string,
+) {
+  element.setAttribute(`data-skinport-${attribute}`, value);
+}
+
+export function getSkinportAttribute(element: HTMLElement, attribute: string) {
+  return element.getAttribute(`data-skinport-${attribute}`);
+}
