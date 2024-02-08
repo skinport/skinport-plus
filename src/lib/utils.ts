@@ -126,3 +126,13 @@ export function getPercentageDecrease(oldNumber: number, newNumber: number) {
 
   return percentageDecrease < 0 ? `${percentageDecrease}%` : undefined;
 }
+
+export function sum(numbers: number[]) {
+  let result = 0;
+
+  for (const number of numbers) {
+    result += number;
+  }
+
+  return result;
+}

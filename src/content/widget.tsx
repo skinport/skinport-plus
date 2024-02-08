@@ -36,7 +36,7 @@ export function createWidgetElement(
   };
 
   reactRoot.render(
-    <SWRConfig>
+    <SWRConfig value={{ dedupingInterval: 10000 }}>
       <TooltipProvider>
         <Widget
           shadowRoot={shadowRoot as unknown as HTMLElement}

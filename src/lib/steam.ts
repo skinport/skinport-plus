@@ -1,5 +1,4 @@
 import ky from "ky";
-import memoize from "memoize";
 import pMemoize from "p-memoize";
 import { $$ } from "select-dom";
 import browser from "webextension-polyfill";
@@ -63,7 +62,7 @@ function findWalletCountryCode(text: string) {
   }
 }
 
-export const getSteamUserWalletCurrencyFromPage = memoize(() => {
+export const getSteamUserWalletCurrency = pMemoize(async () => {
   for (const scriptElement of $$('script[type="text/javascript"]')) {
     const walletCountryCode =
       scriptElement.textContent &&
@@ -74,10 +73,6 @@ export const getSteamUserWalletCurrencyFromPage = memoize(() => {
     }
   }
 
-  return null;
-});
-
-export const getSteamUserWalletCurrencyFromMarket = pMemoize(async () => {
   const walletCountryCode = findWalletCountryCode(await ky("/market").text());
 
   if (walletCountryCode) {

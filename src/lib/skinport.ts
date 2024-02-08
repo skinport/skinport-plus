@@ -1,12 +1,7 @@
 import type { Options as KyOptions } from "ky";
 import useSWR from "swr";
 import browser from "webextension-polyfill";
-import {
-  Item,
-  getSteamUserWalletCurrencyFromMarket,
-  getSteamUserWalletCurrencyFromPage,
-  steamAppIdNames,
-} from "./steam";
+import { Item, getSteamUserWalletCurrency, steamAppIdNames } from "./steam";
 
 export const SKINPORT_BASE_URL = "https://skinport.com";
 
@@ -75,30 +70,6 @@ export type SkinportItemPricesResponse = {
   currency: string;
 };
 
-export const SKINPORT_ITEM_PRICES_REQUEST_LIMIT = 50;
-
-export const SKINPORT_ITEM_PRICES_FALLBACK_CURRENCY = "USD";
-
-export async function getSkinportItemPrices(
-  items: string | string[], // Item market hash names
-  fallbackCurrency = SKINPORT_ITEM_PRICES_FALLBACK_CURRENCY,
-) {
-  return skinportApi<SkinportItemPricesResponse>("v1/extension/prices", {
-    searchParams: [
-      ...(typeof items === "string" ? [items] : items).map((item) => [
-        "items[]",
-        item,
-      ]),
-      [
-        "currency",
-        getSteamUserWalletCurrencyFromPage() ||
-          (await getSteamUserWalletCurrencyFromMarket()) ||
-          fallbackCurrency,
-      ],
-    ],
-  });
-}
-
 export function useSkinportApi<ResponseBody>(
   input: string,
   options?: KyOptions,
@@ -110,17 +81,59 @@ export function useSkinportApi<ResponseBody>(
 
 export function useSkinportItemPrices(
   items: string | string[], // Item market hash names
-  fallbackCurrency = SKINPORT_ITEM_PRICES_FALLBACK_CURRENCY,
+  fallbackCurrency = "USD",
+  requestItemsLimit = 50, // If items is more than limit, multiple request are made
 ) {
-  return useSkinportApi<SkinportItemPricesResponse>("v1/extension/prices", {
-    searchParams: [
-      ...(typeof items === "string" ? [items] : items).map((item) => [
-        "items[]",
-        item,
-      ]),
-      ["currency", getSteamUserWalletCurrencyFromPage() || fallbackCurrency],
-    ],
-  });
+  return useSWR(
+    ["v1/extension/prices", items, fallbackCurrency],
+    async (args) => {
+      const currency = (await getSteamUserWalletCurrency()) || fallbackCurrency;
+
+      type SkinportItemPricesResponse = {
+        items: Record<string, [number | null, number | null]>; // [lowestPrice, suggestedPrice]
+        currency: string;
+      };
+
+      const getSkinportItemPrices = (requestItems: string[]) =>
+        skinportApi<SkinportItemPricesResponse>(args[0], {
+          searchParams: [
+            ...requestItems.map((item) => ["items[]", item]),
+            ["currency", currency],
+          ],
+        });
+
+      if (typeof items === "string") {
+        return getSkinportItemPrices([items]);
+      }
+
+      if (items.length > requestItemsLimit) {
+        const skinportItemPricesRequests: Promise<SkinportItemPricesResponse>[] =
+          [];
+
+        for (let i = 0; i < items.length; i += requestItemsLimit) {
+          skinportItemPricesRequests.push(
+            getSkinportItemPrices(items.slice(i, i + requestItemsLimit)),
+          );
+        }
+
+        const skinportItemPrices: SkinportItemPricesResponse = {
+          items: {},
+          currency: fallbackCurrency,
+        };
+
+        for (const { items, currency } of await Promise.all(
+          skinportItemPricesRequests,
+        )) {
+          skinportItemPrices.items = { ...skinportItemPrices.items, ...items };
+          skinportItemPrices.currency = currency;
+        }
+
+        return skinportItemPrices;
+      }
+
+      return getSkinportItemPrices(items);
+    },
+  );
 }
 
 export async function getSkinportSteamBot(steamId: string) {
