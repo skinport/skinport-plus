@@ -1,5 +1,5 @@
 import type { Options as KyOptions } from "ky";
-import useSWR from "swr";
+import useSWR, { SWRResponse } from "swr";
 import browser from "webextension-polyfill";
 import { Item, getSteamUserWalletCurrency, steamAppIdNames } from "./steam";
 
@@ -65,11 +65,6 @@ export async function skinportApi<ResponseBody>(
   return body;
 }
 
-export type SkinportItemPricesResponse = {
-  items: Record<string, [number | null, number | null]>; // [lowestPrice, suggestedPrice]
-  currency: string;
-};
-
 export function useSkinportApi<ResponseBody>(
   input: string,
   options?: KyOptions,
@@ -77,6 +72,104 @@ export function useSkinportApi<ResponseBody>(
   return useSWR([input, options], async (args) =>
     skinportApi<ResponseBody>(args[0], args[1]),
   );
+}
+
+type SkinportItemPricesResponse = {
+  items: Record<string, [number | null, number | null]>; // [lowestPrice, suggestedPrice]
+  currency: string;
+};
+
+export function createUseSkinportItemPrices(
+  itemNames: string | string[] | (() => Promise<string | string[]>), // Item market hash names
+  fallbackCurrency = "USD",
+  requestItemsLimit = 50, // If items is more than limit, multiple request are made
+) {
+  const maybePromiseRequestItemNames =
+    typeof itemNames === "function" ? itemNames() : itemNames;
+
+  const steamUserWalletCurrency = getSteamUserWalletCurrency();
+
+  let resolvedRequestItems: string | string[] | undefined;
+
+  return () =>
+    useSWR(
+      ["v1/extension/prices", itemNames, fallbackCurrency],
+      async (args) => {
+        if (resolvedRequestItems === undefined) {
+          resolvedRequestItems =
+            maybePromiseRequestItemNames instanceof Promise
+              ? await maybePromiseRequestItemNames
+              : maybePromiseRequestItemNames;
+        }
+
+        const currencySearchParam = [
+          "currency",
+          (await steamUserWalletCurrency) || fallbackCurrency,
+        ];
+
+        const getSkinportItemPrices = async (requestItems: string[]) =>
+          skinportApi<SkinportItemPricesResponse>(args[0], {
+            searchParams: [
+              ...requestItems.map((item) => ["items[]", item]),
+              currencySearchParam,
+            ],
+          });
+
+        if (typeof resolvedRequestItems === "string") {
+          return getSkinportItemPrices([resolvedRequestItems]);
+        }
+
+        if (resolvedRequestItems.length > requestItemsLimit) {
+          const skinportItemPricesRequests: Promise<SkinportItemPricesResponse>[] =
+            [];
+
+          for (
+            let i = 0;
+            i < resolvedRequestItems.length;
+            i += requestItemsLimit
+          ) {
+            skinportItemPricesRequests.push(
+              getSkinportItemPrices(
+                resolvedRequestItems.slice(i, i + requestItemsLimit),
+              ),
+            );
+          }
+
+          const skinportItemPrices: SkinportItemPricesResponse = {
+            items: {},
+            currency: fallbackCurrency,
+          };
+
+          for (const skinportItemPricesRequest of await Promise.all(
+            skinportItemPricesRequests,
+          )) {
+            skinportItemPrices.items = {
+              ...skinportItemPrices.items,
+              ...skinportItemPricesRequest.items,
+            };
+            skinportItemPrices.currency = skinportItemPricesRequest.currency;
+          }
+
+          return skinportItemPrices;
+        }
+
+        return getSkinportItemPrices(resolvedRequestItems);
+      },
+    );
+}
+
+export function selectSkinportItemPrice(
+  skinportItemPrices: SWRResponse<SkinportItemPricesResponse>,
+  itemName?: string,
+) {
+  if (!skinportItemPrices.data || !itemName) {
+    return;
+  }
+
+  return {
+    price: skinportItemPrices.data.items[itemName],
+    currency: skinportItemPrices.data.currency,
+  };
 }
 
 export function useSkinportItemPrices(

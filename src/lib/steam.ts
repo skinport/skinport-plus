@@ -17,6 +17,17 @@ export function getIsSupportedSteamAppId(appId: string) {
   return Object.hasOwn(steamAppIdNames, appId);
 }
 
+export function parseSteamItem(name: string, appId: string) {
+  if (Object.hasOwn(steamAppIdNames, appId)) {
+    return {
+      name,
+      appId: appId as keyof typeof steamAppIdNames,
+    };
+  }
+
+  return null;
+}
+
 export async function verifyTradingPartner(steamId: string) {
   const { response, error } = await browser.runtime.sendMessage({
     skinportApi: `v1/extension/bot/${steamId}`,

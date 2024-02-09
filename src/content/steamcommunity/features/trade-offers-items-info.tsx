@@ -4,47 +4,34 @@ import { SkinportPlusLogo } from "@/components/skinport-plus-logo";
 import { Skeleton } from "@/components/ui/skeleton";
 import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
-import { getSkinportAttribute, setSkinportAttribute } from "@/lib/dom";
 import { formatPrice } from "@/lib/format";
 import { getI18nMessage } from "@/lib/i18n";
-import { useSkinportItemPrices } from "@/lib/skinport";
-import { Item, getIsSupportedSteamAppId } from "@/lib/steam";
+import {
+  createUseSkinportItemPrices,
+  selectSkinportItemPrice,
+} from "@/lib/skinport";
+import { Item, parseSteamItem } from "@/lib/steam";
 import { cn } from "@/lib/utils";
 import ky from "ky";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
-import { ReactNode } from "react";
+import { HTMLAttributes, useEffect, useState } from "react";
 import { $, $$ } from "select-dom";
-import { create } from "zustand";
+import { StoreApi, UseBoundStore, create } from "zustand";
 
-function getSkinportAttributeItemNames(tradeOfferItemElements: HTMLElement[]) {
-  const itemNames: string[] = [];
-
-  for (const tradeOfferItemElement of tradeOfferItemElements) {
-    const itemName = getSkinportAttribute(tradeOfferItemElement, "item-name");
-
-    if (itemName) {
-      itemNames.push(itemName);
-    }
-  }
-
-  return itemNames;
-}
-
-async function tradeOffersItemsInfo() {
-  const allTradeOfferItems: Record<string, number> = {};
-
-  const tradeOfferItemElements = $$(".tradeoffer .trade_item");
+async function getAllTradeOfferItems(tradeOfferItemElements: HTMLElement[]) {
+  const itemInfoRequests = new Map<HTMLElement, Promise<string>>();
 
   for (const tradeOfferItemElement of tradeOfferItemElements) {
     const dataEconomyItemValue =
       tradeOfferItemElement.getAttribute("data-economy-item");
 
     if (!dataEconomyItemValue) {
-      return;
+      continue;
     }
 
-    const itemInfoMatch = (
-      await ky(
+    itemInfoRequests.set(
+      tradeOfferItemElement,
+      ky(
         `https://steamcommunity.com/economy/${dataEconomyItemValue.replace(
           "classinfo",
           "itemclasshover",
@@ -55,56 +42,81 @@ async function tradeOffersItemsInfo() {
             l: "english",
           },
         },
-      ).text()
-    ).match(/"market_hash_name\":"([^"]+)".*"appid":"(\d+)"/);
-
-    if (!itemInfoMatch) {
-      continue;
-    }
-
-    const itemName = JSON.parse(`"${itemInfoMatch[1]}"`);
-    const itemAppId = itemInfoMatch[2];
-
-    if (!getIsSupportedSteamAppId(itemAppId)) {
-      continue;
-    }
-
-    allTradeOfferItems[itemName] += 1;
-
-    setSkinportAttribute(tradeOfferItemElement, "item-name", itemName);
-    setSkinportAttribute(tradeOfferItemElement, "item-app-id", itemAppId);
+      ).text(),
+    );
   }
 
-  const allTradeOfferItemNames = Object.keys(allTradeOfferItems);
+  await Promise.all(itemInfoRequests.values());
 
-  for (const tradeOfferItemElement of tradeOfferItemElements) {
-    const itemName = getSkinportAttribute(tradeOfferItemElement, "item-name");
+  const items = new Map<HTMLElement, Item>();
 
-    const itemAppId = getSkinportAttribute(
-      tradeOfferItemElement,
-      "item-app-id",
-    ) as Item["appId"];
+  for (const [tradeOfferItemElement, itemInfoRequest] of itemInfoRequests) {
+    const itemInfoMatches = (await itemInfoRequest).match(
+      /"market_hash_name\":"([^"]+)".*"appid":"(\d+)"/,
+    );
 
-    if (!itemName || !itemAppId) {
+    if (!itemInfoMatches) {
       continue;
     }
 
-    const [itemSkinportPriceElement] = createWidgetElement(() => {
-      const skinportItemPrices = useSkinportItemPrices(allTradeOfferItemNames);
+    const item = parseSteamItem(
+      JSON.parse(`"${itemInfoMatches[1]}"`),
+      itemInfoMatches[2],
+    );
 
-      const skinportItemPrice = skinportItemPrices.data?.items[itemName];
+    if (!item) {
+      continue;
+    }
+
+    items.set(tradeOfferItemElement, item);
+  }
+
+  return items;
+}
+
+async function tradeOffersItemsInfo() {
+  const allTradeOfferItemElements = $$(".tradeoffer .trade_item");
+
+  const allTradeOfferItemRequests = getAllTradeOfferItems(
+    allTradeOfferItemElements,
+  );
+
+  const useSkinportItemPrices = createUseSkinportItemPrices(async () =>
+    Array.from((await allTradeOfferItemRequests).values()).map(
+      ({ name }) => name,
+    ),
+  );
+
+  // Add trade offer item values
+  for (const tradeOfferItemElement of allTradeOfferItemElements) {
+    const [itemSkinportPriceElement] = createWidgetElement(() => {
+      const [tradeOfferItem, setTradeOfferItem] = useState<Item>();
+
+      const skinportItemPrices = useSkinportItemPrices();
+
+      useEffect(() => {
+        const getTradeOfferItem = async () => {
+          setTradeOfferItem(
+            (await allTradeOfferItemRequests).get(tradeOfferItemElement),
+          );
+        };
+
+        getTradeOfferItem();
+      }, []);
+
+      const skinportItemPrice = selectSkinportItemPrice(
+        skinportItemPrices,
+        tradeOfferItem?.name,
+      );
 
       return (
         <div className="absolute left-1.5 bottom-0.5 z-10">
           <ItemSkinportPrice
-            price={skinportItemPrice?.[1]}
-            currency={skinportItemPrices.data?.currency}
+            price={skinportItemPrice?.price[1]}
+            currency={skinportItemPrice?.currency}
             size="xs"
             priceTitle="none"
-            linkItem={{
-              name: itemName,
-              appId: itemAppId,
-            }}
+            linkItem={tradeOfferItem}
           />
         </div>
       );
@@ -113,103 +125,183 @@ async function tradeOffersItemsInfo() {
     tradeOfferItemElement.append(itemSkinportPriceElement);
   }
 
-  const tradeOfferPartyElements = $$(".tradeoffer .tradeoffer_items");
-
-  const useShowValueDifferencePercentageStore = create<{
+  // Add trade offer total values
+  type UseShowTradeOffersValuePercentage = {
     enabled: boolean;
     toggle: () => void;
-  }>((set) => ({
-    enabled: false,
-    toggle: () =>
-      set((state) => ({
-        enabled: !state.enabled,
-      })),
-  }));
+  };
 
-  for (const tradeOfferPartyElement of tradeOfferPartyElements) {
-    const tradeOfferOppositePartyElement =
-      tradeOfferPartyElement.parentElement?.children[
-        tradeOfferPartyElement.classList.contains("primary") ? 3 : 1
+  const useShowTradeOffersValuePercentage = new Map<
+    HTMLElement,
+    UseBoundStore<StoreApi<UseShowTradeOffersValuePercentage>>
+  >();
+
+  for (const tradeOfferElement of $$(".tradeoffer .tradeoffer_items_ctn")) {
+    useShowTradeOffersValuePercentage.set(
+      tradeOfferElement,
+      create((set) => ({
+        enabled: false,
+        toggle: () =>
+          set((state) => ({
+            enabled: !state.enabled,
+          })),
+      })),
+    );
+  }
+
+  const TradeOfferPartyItemsValueContainer = (
+    props: HTMLAttributes<HTMLDivElement>,
+  ) => (
+    <div className="flex justify-end">
+      <div
+        className="flex gap-1 items-center group relative z-10 bg-background px-4 py-3 rounded-md"
+        {...props}
+      />
+    </div>
+  );
+
+  for (const tradeOfferCurrentPartyElement of $$(
+    ".tradeoffer .tradeoffer_items",
+  )) {
+    const tradeOfferPartyParentElement =
+      tradeOfferCurrentPartyElement.parentElement;
+
+    const tradeOfferOtherPartyElement =
+      tradeOfferPartyParentElement?.children[
+        tradeOfferCurrentPartyElement.classList.contains("primary") ? 3 : 1
       ];
 
-    if (tradeOfferOppositePartyElement) {
-      const [skinportItemsValueElement] = createWidgetElement(() => {
-        const skinportItemPrices = useSkinportItemPrices(
-          allTradeOfferItemNames,
-        );
+    if (!tradeOfferPartyParentElement || !tradeOfferOtherPartyElement) {
+      return;
+    }
 
-        const showValueDifferencePercentage =
-          useShowValueDifferencePercentageStore();
+    const useShowTradeOfferValuePercentage =
+      useShowTradeOffersValuePercentage.get(
+        tradeOfferCurrentPartyElement.parentElement,
+      );
 
-        const render = (children: ReactNode) => (
-          <div className="flex justify-end">
-            <div
-              className="flex gap-1 items-center group relative z-10 bg-background px-4 py-3 rounded-md"
-              onMouseEnter={showValueDifferencePercentage.toggle}
-              onMouseLeave={showValueDifferencePercentage.toggle}
-            >
-              {children}
-            </div>
-          </div>
-        );
+    if (!useShowTradeOfferValuePercentage) {
+      return;
+    }
 
-        if (!skinportItemPrices.data) {
-          return render(<Skeleton className="w-28 h-3.5 my-[0.2rem]" />);
-        }
+    const [skinportItemsValueElement] = createWidgetElement(() => {
+      const [tradeOfferPartyItems, setTradeOfferPartyItems] = useState<{
+        current: Item[];
+        other: Item[];
+      }>();
 
-        const getSkinportItemsValue = (items: string[]) => {
-          let itemsValue = 0;
+      const skinportItemPrices = useSkinportItemPrices();
 
-          if (skinportItemPrices.data) {
-            for (const tradeOfferItem of items) {
-              const skinportItemPrice =
-                skinportItemPrices.data.items[tradeOfferItem];
+      const showValueDifferencePercentage = useShowTradeOfferValuePercentage();
 
-              if (skinportItemPrice[1]) {
-                itemsValue += skinportItemPrice[1];
+      useEffect(() => {
+        const initTradeOfferItems = async () => {
+          const allTradeOfferItems = await allTradeOfferItemRequests;
+
+          const getTradeOfferPartyItems = (tradeOfferPartyElement: Element) => {
+            const tradeOfferPartyItems: Item[] = [];
+
+            const tradeOfferPartyItemElements = $$(
+              ".trade_item",
+              tradeOfferPartyElement,
+            );
+
+            for (const tradeOfferPartyItemElement of tradeOfferPartyItemElements) {
+              const tradeOfferItem = allTradeOfferItems.get(
+                tradeOfferPartyItemElement,
+              );
+
+              if (tradeOfferItem) {
+                tradeOfferPartyItems.push(tradeOfferItem);
               }
             }
-          }
 
-          return itemsValue;
+            return tradeOfferPartyItems;
+          };
+
+          setTradeOfferPartyItems({
+            current: getTradeOfferPartyItems(tradeOfferCurrentPartyElement),
+            other: getTradeOfferPartyItems(tradeOfferOtherPartyElement),
+          });
         };
 
-        const tradeOfferPartyItemsValue = getSkinportItemsValue(
-          getSkinportAttributeItemNames(
-            $$(".trade_item", tradeOfferPartyElement),
-          ),
+        initTradeOfferItems();
+      }, []);
+
+      const tradeOfferPartyItemsContainerProps = {
+        onMouseEnter: showValueDifferencePercentage.toggle,
+        onMouseLeave: showValueDifferencePercentage.toggle,
+      };
+
+      if (!skinportItemPrices.data) {
+        return (
+          <TradeOfferPartyItemsValueContainer
+            {...tradeOfferPartyItemsContainerProps}
+          >
+            <Skeleton className="w-28 h-3.5 my-[0.2rem]" />
+          </TradeOfferPartyItemsValueContainer>
         );
+      }
 
-        const tradeOfferOppositePartyItemsValue = getSkinportItemsValue(
-          getSkinportAttributeItemNames(
-            $$(".trade_item", tradeOfferOppositePartyElement),
-          ),
-        );
+      const calculateItemsValue = (tradeOfferItems?: Item[]) => {
+        let itemsValue = 0;
 
-        const tradeOfferPartyItemsValueDifference =
-          tradeOfferOppositePartyItemsValue - tradeOfferPartyItemsValue;
+        if (tradeOfferItems) {
+          for (const tradeOfferItem of tradeOfferItems) {
+            const skinportItemPrice = selectSkinportItemPrice(
+              skinportItemPrices,
+              tradeOfferItem.name,
+            );
 
-        const tradeOfferPartyItemsValueDifferencePercentage = (
-          (tradeOfferPartyItemsValueDifference / tradeOfferPartyItemsValue) *
-          100
-        ).toFixed(2);
+            if (skinportItemPrice?.price[1]) {
+              itemsValue += skinportItemPrice.price[1];
+            }
+          }
+        }
 
-        const ChevronIcon =
-          tradeOfferPartyItemsValueDifference > 0
-            ? ChevronUpIcon
-            : ChevronDownIcon;
+        return itemsValue;
+      };
 
-        return render(
-          <>
-            <div>
-              <span className="text-white font-semibold">
-                {formatPrice(
-                  tradeOfferPartyItemsValue,
-                  skinportItemPrices.data.currency,
-                )}
-              </span>
-            </div>
-            {tradeOfferPartyItemsValueDifference !== 0 && (
+      const tradeOfferCurrentPartyItemsValue = calculateItemsValue(
+        tradeOfferPartyItems?.current,
+      );
+
+      if (tradeOfferCurrentPartyItemsValue === 0) {
+        return;
+      }
+
+      const tradeOfferOtherPartyItemsValue = calculateItemsValue(
+        tradeOfferPartyItems?.other,
+      );
+
+      const tradeOfferPartyItemsValueDifference =
+        tradeOfferOtherPartyItemsValue - tradeOfferCurrentPartyItemsValue;
+
+      const tradeOfferPartyItemsValueDifferencePercentage = (
+        (tradeOfferPartyItemsValueDifference /
+          tradeOfferCurrentPartyItemsValue) *
+        100
+      ).toFixed(2);
+
+      const ChevronIcon =
+        tradeOfferPartyItemsValueDifference > 0
+          ? ChevronUpIcon
+          : ChevronDownIcon;
+
+      return (
+        <TradeOfferPartyItemsValueContainer
+          {...tradeOfferPartyItemsContainerProps}
+        >
+          <div>
+            <span className="text-white font-semibold">
+              {formatPrice(
+                tradeOfferCurrentPartyItemsValue,
+                skinportItemPrices.data.currency,
+              )}
+            </span>
+          </div>
+          {tradeOfferOtherPartyItemsValue !== 0 &&
+            tradeOfferPartyItemsValueDifference !== 0 && (
               <div
                 className={cn("flex items-center text-red-light", {
                   "text-green-light": tradeOfferPartyItemsValueDifference > 0,
@@ -232,14 +324,14 @@ async function tradeOffersItemsInfo() {
                 )}
               </div>
             )}
-          </>,
-        );
-      });
+        </TradeOfferPartyItemsValueContainer>
+      );
+    });
 
-      tradeOfferPartyElement.append(skinportItemsValueElement);
-    }
+    tradeOfferCurrentPartyElement.append(skinportItemsValueElement);
   }
 
+  // Add `Pricing by Skinport+` in trade offer footer
   for (const tradeOfferElement of $$(".tradeoffer")) {
     const tradeOfferFooterElement = $(".tradeoffer_footer", tradeOfferElement);
 
