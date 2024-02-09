@@ -2,6 +2,7 @@ import { useToast } from "@/components/ui/use-toast";
 import type { Options as KyOptions } from "ky";
 import useSWR, { SWRResponse } from "swr";
 import browser from "webextension-polyfill";
+import { getI18nMessage } from "./i18n";
 import { Item, getSteamUserWalletCurrency, steamAppIdNames } from "./steam";
 
 export const SKINPORT_BASE_URL = "https://skinport.com";
@@ -161,10 +162,8 @@ export function createUseSkinportItemPrices(
       {
         onError: () => {
           toast({
-            title: "Something went wrong",
-            description:
-              "Loading item prices has failed. Please try again later.",
-            variant: "destructive",
+            title: getI18nMessage("common_errorOccurred"),
+            description: getI18nMessage("common_failedLoadingItemPrices"),
           });
         },
       },

@@ -17,7 +17,7 @@ export function Toaster() {
       {toasts.map(({ id, title, description, action, ...props }) => (
         <Toast key={id} {...props}>
           <div className="grid gap-1">
-            <SkinportPlusLogo className="h-4 w-auto mb-2" />
+            <SkinportPlusLogo className="h-4 w-auto mb-1.5" />
             {title && <ToastTitle>{title}</ToastTitle>}
             {description && <ToastDescription>{description}</ToastDescription>}
           </div>

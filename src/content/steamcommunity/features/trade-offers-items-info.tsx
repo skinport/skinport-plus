@@ -109,7 +109,7 @@ async function tradeOffersItemsInfo() {
       );
 
       if (skinportItemPrices.error) {
-        return render(<div className="text-white">–</div>);
+        return;
       }
 
       const skinportItemPrice = selectSkinportItemPrice(
@@ -235,8 +235,16 @@ async function tradeOffersItemsInfo() {
         </div>
       );
 
+      if (!tradeOfferPartyItems?.current.length) {
+        return;
+      }
+
       if (skinportItemPrices.error) {
-        return render(<div className="text-white">–</div>);
+        return render(
+          <div className="text-red-light">
+            {getI18nMessage("common_error")}
+          </div>,
+        );
       }
 
       if (!skinportItemPrices.data) {
@@ -265,10 +273,6 @@ async function tradeOffersItemsInfo() {
       const tradeOfferCurrentPartyItemsValue = calculateItemsValue(
         tradeOfferPartyItems?.current,
       );
-
-      if (tradeOfferCurrentPartyItemsValue === 0) {
-        return;
-      }
 
       const tradeOfferOtherPartyItemsValue = calculateItemsValue(
         tradeOfferPartyItems?.other,
