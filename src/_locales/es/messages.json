@@ -12,7 +12,7 @@
     "message": "Ha ocurrido un error"
   },
   "common_failedLoadingItemPrices": {
-    "message": "Failed loading item prices. Please try again later."
+    "message": "Error al cargar los precios de los objetos. Por favor, inténtalo de nuevo más tarde."
   },
   "common_pricingBySkinportPlus": {
     "message": "Precios por <skinportPlusLogo />"

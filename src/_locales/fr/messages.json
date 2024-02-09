@@ -6,13 +6,13 @@
     "message": "Fermer"
   },
   "common_error": {
-    "message": "Error"
+    "message": "Erreur"
   },
   "common_errorOccurred": {
     "message": "Une erreur s'est produite"
   },
   "common_failedLoadingItemPrices": {
-    "message": "Failed loading item prices. Please try again later."
+    "message": "Le chargement des prix des objets a échoué. Veuillez réessayer plus tard."
   },
   "common_pricingBySkinportPlus": {
     "message": "Tarification par <skinportPlusLogo />"

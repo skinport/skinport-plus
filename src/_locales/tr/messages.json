@@ -6,16 +6,16 @@
     "message": "Kapat"
   },
   "common_error": {
-    "message": "Error"
+    "message": "Hata"
   },
   "common_errorOccurred": {
     "message": "Bir hata oluştu"
   },
   "common_failedLoadingItemPrices": {
-    "message": "Failed loading item prices. Please try again later."
+    "message": "Esya fiyatları yüklenirken hata oluştu. Lütfen daha sonra tekrar deneyin."
   },
   "common_pricingBySkinportPlus": {
-    "message": "Pricing by <skinportPlusLogo />"
+    "message": "<skinportPlusLogo /> Tarafından Fiyatlandırma"
   },
   "common_securityProvidedBySkinportPlus": {
     "message": "Skinport Plus tarafından sağlanan güvenlik"

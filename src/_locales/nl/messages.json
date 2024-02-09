@@ -6,13 +6,13 @@
     "message": "Sluiten"
   },
   "common_error": {
-    "message": "Error"
+    "message": "Fout"
   },
   "common_errorOccurred": {
     "message": "Er is een fout opgetreden"
   },
   "common_failedLoadingItemPrices": {
-    "message": "Failed loading item prices. Please try again later."
+    "message": "Het laden van voorwerpprijzen is mislukt. Probeer het later opnieuw."
   },
   "common_pricingBySkinportPlus": {
     "message": "Prijzen door <skinportPlusLogo />"

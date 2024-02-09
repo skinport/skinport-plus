@@ -6,13 +6,13 @@
     "message": "Luk"
   },
   "common_error": {
-    "message": "Error"
+    "message": "Fejl"
   },
   "common_errorOccurred": {
     "message": "En fejl er opstået"
   },
   "common_failedLoadingItemPrices": {
-    "message": "Failed loading item prices. Please try again later."
+    "message": "Indlæsning af genstandspriser mislykkedes. Prøv venligst igen senere."
   },
   "common_pricingBySkinportPlus": {
     "message": "Prisfastsættelse af <skinportPlusLogo />"

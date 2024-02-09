@@ -6,13 +6,13 @@
     "message": "关闭"
   },
   "common_error": {
-    "message": "Error"
+    "message": "错误"
   },
   "common_errorOccurred": {
     "message": "发生了一个错误"
   },
   "common_failedLoadingItemPrices": {
-    "message": "Failed loading item prices. Please try again later."
+    "message": "加载物品价格失败。请稍后再试。"
   },
   "common_pricingBySkinportPlus": {
     "message": "由 <skinportPlusLogo /> 定价"
