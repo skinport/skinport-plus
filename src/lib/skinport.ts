@@ -1,3 +1,4 @@
+import { useToast } from "@/components/ui/use-toast";
 import type { Options as KyOptions } from "ky";
 import useSWR, { SWRResponse } from "swr";
 import browser from "webextension-polyfill";
@@ -91,8 +92,10 @@ export function createUseSkinportItemPrices(
 
   let resolvedRequestItems: string | string[] | undefined;
 
-  return () =>
-    useSWR(
+  return () => {
+    const { toast } = useToast();
+
+    const swr = useSWR(
       ["v1/extension/prices", itemNames, fallbackCurrency],
       async (args) => {
         if (resolvedRequestItems === undefined) {
@@ -155,7 +158,18 @@ export function createUseSkinportItemPrices(
 
         return getSkinportItemPrices(resolvedRequestItems);
       },
+      {
+        onError: () => {
+          toast({
+            title: "Something went wrong while getting item prices",
+            description: "Please try again later.",
+          });
+        },
+      },
     );
+
+    return swr;
+  };
 }
 
 export function selectSkinportItemPrice(

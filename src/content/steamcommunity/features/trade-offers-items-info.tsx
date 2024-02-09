@@ -14,7 +14,7 @@ import { Item, parseSteamItem } from "@/lib/steam";
 import { cn } from "@/lib/utils";
 import ky from "ky";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
-import { HTMLAttributes, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { $, $$ } from "select-dom";
 import { StoreApi, UseBoundStore, create } from "zustand";
 
@@ -104,21 +104,27 @@ async function tradeOffersItemsInfo() {
         getTradeOfferItem();
       }, []);
 
+      const render = (children: ReactNode) => (
+        <div className="absolute left-1.5 bottom-0.5 z-10">{children}</div>
+      );
+
+      if (skinportItemPrices.error) {
+        return render(<div className="text-white">–</div>);
+      }
+
       const skinportItemPrice = selectSkinportItemPrice(
         skinportItemPrices,
         tradeOfferItem?.name,
       );
 
-      return (
-        <div className="absolute left-1.5 bottom-0.5 z-10">
-          <ItemSkinportPrice
-            price={skinportItemPrice?.price[1]}
-            currency={skinportItemPrice?.currency}
-            size="xs"
-            priceTitle="none"
-            linkItem={tradeOfferItem}
-          />
-        </div>
+      return render(
+        <ItemSkinportPrice
+          price={skinportItemPrice?.price[1]}
+          currency={skinportItemPrice?.currency}
+          size="xs"
+          priceTitle="none"
+          linkItem={tradeOfferItem}
+        />,
       );
     });
 
@@ -148,17 +154,6 @@ async function tradeOffersItemsInfo() {
       })),
     );
   }
-
-  const TradeOfferPartyItemsValueContainer = (
-    props: HTMLAttributes<HTMLDivElement>,
-  ) => (
-    <div className="flex justify-end">
-      <div
-        className="flex gap-1 items-center group relative z-10 bg-background px-4 py-3 rounded-md"
-        {...props}
-      />
-    </div>
-  );
 
   for (const tradeOfferCurrentPartyElement of $$(
     ".tradeoffer .tradeoffer_items",
@@ -228,19 +223,24 @@ async function tradeOffersItemsInfo() {
         initTradeOfferItems();
       }, []);
 
-      const tradeOfferPartyItemsContainerProps = {
-        onMouseEnter: showValueDifferencePercentage.toggle,
-        onMouseLeave: showValueDifferencePercentage.toggle,
-      };
+      const render = (children: ReactNode) => (
+        <div className="flex justify-end">
+          <div
+            className="flex gap-1 items-center group relative z-10 bg-background px-4 py-3 rounded-md"
+            onMouseEnter={showValueDifferencePercentage.toggle}
+            onMouseLeave={showValueDifferencePercentage.toggle}
+          >
+            {children}
+          </div>
+        </div>
+      );
+
+      if (skinportItemPrices.error) {
+        return render(<div className="text-white">–</div>);
+      }
 
       if (!skinportItemPrices.data) {
-        return (
-          <TradeOfferPartyItemsValueContainer
-            {...tradeOfferPartyItemsContainerProps}
-          >
-            <Skeleton className="w-28 h-3.5 my-[0.2rem]" />
-          </TradeOfferPartyItemsValueContainer>
-        );
+        return render(<Skeleton className="w-28 h-3.5 my-[0.2rem]" />);
       }
 
       const calculateItemsValue = (tradeOfferItems?: Item[]) => {
@@ -288,10 +288,8 @@ async function tradeOffersItemsInfo() {
           ? ChevronUpIcon
           : ChevronDownIcon;
 
-      return (
-        <TradeOfferPartyItemsValueContainer
-          {...tradeOfferPartyItemsContainerProps}
-        >
+      return render(
+        <>
           <div>
             <span className="text-white font-semibold">
               {formatPrice(
@@ -324,7 +322,7 @@ async function tradeOffersItemsInfo() {
                 )}
               </div>
             )}
-        </TradeOfferPartyItemsValueContainer>
+        </>,
       );
     });
 
