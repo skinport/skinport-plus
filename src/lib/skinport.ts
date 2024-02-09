@@ -161,8 +161,10 @@ export function createUseSkinportItemPrices(
       {
         onError: () => {
           toast({
-            title: "Something went wrong while getting item prices",
-            description: "Please try again later.",
+            title: "Something went wrong",
+            description:
+              "Loading item prices has failed. Please try again later.",
+            variant: "destructive",
           });
         },
       },
