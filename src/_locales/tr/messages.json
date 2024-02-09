@@ -5,8 +5,14 @@
   "common_close": {
     "message": "Kapat"
   },
+  "common_error": {
+    "message": "Error"
+  },
   "common_errorOccurred": {
     "message": "Bir hata oluştu"
+  },
+  "common_failedLoadingItemPrices": {
+    "message": "Failed loading item prices. Please try again later."
   },
   "common_pricingBySkinportPlus": {
     "message": "Pricing by <skinportPlusLogo />"

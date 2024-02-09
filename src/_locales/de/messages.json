@@ -5,8 +5,14 @@
   "common_close": {
     "message": "Schließen"
   },
+  "common_error": {
+    "message": "Error"
+  },
   "common_errorOccurred": {
     "message": "Es ist ein Fehler aufgetreten."
+  },
+  "common_failedLoadingItemPrices": {
+    "message": "Failed loading item prices. Please try again later."
   },
   "common_pricingBySkinportPlus": {
     "message": "Preise von <skinportPlusLogo />"

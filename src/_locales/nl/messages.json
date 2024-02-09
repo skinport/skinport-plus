@@ -5,8 +5,14 @@
   "common_close": {
     "message": "Sluiten"
   },
+  "common_error": {
+    "message": "Error"
+  },
   "common_errorOccurred": {
     "message": "Er is een fout opgetreden"
+  },
+  "common_failedLoadingItemPrices": {
+    "message": "Failed loading item prices. Please try again later."
   },
   "common_pricingBySkinportPlus": {
     "message": "Prijzen door <skinportPlusLogo />"

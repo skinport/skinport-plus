@@ -5,8 +5,14 @@
   "common_close": {
     "message": "Luk"
   },
+  "common_error": {
+    "message": "Error"
+  },
   "common_errorOccurred": {
     "message": "En fejl er opstået"
+  },
+  "common_failedLoadingItemPrices": {
+    "message": "Failed loading item prices. Please try again later."
   },
   "common_pricingBySkinportPlus": {
     "message": "Prisfastsættelse af <skinportPlusLogo />"
