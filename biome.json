@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "ignore": ["dist", "package-lock.json"]
+    "ignore": ["dist", "src/_locales", "package-lock.json"]
   },
   "linter": {
     "enabled": true,
