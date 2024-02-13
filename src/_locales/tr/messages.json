@@ -65,16 +65,16 @@
     "message": "Steam hesap güvenlik açıklarını kontrol et"
   },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
-    "message": "Show suggested item prices from Skinport on each item."
+    "message": "Her esyada Skinport'tan önerilen fiyatları göster."
   },
   "options_steamCommunityTradeOffersShowItemPrices_label": {
-    "message": "Show item prices"
+    "message": "Esya fiyatlarını göster"
   },
   "options_steamCommunityTradeOffersShowTotalTradeValues_description": {
-    "message": "Show total trade values based on suggested item prices from Skinport."
+    "message": "Skinport'tan önerilen eşya fiyatlarına dayalı toplam ticaret değerlerini göster."
   },
   "options_steamCommunityTradeOffersShowTotalTradeValues_label": {
-    "message": "Show total trade values"
+    "message": "Toplam takas değerlerini göster"
   },
   "options_steamCommunityTradeOffersVerifyTradePartner_description": {
     "message": "Bu özellik, bir ticaret partnerinin Steam'da resmi bir Skinport botu olup olmadığını kontrol ederek doğruluğunu teyit eder."
@@ -83,10 +83,10 @@
     "message": "Ticaret Tekliflerini Kontrol Et"
   },
   "options_steamCommunity_account": {
-    "message": "Account"
+    "message": "Hesap"
   },
   "options_steamCommunity_tradeOffers": {
-    "message": "Trade offers"
+    "message": "Takas teklifleri"
   },
   "phishingBlocker_description_paragraph1": {
     "message": "Skinport eklentisi, seni kandırarak tehlikeli bir şey yapmana, örneğin e-posta, şifre ve Steam Web API anahtarınız gibi Steam bilgilerini açığa çıkarmana neden olabileceği için <strong>{{blockedHost}}</strong>'a erişimi engelledi, çünkü potansiyel olarak Skinport'un yerini alabilir."

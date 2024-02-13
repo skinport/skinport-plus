@@ -65,16 +65,16 @@
     "message": "Tjek for sikkerhedsproblemer med din Steam-konto"
   },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
-    "message": "Show suggested item prices from Skinport on each item."
+    "message": "Vis foreslåede genstandspriser fra Skinport på hver genstand."
   },
   "options_steamCommunityTradeOffersShowItemPrices_label": {
-    "message": "Show item prices"
+    "message": "Vis priser på genstande"
   },
   "options_steamCommunityTradeOffersShowTotalTradeValues_description": {
-    "message": "Show total trade values based on suggested item prices from Skinport."
+    "message": "Vis samlet handelsværdi baseret på foreslåede genstandspriser fra Skinport."
   },
   "options_steamCommunityTradeOffersShowTotalTradeValues_label": {
-    "message": "Show total trade values"
+    "message": "Vis samlet handelsværdi"
   },
   "options_steamCommunityTradeOffersVerifyTradePartner_description": {
     "message": "Denne funktion tjekker, om en handelspartner på Steam er en officiel Skinport bot, for at bekræfte dets ægthed."
@@ -83,10 +83,10 @@
     "message": "Tjek handelstilbud"
   },
   "options_steamCommunity_account": {
-    "message": "Account"
+    "message": "Konto"
   },
   "options_steamCommunity_tradeOffers": {
-    "message": "Trade offers"
+    "message": "Handelstilbud"
   },
   "phishingBlocker_description_paragraph1": {
     "message": "Skinport-udvidelsen har blokeret adgang til <strong>{{blockedHost}}</strong>, fordi den potentielt udgiver sig for at være Skinport og måske kan narre dig til at gøre noget farligt, som at afsløre dine Steam-informationer såsom email, adgangskode og Steam Web API nøgle."

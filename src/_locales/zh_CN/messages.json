@@ -65,16 +65,16 @@
     "message": "检查Steam账户的安全漏洞"
   },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
-    "message": "Show suggested item prices from Skinport on each item."
+    "message": "在每个物品上显示来自Skinport的建议物品价格。"
   },
   "options_steamCommunityTradeOffersShowItemPrices_label": {
-    "message": "Show item prices"
+    "message": "显示物品价格"
   },
   "options_steamCommunityTradeOffersShowTotalTradeValues_description": {
-    "message": "Show total trade values based on suggested item prices from Skinport."
+    "message": "显示基于Skinport建议的物品价格的总交易价值。"
   },
   "options_steamCommunityTradeOffersShowTotalTradeValues_label": {
-    "message": "Show total trade values"
+    "message": "显示总交易值"
   },
   "options_steamCommunityTradeOffersVerifyTradePartner_description": {
     "message": "此功能检查Steam上的交易伙伴是否是官方Skinport bot，以确认其真实性。"
@@ -83,10 +83,10 @@
     "message": "检查交易提供"
   },
   "options_steamCommunity_account": {
-    "message": "Account"
+    "message": "账户"
   },
   "options_steamCommunity_tradeOffers": {
-    "message": "Trade offers"
+    "message": "交易提议"
   },
   "phishingBlocker_description_paragraph1": {
     "message": "Skinport扩展程序已阻止对<strong>{{blockedHost}}</strong>的访问，因为它可能假装是Skinport，并可能诱导你做出像透露你的Steam信息（例如邮箱，密码和Steam Web API密钥）之类的危险行为。"

@@ -65,16 +65,16 @@
     "message": "Controleer op beveiligingskwetsbaarheden in je Steam-account"
   },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
-    "message": "Show suggested item prices from Skinport on each item."
+    "message": "Toon voorgestelde voorwerp prijzen van Skinport op elk voorwerp."
   },
   "options_steamCommunityTradeOffersShowItemPrices_label": {
-    "message": "Show item prices"
+    "message": "Toon prijzen van voorwerpen"
   },
   "options_steamCommunityTradeOffersShowTotalTradeValues_description": {
-    "message": "Show total trade values based on suggested item prices from Skinport."
+    "message": "Toon de totale handelswaarden op basis van de voorgestelde voorwerpprijzen van Skinport."
   },
   "options_steamCommunityTradeOffersShowTotalTradeValues_label": {
-    "message": "Show total trade values"
+    "message": "Toon totale handelswaarden"
   },
   "options_steamCommunityTradeOffersVerifyTradePartner_description": {
     "message": "Deze functie controleert of een handelspartner op Steam een officiële Skinport bot is om de echtheid te bevestigen."
@@ -86,7 +86,7 @@
     "message": "Account"
   },
   "options_steamCommunity_tradeOffers": {
-    "message": "Trade offers"
+    "message": "Handelsaanbiedingen"
   },
   "phishingBlocker_description_paragraph1": {
     "message": "De Skinport extensie heeft de toegang tot <strong>{{blockedHost}}</strong> geblokkeerd, omdat het mogelijk doet alsof het Skinport is en je kan misleiden tot het doen van iets gevaarlijks zoals het onthullen van je Steam informatie zoals e-mail, wachtwoord en Steam Web API sleutel."

@@ -65,16 +65,16 @@
     "message": "Vérifiez les vulnérabilités de sécurité du compte Steam"
   },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
-    "message": "Show suggested item prices from Skinport on each item."
+    "message": "Affiche les prix suggérés pour chaque objet de Skinport."
   },
   "options_steamCommunityTradeOffersShowItemPrices_label": {
-    "message": "Show item prices"
+    "message": "Afficher les prix des objets"
   },
   "options_steamCommunityTradeOffersShowTotalTradeValues_description": {
-    "message": "Show total trade values based on suggested item prices from Skinport."
+    "message": "Affiche les valeurs commerciales totales basées sur les prix d'objet suggérés de Skinport."
   },
   "options_steamCommunityTradeOffersShowTotalTradeValues_label": {
-    "message": "Show total trade values"
+    "message": "Afficher les valeurs totales des échanges"
   },
   "options_steamCommunityTradeOffersVerifyTradePartner_description": {
     "message": "La fonctionnalité vérifie si un partenaire commercial sur Steam est un bot officiel Skinport pour confirmer son authenticité."
@@ -83,10 +83,10 @@
     "message": "Vérifie les offres d'échange"
   },
   "options_steamCommunity_account": {
-    "message": "Account"
+    "message": "Compte"
   },
   "options_steamCommunity_tradeOffers": {
-    "message": "Trade offers"
+    "message": "Offres de commerce"
   },
   "phishingBlocker_description_paragraph1": {
     "message": "L'extension Skinport a bloqué l'accès à <strong>{{blockedHost}}</strong>, car il prétend potentiellement être Skinport et pourrait vous inciter à faire quelque chose de dangereux, comme révéler vos informations Steam telles que l'email, le mot de passe et la clé API Web Steam."

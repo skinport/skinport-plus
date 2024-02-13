@@ -65,16 +65,16 @@
     "message": "Sprawdź podatności na luki bezpieczeństwa konta Steam"
   },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
-    "message": "Show suggested item prices from Skinport on each item."
+    "message": "Pokaż sugerowane ceny przedmiotów z Skinport na każdym przedmiocie."
   },
   "options_steamCommunityTradeOffersShowItemPrices_label": {
-    "message": "Show item prices"
+    "message": "Pokaż ceny przedmiotów"
   },
   "options_steamCommunityTradeOffersShowTotalTradeValues_description": {
-    "message": "Show total trade values based on suggested item prices from Skinport."
+    "message": "Pokaż całkowite wartości transakcji na podstawie sugerowanych cen przedmiotów od Skinport."
   },
   "options_steamCommunityTradeOffersShowTotalTradeValues_label": {
-    "message": "Show total trade values"
+    "message": "Pokaż łączną wartość transakcji"
   },
   "options_steamCommunityTradeOffersVerifyTradePartner_description": {
     "message": "Ta funkcja sprawdza, czy partner handlowy na Steamie jest oficjalnym botem Skinport, aby potwierdzić jego autentyczność."
@@ -83,10 +83,10 @@
     "message": "Sprawdź oferty wymiany"
   },
   "options_steamCommunity_account": {
-    "message": "Account"
+    "message": "Konto"
   },
   "options_steamCommunity_tradeOffers": {
-    "message": "Trade offers"
+    "message": "Oferty handlowe"
   },
   "phishingBlocker_description_paragraph1": {
     "message": "Rozszerzenie Skinport zablokowało dostęp do <strong>{{blockedHost}}</strong>, ponieważ potencjalnie udaje Skinport i może cię oszukać, nakłaniając do czegoś niebezpiecznego, jak ujawnienie informacji o Steam, takich jak e-mail, hasło i klucz do Steam Web API."
