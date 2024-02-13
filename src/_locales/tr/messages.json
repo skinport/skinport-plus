@@ -43,21 +43,6 @@
   "google_officialSkinportWebsite": {
     "message": "Resmi <skinportLogo /> web sitesi"
   },
-  "options_checkSteamAccountSecurity_description": {
-    "message": "Bu özellik, hesabınızdaki açığa çıkmış Steam Web API Anahtarlarını tespit eder, bu da hesabınızı kontrol etmek ve envanterleri çalmak için sık kullanılan bir phishing saldırısı hedefidir."
-  },
-  "options_checkSteamAccountSecurity_label": {
-    "message": "Steam hesap güvenlik açıklarını kontrol et"
-  },
-  "options_checkTradeOffer_description": {
-    "message": "Bu özellik, bir ticaret partnerinin Steam'da resmi bir Skinport botu olup olmadığını kontrol ederek doğruluğunu teyit eder."
-  },
-  "options_checkTradeOffer_label": {
-    "message": "Ticaret Tekliflerini Kontrol Et"
-  },
-  "options_headerTitle": {
-    "message": "Artı"
-  },
   "options_pageTitle": {
     "message": "Ayarlar"
   },
@@ -72,6 +57,36 @@
   },
   "options_permissionsRequired_title": {
     "message": "Gerekli izinler"
+  },
+  "options_steamCommunityAccountCheckSecurityVulnerabilities_description": {
+    "message": "Bu özellik, hesabınızdaki açığa çıkmış Steam Web API Anahtarlarını tespit eder, bu da hesabınızı kontrol etmek ve envanterleri çalmak için sık kullanılan bir phishing saldırısı hedefidir."
+  },
+  "options_steamCommunityAccountCheckSecurityVulnerabilities_label": {
+    "message": "Steam hesap güvenlik açıklarını kontrol et"
+  },
+  "options_steamCommunityTradeOffersShowItemPrices_description": {
+    "message": "Show suggested item prices from Skinport on each item."
+  },
+  "options_steamCommunityTradeOffersShowItemPrices_label": {
+    "message": "Show item prices"
+  },
+  "options_steamCommunityTradeOffersShowTotalTradeValues_description": {
+    "message": "Show total trade values based on suggested item prices from Skinport."
+  },
+  "options_steamCommunityTradeOffersShowTotalTradeValues_label": {
+    "message": "Show total trade values"
+  },
+  "options_steamCommunityTradeOffersVerifyTradePartner_description": {
+    "message": "Bu özellik, bir ticaret partnerinin Steam'da resmi bir Skinport botu olup olmadığını kontrol ederek doğruluğunu teyit eder."
+  },
+  "options_steamCommunityTradeOffersVerifyTradePartner_label": {
+    "message": "Ticaret Tekliflerini Kontrol Et"
+  },
+  "options_steamCommunity_account": {
+    "message": "Account"
+  },
+  "options_steamCommunity_tradeOffers": {
+    "message": "Trade offers"
   },
   "phishingBlocker_description_paragraph1": {
     "message": "Skinport eklentisi, seni kandırarak tehlikeli bir şey yapmana, örneğin e-posta, şifre ve Steam Web API anahtarınız gibi Steam bilgilerini açığa çıkarmana neden olabileceği için <strong>{{blockedHost}}</strong>'a erişimi engelledi, çünkü potansiyel olarak Skinport'un yerini alabilir."

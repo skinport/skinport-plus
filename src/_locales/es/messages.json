@@ -43,21 +43,6 @@
   "google_officialSkinportWebsite": {
     "message": "Sitio web oficial de <skinportLogo />"
   },
-  "options_checkSteamAccountSecurity_description": {
-    "message": "Esta función detecta claves expuestas de la API Web de Steam en tu cuenta, un objetivo común en ataques de phishing para controlar tu cuenta y robar tus inventarios."
-  },
-  "options_checkSteamAccountSecurity_label": {
-    "message": "Verifica vulnerabilidades de seguridad en tu cuenta de Steam"
-  },
-  "options_checkTradeOffer_description": {
-    "message": "La función verifica si un socio comercial en Steam es un bot oficial de Skinport para confirmar su autenticidad."
-  },
-  "options_checkTradeOffer_label": {
-    "message": "Verifica las ofertas de intercambio"
-  },
-  "options_headerTitle": {
-    "message": "Más"
-  },
   "options_pageTitle": {
     "message": "Ajustes"
   },
@@ -72,6 +57,36 @@
   },
   "options_permissionsRequired_title": {
     "message": "Permisos necesarios"
+  },
+  "options_steamCommunityAccountCheckSecurityVulnerabilities_description": {
+    "message": "Esta función detecta claves expuestas de la API Web de Steam en tu cuenta, un objetivo común en ataques de phishing para controlar tu cuenta y robar tus inventarios."
+  },
+  "options_steamCommunityAccountCheckSecurityVulnerabilities_label": {
+    "message": "Verifica vulnerabilidades de seguridad en tu cuenta de Steam"
+  },
+  "options_steamCommunityTradeOffersShowItemPrices_description": {
+    "message": "Show suggested item prices from Skinport on each item."
+  },
+  "options_steamCommunityTradeOffersShowItemPrices_label": {
+    "message": "Show item prices"
+  },
+  "options_steamCommunityTradeOffersShowTotalTradeValues_description": {
+    "message": "Show total trade values based on suggested item prices from Skinport."
+  },
+  "options_steamCommunityTradeOffersShowTotalTradeValues_label": {
+    "message": "Show total trade values"
+  },
+  "options_steamCommunityTradeOffersVerifyTradePartner_description": {
+    "message": "La función verifica si un socio comercial en Steam es un bot oficial de Skinport para confirmar su autenticidad."
+  },
+  "options_steamCommunityTradeOffersVerifyTradePartner_label": {
+    "message": "Verifica las ofertas de intercambio"
+  },
+  "options_steamCommunity_account": {
+    "message": "Account"
+  },
+  "options_steamCommunity_tradeOffers": {
+    "message": "Trade offers"
   },
   "phishingBlocker_description_paragraph1": {
     "message": "La extensión de Skinport ha bloqueado el acceso a <strong>{{blockedHost}}</strong>, porque potencialmente podría hacerse pasar por Skinport y engañarte para que hagas algo peligroso, como revelar tu información de Steam, como el correo electrónico, la contraseña y la clave de la API web de Steam."

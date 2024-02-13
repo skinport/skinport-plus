@@ -43,21 +43,6 @@
   "google_officialSkinportWebsite": {
     "message": "Official <skinportLogo /> website"
   },
-  "options_checkSteamAccountSecurity_description": {
-    "message": "This feature detects exposed Steam Web API Keys on your account, a common target in phishing attacks to control your account and steal inventories."
-  },
-  "options_checkSteamAccountSecurity_label": {
-    "message": "Check for Steam account security vulnerabilities"
-  },
-  "options_checkTradeOffer_description": {
-    "message": "The feature checks if a trading partner on Steam is an official Skinport bot to confirm its authenticity."
-  },
-  "options_checkTradeOffer_label": {
-    "message": "Check Trade offers"
-  },
-  "options_headerTitle": {
-    "message": "Plus"
-  },
   "options_pageTitle": {
     "message": "Settings"
   },
@@ -72,6 +57,36 @@
   },
   "options_permissionsRequired_title": {
     "message": "Permissions required"
+  },
+  "options_steamCommunityAccountCheckSecurityVulnerabilities_description": {
+    "message": "This feature detects exposed Steam Web API Keys on your account, a common target in phishing attacks to control your account and steal inventories."
+  },
+  "options_steamCommunityAccountCheckSecurityVulnerabilities_label": {
+    "message": "Check for Steam account security vulnerabilities"
+  },
+  "options_steamCommunityTradeOffersShowItemPrices_description": {
+    "message": "Show suggested item prices from Skinport on each item."
+  },
+  "options_steamCommunityTradeOffersShowItemPrices_label": {
+    "message": "Show item prices"
+  },
+  "options_steamCommunityTradeOffersShowTotalTradeValues_description": {
+    "message": "Show total trade values based on suggested item prices from Skinport."
+  },
+  "options_steamCommunityTradeOffersShowTotalTradeValues_label": {
+    "message": "Show total trade values"
+  },
+  "options_steamCommunityTradeOffersVerifyTradePartner_description": {
+    "message": "This feature checks if a trade partner on Steam is an official Skinport bot to confirm its authenticity."
+  },
+  "options_steamCommunityTradeOffersVerifyTradePartner_label": {
+    "message": "Verify trade partner"
+  },
+  "options_steamCommunity_account": {
+    "message": "Account"
+  },
+  "options_steamCommunity_tradeOffers": {
+    "message": "Trade offers"
   },
   "phishingBlocker_description_paragraph1": {
     "message": "Skinport extension has blocked access to <strong>{{blockedHost}}</strong>, because it potentially pretends to be Skinport and may trick you into doing something dangerous like revealing your Steam information such as email, password and Steam Web API key."

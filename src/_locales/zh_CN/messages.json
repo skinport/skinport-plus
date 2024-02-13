@@ -43,21 +43,6 @@
   "google_officialSkinportWebsite": {
     "message": "官方 <skinportLogo /> 网站"
   },
-  "options_checkSteamAccountSecurity_description": {
-    "message": "此功能可以检测到您帐户上公开的Steam Web API密钥，这是钓鱼攻击的常见目标，以控制您的帐户并窃取库存。"
-  },
-  "options_checkSteamAccountSecurity_label": {
-    "message": "检查Steam账户的安全漏洞"
-  },
-  "options_checkTradeOffer_description": {
-    "message": "此功能检查Steam上的交易伙伴是否是官方Skinport bot，以确认其真实性。"
-  },
-  "options_checkTradeOffer_label": {
-    "message": "检查交易提供"
-  },
-  "options_headerTitle": {
-    "message": "加号"
-  },
   "options_pageTitle": {
     "message": "设置"
   },
@@ -72,6 +57,36 @@
   },
   "options_permissionsRequired_title": {
     "message": "需要的权限"
+  },
+  "options_steamCommunityAccountCheckSecurityVulnerabilities_description": {
+    "message": "此功能可以检测到您帐户上公开的Steam Web API密钥，这是钓鱼攻击的常见目标，以控制您的帐户并窃取库存。"
+  },
+  "options_steamCommunityAccountCheckSecurityVulnerabilities_label": {
+    "message": "检查Steam账户的安全漏洞"
+  },
+  "options_steamCommunityTradeOffersShowItemPrices_description": {
+    "message": "Show suggested item prices from Skinport on each item."
+  },
+  "options_steamCommunityTradeOffersShowItemPrices_label": {
+    "message": "Show item prices"
+  },
+  "options_steamCommunityTradeOffersShowTotalTradeValues_description": {
+    "message": "Show total trade values based on suggested item prices from Skinport."
+  },
+  "options_steamCommunityTradeOffersShowTotalTradeValues_label": {
+    "message": "Show total trade values"
+  },
+  "options_steamCommunityTradeOffersVerifyTradePartner_description": {
+    "message": "此功能检查Steam上的交易伙伴是否是官方Skinport bot，以确认其真实性。"
+  },
+  "options_steamCommunityTradeOffersVerifyTradePartner_label": {
+    "message": "检查交易提供"
+  },
+  "options_steamCommunity_account": {
+    "message": "Account"
+  },
+  "options_steamCommunity_tradeOffers": {
+    "message": "Trade offers"
   },
   "phishingBlocker_description_paragraph1": {
     "message": "Skinport扩展程序已阻止对<strong>{{blockedHost}}</strong>的访问，因为它可能假装是Skinport，并可能诱导你做出像透露你的Steam信息（例如邮箱，密码和Steam Web API密钥）之类的危险行为。"

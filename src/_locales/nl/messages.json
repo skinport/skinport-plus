@@ -43,21 +43,6 @@
   "google_officialSkinportWebsite": {
     "message": "Officiële <skinportLogo /> website"
   },
-  "options_checkSteamAccountSecurity_description": {
-    "message": "Deze functie detecteert blootgestelde Steam Web API-sleutels op je account, een veelvoorkomend doelwit in phishing-aanvallen om je account te beheersen en inventarissen te stelen."
-  },
-  "options_checkSteamAccountSecurity_label": {
-    "message": "Controleer op beveiligingskwetsbaarheden in je Steam-account"
-  },
-  "options_checkTradeOffer_description": {
-    "message": "Deze functie controleert of een handelspartner op Steam een officiële Skinport bot is om de echtheid te bevestigen."
-  },
-  "options_checkTradeOffer_label": {
-    "message": "Controleer Handelsaanbiedingen"
-  },
-  "options_headerTitle": {
-    "message": "Plus"
-  },
   "options_pageTitle": {
     "message": "Instellingen"
   },
@@ -72,6 +57,36 @@
   },
   "options_permissionsRequired_title": {
     "message": "Vereiste toestemming"
+  },
+  "options_steamCommunityAccountCheckSecurityVulnerabilities_description": {
+    "message": "Deze functie detecteert blootgestelde Steam Web API-sleutels op je account, een veelvoorkomend doelwit in phishing-aanvallen om je account te beheersen en inventarissen te stelen."
+  },
+  "options_steamCommunityAccountCheckSecurityVulnerabilities_label": {
+    "message": "Controleer op beveiligingskwetsbaarheden in je Steam-account"
+  },
+  "options_steamCommunityTradeOffersShowItemPrices_description": {
+    "message": "Show suggested item prices from Skinport on each item."
+  },
+  "options_steamCommunityTradeOffersShowItemPrices_label": {
+    "message": "Show item prices"
+  },
+  "options_steamCommunityTradeOffersShowTotalTradeValues_description": {
+    "message": "Show total trade values based on suggested item prices from Skinport."
+  },
+  "options_steamCommunityTradeOffersShowTotalTradeValues_label": {
+    "message": "Show total trade values"
+  },
+  "options_steamCommunityTradeOffersVerifyTradePartner_description": {
+    "message": "Deze functie controleert of een handelspartner op Steam een officiële Skinport bot is om de echtheid te bevestigen."
+  },
+  "options_steamCommunityTradeOffersVerifyTradePartner_label": {
+    "message": "Controleer Handelsaanbiedingen"
+  },
+  "options_steamCommunity_account": {
+    "message": "Account"
+  },
+  "options_steamCommunity_tradeOffers": {
+    "message": "Trade offers"
   },
   "phishingBlocker_description_paragraph1": {
     "message": "De Skinport extensie heeft de toegang tot <strong>{{blockedHost}}</strong> geblokkeerd, omdat het mogelijk doet alsof het Skinport is en je kan misleiden tot het doen van iets gevaarlijks zoals het onthullen van je Steam informatie zoals e-mail, wachtwoord en Steam Web API sleutel."

@@ -90,11 +90,11 @@ function App() {
           <>
             <div className="space-y-8">
               <div className="space-y-4">
-                <h3>Account</h3>
+                <h3>{getI18nMessage("options_steamCommunity_account")}</h3>
                 <div className="space-y-0.5">
                   <OptionField
-                    labelKey="options_checkSteamAccountSecurity_label"
-                    descriptionKey="options_checkSteamAccountSecurity_description"
+                    labelKey="options_steamCommunityAccountCheckSecurityVulnerabilities_label"
+                    descriptionKey="options_steamCommunityAccountCheckSecurityVulnerabilities_description"
                     defaultChecked={
                       options.steamCommunityAccountCheckSecurityVulnerabilities
                     }
@@ -108,11 +108,11 @@ function App() {
                 </div>
               </div>
               <div className="space-y-4">
-                <h3>Trade offers</h3>
+                <h3>{getI18nMessage("options_steamCommunity_tradeOffers")}</h3>
                 <div className="space-y-0.5">
                   <OptionField
-                    label="Verify trade partner"
-                    descriptionKey="options_checkTradeOffer_description"
+                    labelKey="options_steamCommunityTradeOffersVerifyTradePartner_label"
+                    descriptionKey="options_steamCommunityTradeOffersVerifyTradePartner_description"
                     defaultChecked={
                       options.steamCommunityTradeOffersVerifyTradePartner
                     }
@@ -123,8 +123,8 @@ function App() {
                     }
                   />
                   <OptionField
-                    label="Show item prices"
-                    description="Show suggested item prices from Skinport on each item."
+                    labelKey="options_steamCommunityTradeOffersShowItemPrices_label"
+                    descriptionKey="options_steamCommunityTradeOffersShowItemPrices_description"
                     defaultChecked={
                       options.steamCommunityTradeOffersShowItemPrices
                     }
@@ -135,8 +135,8 @@ function App() {
                     }
                   />
                   <OptionField
-                    label="Show total trade values"
-                    description="Show total trade values based on suggested item prices from Skinport."
+                    labelKey="options_steamCommunityTradeOffersShowTotalTradeValues_label"
+                    descriptionKey="options_steamCommunityTradeOffersShowTotalTradeValues_description"
                     defaultChecked={
                       options.steamCommunityTradeOffersShowTotalTradeValues
                     }
