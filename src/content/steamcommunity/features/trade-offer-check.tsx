@@ -195,6 +195,6 @@ async function tradeOfferCheck() {
 featureManager.add(tradeOfferCheck, {
   name: "trade-offer-check",
   matchPathname: "/tradeoffer",
-  optionKey: "checkTradeOffer",
+  extensionOptionsKey: "steamCommunityAccountTradeOffersVerifyTradePartner",
   awaitDomReady: true,
 });

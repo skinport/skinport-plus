@@ -21,11 +21,15 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 
 function OptionField({
+  label,
   labelKey,
+  description,
   descriptionKey,
   ...switchProps
 }: {
-  labelKey: I18nMessageKey;
+  label?: string;
+  labelKey?: I18nMessageKey;
+  description?: string;
   descriptionKey?: I18nMessageKey;
 } & React.ComponentPropsWithoutRef<typeof Switch>) {
   const id = useId();
@@ -33,8 +37,12 @@ function OptionField({
   return (
     <div className="bg-card px-8 py-6 flex flex-row items-center gap-8">
       <div className="space-y-1 flex-1">
-        <Label htmlFor={id}>{getI18nMessage(labelKey)}</Label>
-        {descriptionKey && <p>{getI18nMessage(descriptionKey)}</p>}
+        <Label htmlFor={id}>
+          {labelKey ? getI18nMessage(labelKey) : label}
+        </Label>
+        {(descriptionKey || description) && (
+          <p>{descriptionKey ? getI18nMessage(descriptionKey) : description}</p>
+        )}
       </div>
       <div>
         <Switch {...switchProps} id={id} />
@@ -64,7 +72,7 @@ function App() {
     <>
       <header className="fixed top-0 left-0 right-0 z-50 max-w-screen-md mx-auto">
         <div className="bg-[#232728] border-b-2 border-[#1d2021] px-8 py-6 tracking-widest">
-          <div className="flex flex-row gap-4 uppercase text-white font-bold text-xl items-center">
+          <div className="flex flex-row gap-4 uppercase text-white font-bold text-xl items-baseline">
             <a
               href={getSkinportUrl()}
               target="_blank"
@@ -72,35 +80,74 @@ function App() {
             >
               <SkinportPlusLogo />
             </a>
+            {getI18nMessage("options_pageTitle")}
           </div>
         </div>
       </header>
       <div className="bg-background px-8 py-12 mt-[78px] max-w-screen-md mx-auto">
-        <h1 className="text-white text-5xl font-semibold mb-8">
-          {getI18nMessage("options_pageTitle")}
-        </h1>
+        <h1 className="text-white font-semibold mb-8">Steam Community</h1>
         {options && (
           <>
-            <h2 className="text-white font-semibold mb-5">Steam Community</h2>
-            <div className="space-y-0.5">
-              <OptionField
-                labelKey="options_checkSteamAccountSecurity_label"
-                descriptionKey="options_checkSteamAccountSecurity_description"
-                defaultChecked={options.checkSteamAccountSecurity}
-                onCheckedChange={(checked) =>
-                  optionsStorage.set({
-                    checkSteamAccountSecurity: checked,
-                  })
-                }
-              />
-              <OptionField
-                labelKey="options_checkTradeOffer_label"
-                descriptionKey="options_checkTradeOffer_description"
-                defaultChecked={options.checkTradeOffer}
-                onCheckedChange={(checked) =>
-                  optionsStorage.set({ checkTradeOffer: checked })
-                }
-              />
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <h3>Account</h3>
+                <div className="space-y-0.5">
+                  <OptionField
+                    labelKey="options_checkSteamAccountSecurity_label"
+                    descriptionKey="options_checkSteamAccountSecurity_description"
+                    defaultChecked={
+                      options.steamCommunityAccountCheckSecurityVulnerabilities
+                    }
+                    onCheckedChange={(checked) =>
+                      optionsStorage.set({
+                        steamCommunityAccountCheckSecurityVulnerabilities:
+                          checked,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+              <div className="space-y-4">
+                <h3>Trade offers</h3>
+                <div className="space-y-0.5">
+                  <OptionField
+                    label="Verify trade partner"
+                    descriptionKey="options_checkTradeOffer_description"
+                    defaultChecked={
+                      options.steamCommunityTradeOffersVerifyTradePartner
+                    }
+                    onCheckedChange={(checked) =>
+                      optionsStorage.set({
+                        steamCommunityTradeOffersVerifyTradePartner: checked,
+                      })
+                    }
+                  />
+                  <OptionField
+                    label="Show item prices"
+                    description="Show suggested item prices from Skinport on each item."
+                    defaultChecked={
+                      options.steamCommunityTradeOffersShowItemPrices
+                    }
+                    onCheckedChange={(checked) =>
+                      optionsStorage.set({
+                        steamCommunityTradeOffersShowItemPrices: checked,
+                      })
+                    }
+                  />
+                  <OptionField
+                    label="Show total trade values"
+                    description="Show total trade values based on suggested item prices from Skinport."
+                    defaultChecked={
+                      options.steamCommunityTradeOffersShowTotalTradeValues
+                    }
+                    onCheckedChange={(checked) =>
+                      optionsStorage.set({
+                        steamCommunityTradeOffersShowTotalTradeValues: checked,
+                      })
+                    }
+                  />
+                </div>
+              </div>
             </div>
           </>
         )}

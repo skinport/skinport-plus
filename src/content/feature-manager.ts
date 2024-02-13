@@ -8,12 +8,13 @@ export type Feature = (props: {
     removeFeatureAttribute: () => void;
   };
   getHasFeatureAttribute(target: HTMLElement): boolean;
+  extensionOptions: Options;
 }) => Promise<void>;
 
 interface FeatureConfig {
   name: string;
   matchPathname?: string | RegExp;
-  optionKey?: keyof Options;
+  extensionOptionsKey?: keyof Options;
   awaitDomReady?: boolean;
 }
 
@@ -23,12 +24,12 @@ function add(feature: Feature, featureConfig: FeatureConfig) {
   features.push([feature, featureConfig]);
 }
 
-let options: Options | undefined;
+let extensionOptions: Options | undefined;
 
 async function run() {
   for (const [
     feature,
-    { name: featureName, matchPathname, optionKey, awaitDomReady },
+    { name: featureName, matchPathname, extensionOptionsKey, awaitDomReady },
   ] of features) {
     if (
       (matchPathname instanceof RegExp &&
@@ -39,16 +40,17 @@ async function run() {
       continue;
     }
 
-    if (optionKey) {
-      if (options === undefined) {
-        options = await optionsStorage.getAll();
-      } else if (options instanceof Promise) {
-        await options;
-      }
+    if (extensionOptions === undefined) {
+      extensionOptions = await optionsStorage.getAll();
+    } else if (extensionOptions instanceof Promise) {
+      await extensionOptions;
+    }
 
-      if (options[optionKey] === false) {
-        continue;
-      }
+    if (
+      extensionOptionsKey &&
+      extensionOptions[extensionOptionsKey] === false
+    ) {
+      continue;
     }
 
     try {
@@ -72,6 +74,7 @@ async function run() {
               target.removeAttribute(featureAttribute),
           };
         },
+        extensionOptions,
       });
 
       if (process.env.NODE_ENV !== "production") {
