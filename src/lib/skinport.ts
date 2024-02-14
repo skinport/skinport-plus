@@ -77,7 +77,7 @@ export function useSkinportApi<ResponseBody>(
 }
 
 type SkinportItemPricesResponse = {
-  items: Record<string, [number | null, number | null]>; // [lowestPrice, suggestedPrice]
+  items: Record<string, [number | null, number | null, string | null]>; // [lowestPrice, suggestedPrice, exteriorColor]
   currency: string;
 };
 
@@ -179,7 +179,7 @@ export function selectSkinportItemPrice(
 ):
   | { error: unknown; isError: true; price: undefined; currency: undefined }
   | {
-      price: [number | null, number | null];
+      price: [number | null, number | null, string | null];
       currency: string;
       error: undefined;
       isError: false;

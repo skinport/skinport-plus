@@ -100,6 +100,11 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
 
         const skinportItemPrices = useSkinportItemPrices();
 
+        const skinportItemPrice = selectSkinportItemPrice(
+          skinportItemPrices,
+          tradeOfferItem?.name,
+        );
+
         useEffect(() => {
           const getTradeOfferItem = async () => {
             setTradeOfferItem(
@@ -110,13 +115,24 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
           getTradeOfferItem();
         }, []);
 
+        useEffect(() => {
+          if (skinportItemPrice?.price?.[2]) {
+            if (
+              tradeOfferItemElement.style.borderColor === "rgb(207, 106, 50)"
+            ) {
+              tradeOfferItemElement.style.borderColor = "";
+              tradeOfferItemElement.style.borderImage = `linear-gradient(90deg, rgb(207, 106, 50) 0%, ${skinportItemPrice.price[2]} 100%) 1`;
+              tradeOfferItemElement.style.borderWidth = "1px";
+              tradeOfferItemElement.style.borderStyle = "solid";
+            } else {
+              tradeOfferItemElement.style.borderColor =
+                skinportItemPrice.price[2];
+            }
+          }
+        }, [skinportItemPrice?.price]);
+
         const render = (children: ReactNode) => (
           <div className="absolute left-1.5 bottom-0.5 z-10">{children}</div>
-        );
-
-        const skinportItemPrice = selectSkinportItemPrice(
-          skinportItemPrices,
-          tradeOfferItem?.name,
         );
 
         return render(
