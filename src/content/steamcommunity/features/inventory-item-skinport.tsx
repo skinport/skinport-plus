@@ -2,7 +2,8 @@ import { ItemSkinportActions } from "@/components/item-skinport-actions";
 import { ItemSkinportPrice } from "@/components/item-skinport-price";
 import { Feature, featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
-import { useSkinportItemPrices } from "@/lib/skinport";
+import { getI18nMessage } from "@/lib/i18n";
+import { selectSkinportItemPrice, useSkinportItemPrices } from "@/lib/skinport";
 import { getHasItemExterior, getItemFromSteamMarketUrl } from "@/lib/steam";
 import elementReady from "element-ready";
 import { $ } from "select-dom";
@@ -66,13 +67,24 @@ const inventoryItemSkinport: Feature = async ({
       createWidgetElement(({ shadowRoot }) => {
         const skinportItemPrices = useSkinportItemPrices(item.name);
 
+        const skinportItemPrice = selectSkinportItemPrice(
+          skinportItemPrices,
+          item.name,
+        );
+
         return (
           <div className="space-y-1 mb-4">
-            <ItemSkinportPrice
-              price={skinportItemPrices.data?.items[item.name]?.[1]}
-              priceTitle="suggested_price"
-              currency={skinportItemPrices.data?.currency}
-            />
+            {skinportItemPrices.error ? (
+              <div className="text-red-light">
+                {getI18nMessage("common_error")}
+              </div>
+            ) : (
+              <ItemSkinportPrice
+                price={skinportItemPrice?.price?.[1]}
+                priceTitle="suggested_price"
+                currency={skinportItemPrice?.currency}
+              />
+            )}
             <ItemSkinportActions
               item={item}
               inspectIngameLink={inspectIngameLink}

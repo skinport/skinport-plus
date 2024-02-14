@@ -188,60 +188,15 @@ export function selectSkinportItemPrice(
 }
 
 export function useSkinportItemPrices(
-  items: string | string[], // Item market hash names
+  itemNames: string | string[], // Item market hash names
   fallbackCurrency = "USD",
   requestItemsLimit = 50, // If items is more than limit, multiple request are made
 ) {
-  return useSWR(
-    ["v1/extension/prices", items, fallbackCurrency],
-    async (args) => {
-      const currency = (await getSteamUserWalletCurrency()) || fallbackCurrency;
-
-      type SkinportItemPricesResponse = {
-        items: Record<string, [number | null, number | null]>; // [lowestPrice, suggestedPrice]
-        currency: string;
-      };
-
-      const getSkinportItemPrices = (requestItems: string[]) =>
-        skinportApi<SkinportItemPricesResponse>(args[0], {
-          searchParams: [
-            ...requestItems.map((item) => ["items[]", item]),
-            ["currency", currency],
-          ],
-        });
-
-      if (typeof items === "string") {
-        return getSkinportItemPrices([items]);
-      }
-
-      if (items.length > requestItemsLimit) {
-        const skinportItemPricesRequests: Promise<SkinportItemPricesResponse>[] =
-          [];
-
-        for (let i = 0; i < items.length; i += requestItemsLimit) {
-          skinportItemPricesRequests.push(
-            getSkinportItemPrices(items.slice(i, i + requestItemsLimit)),
-          );
-        }
-
-        const skinportItemPrices: SkinportItemPricesResponse = {
-          items: {},
-          currency: fallbackCurrency,
-        };
-
-        for (const { items, currency } of await Promise.all(
-          skinportItemPricesRequests,
-        )) {
-          skinportItemPrices.items = { ...skinportItemPrices.items, ...items };
-          skinportItemPrices.currency = currency;
-        }
-
-        return skinportItemPrices;
-      }
-
-      return getSkinportItemPrices(items);
-    },
-  );
+  return createUseSkinportItemPrices(
+    itemNames,
+    fallbackCurrency,
+    requestItemsLimit,
+  )();
 }
 
 export async function getSkinportSteamBot(steamId: string) {
