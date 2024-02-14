@@ -2,7 +2,10 @@ import { ItemSkinportPrice } from "@/components/item-skinport-price";
 import { SkinportLogo } from "@/components/skinport-logo";
 import { Feature, featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
-import { useSkinportItemPrices } from "@/lib/skinport";
+import {
+  createUseSkinportItemPrices,
+  selectSkinportItemPrice,
+} from "@/lib/skinport";
 import { getItemFromSteamMarketUrl } from "@/lib/steam";
 import { getPercentageDecrease, parseCurrency } from "@/lib/utils";
 import { $, $$ } from "select-dom";
@@ -69,13 +72,16 @@ const marketItemsSkinportPrice: Feature = async ({
       marketListings.push({ item, element: marketListingElement });
     }
 
-    const skinportItemPricesItems: string[] = [];
+    const skinportItemNames: string[] = [];
 
     for (const { item } of marketListings) {
       if (item) {
-        skinportItemPricesItems.push(item.name);
+        skinportItemNames.push(item.name);
       }
     }
+
+    const useSkinportItemPrices =
+      createUseSkinportItemPrices(skinportItemNames);
 
     for (const marketListing of marketListings) {
       const marketListingColumnsElement = $(
@@ -88,18 +94,14 @@ const marketItemsSkinportPrice: Feature = async ({
       }
 
       const [skinportStartingAtElement] = createWidgetElement(() => {
-        const skinportItemPrices = useSkinportItemPrices(
-          skinportItemPricesItems,
+        const skinportItemPrices = useSkinportItemPrices();
+
+        const skinportItemPrice = selectSkinportItemPrice(
+          skinportItemPrices,
+          marketListing.item?.name,
         );
 
-        const skinportItemPrice =
-          marketListing.item &&
-          skinportItemPrices.data?.items[marketListing.item.name][0];
-
-        if (
-          !marketListing.item ||
-          (!skinportItemPrices.isLoading && !skinportItemPrice)
-        ) {
+        if (!marketListing.item) {
           return (
             <div className="flex items-center justify-center h-full">–</div>
           );
@@ -115,20 +117,24 @@ const marketItemsSkinportPrice: Feature = async ({
           : undefined;
 
         const skinportItemPricePercentageDecrease =
-          marketListingItemPrice && skinportItemPrice
-            ? getPercentageDecrease(marketListingItemPrice, skinportItemPrice)
+          marketListingItemPrice && skinportItemPrice?.price?.[0]
+            ? getPercentageDecrease(
+                marketListingItemPrice,
+                skinportItemPrice.price[0],
+              )
             : undefined;
 
         return (
           <div className="h-full flex flex-col justify-center">
             <ItemSkinportPrice
-              price={skinportItemPrice}
-              currency={skinportItemPrices.data?.currency}
+              price={skinportItemPrice?.price?.[0]}
+              currency={skinportItemPrice?.currency}
               discount={skinportItemPricePercentageDecrease}
               size="sm"
               linkItem={marketListing.item}
               className="justify-center"
               startingAtClassName="text-center"
+              loadingFailed={skinportItemPrice?.isError}
             />
           </div>
         );

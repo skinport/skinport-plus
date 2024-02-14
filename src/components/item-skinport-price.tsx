@@ -4,6 +4,7 @@ import { getSkinportItemUrl } from "@/lib/skinport";
 import { Item } from "@/lib/steam";
 import { cn } from "@/lib/utils";
 import { VariantProps, cva } from "class-variance-authority";
+import { AlertCircleIcon } from "lucide-react";
 import { ReactNode } from "react";
 import { Discount } from "./discount";
 import { InterpolateMessage } from "./interpolate-message";
@@ -56,6 +57,19 @@ const skeletonVariants = cva(undefined, {
   },
 });
 
+const alertIconVariants = cva("text-red-light", {
+  variants: {
+    size: {
+      xs: "w-3 h-3 my-0.5",
+      sm: "w-3.5 h-3.5 my-[0.1875rem]",
+      base: "w-[1.875rem] h-[1.875rem] my-[0.1875rem]",
+    },
+  },
+  defaultVariants: {
+    size: "base",
+  },
+});
+
 /**
  * Shows a skeleton if `price` and `currency` are `undefined` and loading.
  */
@@ -68,6 +82,7 @@ export function ItemSkinportPrice({
   startingAtClassName,
   linkItem,
   priceTitle = "starting_at",
+  loadingFailed,
 }: {
   price?: number | null;
   currency?: string;
@@ -76,6 +91,7 @@ export function ItemSkinportPrice({
   startingAtClassName?: string;
   linkItem?: Item;
   priceTitle?: "starting_at" | "suggested_price" | "none";
+  loadingFailed?: boolean;
 } & VariantProps<typeof priceVariants>) {
   const linkPriceToItem = (children: ReactNode) =>
     linkItem ? (
@@ -108,8 +124,26 @@ export function ItemSkinportPrice({
     );
 
   const priceElement = (
-    <div className={cn("flex gap-2 items-center", className)}>
-      {price !== undefined && currency ? (
+    <div
+      className={cn(
+        "flex items-center",
+        {
+          "gap-1": size === "xs" || size === "sm",
+          "gap-1.5": !size,
+        },
+        className,
+      )}
+    >
+      {loadingFailed ? (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <AlertCircleIcon className={alertIconVariants({ size })} />
+          </TooltipTrigger>
+          <TooltipContent>
+            {getI18nMessage("common_failedLoadingItemPrices")}
+          </TooltipContent>
+        </Tooltip>
+      ) : price !== undefined && currency ? (
         linkPriceToItem(
           <>
             <div

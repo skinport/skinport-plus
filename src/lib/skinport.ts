@@ -176,15 +176,32 @@ export function createUseSkinportItemPrices(
 export function selectSkinportItemPrice(
   skinportItemPrices: SWRResponse<SkinportItemPricesResponse>,
   itemName?: string,
-) {
-  if (!skinportItemPrices.data || !itemName) {
-    return;
+):
+  | { error: unknown; isError: true; price: undefined; currency: undefined }
+  | {
+      price: [number | null, number | null];
+      currency: string;
+      error: undefined;
+      isError: false;
+    }
+  | undefined {
+  if (skinportItemPrices.error) {
+    return {
+      error: skinportItemPrices.error,
+      isError: true,
+      price: undefined,
+      currency: undefined,
+    };
   }
 
-  return {
-    price: skinportItemPrices.data.items[itemName],
-    currency: skinportItemPrices.data.currency,
-  };
+  if (itemName && skinportItemPrices.data?.items[itemName]) {
+    return {
+      price: skinportItemPrices.data.items[itemName],
+      currency: skinportItemPrices.data.currency,
+      error: undefined,
+      isError: false,
+    };
+  }
 }
 
 export function useSkinportItemPrices(

@@ -2,7 +2,7 @@ import { ItemSkinportActions } from "@/components/item-skinport-actions";
 import { ItemSkinportPrice } from "@/components/item-skinport-price";
 import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
-import { useSkinportItemPrices } from "@/lib/skinport";
+import { selectSkinportItemPrice, useSkinportItemPrices } from "@/lib/skinport";
 import {
   getHasItemExterior,
   getItemFromSteamMarketUrl,
@@ -59,24 +59,31 @@ async function marketItemSkinportPrice() {
       })();
     }, []);
 
-    const itemSkinportPrice = skinportItemPrices.data?.items[item.name];
+    const skinportItemPrice = selectSkinportItemPrice(
+      skinportItemPrices,
+      item.name,
+    );
 
     const marketStartingAtPrice =
       marketForSalePriceElementText &&
       parseCurrency(marketForSalePriceElementText);
 
     const itemSkinportPercentageDecrease =
-      marketStartingAtPrice && itemSkinportPrice?.[0]
-        ? getPercentageDecrease(marketStartingAtPrice, itemSkinportPrice[0])
+      marketStartingAtPrice && skinportItemPrice?.price?.[0]
+        ? getPercentageDecrease(
+            marketStartingAtPrice,
+            skinportItemPrice.price[0],
+          )
         : undefined;
 
     return (
       <div className="space-y-1 mb-4">
         <ItemSkinportPrice
-          price={itemSkinportPrice?.[0]}
-          currency={skinportItemPrices.data?.currency}
+          price={skinportItemPrice?.price?.[0]}
+          currency={skinportItemPrice?.currency}
           discount={itemSkinportPercentageDecrease}
           priceTitle="starting_at"
+          loadingFailed={skinportItemPrice?.isError}
         />
         <ItemSkinportActions
           item={item}

@@ -2,6 +2,11 @@ import { InterpolateMessage } from "@/components/interpolate-message";
 import { ItemSkinportPrice } from "@/components/item-skinport-price";
 import { SkinportPlusLogo } from "@/components/skinport-plus-logo";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Feature, featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { formatPrice } from "@/lib/format";
@@ -13,7 +18,7 @@ import {
 import { Item, parseSteamItem } from "@/lib/steam";
 import { cn } from "@/lib/utils";
 import ky from "ky";
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
+import { AlertCircleIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
 import { $, $$ } from "select-dom";
 import { StoreApi, UseBoundStore, create } from "zustand";
@@ -109,10 +114,6 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
           <div className="absolute left-1.5 bottom-0.5 z-10">{children}</div>
         );
 
-        if (skinportItemPrices.error) {
-          return;
-        }
-
         const skinportItemPrice = selectSkinportItemPrice(
           skinportItemPrices,
           tradeOfferItem?.name,
@@ -120,11 +121,12 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
 
         return render(
           <ItemSkinportPrice
-            price={skinportItemPrice?.price[1]}
+            price={skinportItemPrice?.price?.[1]}
             currency={skinportItemPrice?.currency}
             size="xs"
             priceTitle="none"
             linkItem={tradeOfferItem}
+            loadingFailed={skinportItemPrice?.isError}
           />,
         );
       });
@@ -232,7 +234,13 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
         const render = (children: ReactNode) => (
           <div className="flex justify-end">
             <div
-              className="flex gap-1 items-center group relative z-10 bg-background px-4 py-3 rounded-md"
+              className={cn(
+                "flex items-center group relative z-10 bg-background px-4 py-3 rounded-md",
+                {
+                  "gap-1": !skinportItemPrices.error,
+                  "gap-1.5": skinportItemPrices.error,
+                },
+              )}
               onMouseEnter={showValueDifferencePercentage.toggle}
               onMouseLeave={showValueDifferencePercentage.toggle}
             >
@@ -247,9 +255,14 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
 
         if (skinportItemPrices.error) {
           return render(
-            <div className="text-red-light">
-              {getI18nMessage("common_error")}
-            </div>,
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <AlertCircleIcon className="text-red-light" size={16} />
+              </TooltipTrigger>
+              <TooltipContent>
+                {getI18nMessage("common_failedLoadingItemPrices")}
+              </TooltipContent>
+            </Tooltip>,
           );
         }
 
@@ -267,7 +280,7 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
                 tradeOfferItem.name,
               );
 
-              if (skinportItemPrice?.price[1]) {
+              if (skinportItemPrice?.price?.[1]) {
                 itemsValue += skinportItemPrice.price[1];
               }
             }
