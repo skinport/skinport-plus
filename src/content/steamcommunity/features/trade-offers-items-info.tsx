@@ -179,24 +179,26 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
       ".tradeoffer .tradeoffer_items",
     )) {
       const tradeOfferPartyParentElement =
-        tradeOfferCurrentPartyElement.parentElement;
+        tradeOfferCurrentPartyElement.parentElement || undefined;
 
-      const tradeOfferOtherPartyElement =
-        tradeOfferPartyParentElement?.children[
-          tradeOfferCurrentPartyElement.classList.contains("primary") ? 3 : 1
-        ];
+      const tradeOfferOtherPartyElement = $(
+        `.tradeoffer_items${
+          tradeOfferCurrentPartyElement.classList.contains("primary")
+            ? ".secondary"
+            : ".primary"
+        }`,
+        tradeOfferPartyParentElement,
+      );
 
       if (!tradeOfferPartyParentElement || !tradeOfferOtherPartyElement) {
-        return;
+        continue;
       }
 
       const useShowTradeOfferValuePercentage =
-        useShowTradeOffersValuePercentage.get(
-          tradeOfferCurrentPartyElement.parentElement,
-        );
+        useShowTradeOffersValuePercentage.get(tradeOfferPartyParentElement);
 
       if (!useShowTradeOfferValuePercentage) {
-        return;
+        continue;
       }
 
       const [skinportItemsValueElement] = createWidgetElement(() => {
