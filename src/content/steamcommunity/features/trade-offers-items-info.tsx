@@ -117,33 +117,32 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
 
         useEffect(() => {
           if (skinportItemPrice?.price?.[2]) {
-            if (
-              tradeOfferItemElement.style.borderColor === "rgb(207, 106, 50)"
-            ) {
-              tradeOfferItemElement.style.borderColor = "";
-              tradeOfferItemElement.style.borderImage = `linear-gradient(90deg, rgb(207, 106, 50) 0%, ${skinportItemPrice.price[2]} 100%) 1`;
-              tradeOfferItemElement.style.borderWidth = "1px";
-              tradeOfferItemElement.style.borderStyle = "solid";
-            } else {
-              tradeOfferItemElement.style.borderColor =
-                skinportItemPrice.price[2];
-            }
+            tradeOfferItemElement.style.borderColor = "#1d1d1d";
+            tradeOfferItemElement.style.borderTopColor =
+              skinportItemPrice.price[2];
+            tradeOfferItemElement.style.borderTopWidth = "2px";
           }
         }, [skinportItemPrice?.price]);
 
-        const render = (children: ReactNode) => (
-          <div className="absolute left-1.5 bottom-0.5 z-10">{children}</div>
-        );
-
-        return render(
-          <ItemSkinportPrice
-            price={skinportItemPrice?.price?.[1]}
-            currency={skinportItemPrice?.currency}
-            size="xs"
-            priceTitle="none"
-            linkItem={tradeOfferItem}
-            loadingFailed={skinportItemPrice?.isError}
-          />,
+        return (
+          <>
+            <div className="absolute left-1.5 bottom-0.5 z-10">
+              {tradeOfferItem?.isStatTrak && (
+                <div className="text-2xs text-stattrak font-bold">ST</div>
+              )}
+              {tradeOfferItem?.isSouvenir && (
+                <div className="text-2xs text-souvenir font-bold">S</div>
+              )}
+              <ItemSkinportPrice
+                price={skinportItemPrice?.price?.[1]}
+                currency={skinportItemPrice?.currency}
+                size="xs"
+                priceTitle="none"
+                linkItem={tradeOfferItem}
+                loadingFailed={skinportItemPrice?.isError}
+              />
+            </div>
+          </>
         );
       });
 
@@ -414,6 +413,6 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
 
 featureManager.add(tradeOffersItemsInfo, {
   name: "trade-offers-items-info",
-  matchPathname: /\/tradeoffers\/$/,
+  matchPathname: /\/tradeoffers\/(sent\/)?$/,
   awaitDomReady: true,
 });

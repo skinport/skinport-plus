@@ -19,10 +19,14 @@ export function getIsSupportedSteamAppId(appId: string) {
 
 export function parseSteamItem(name: string, appId: string) {
   if (Object.hasOwn(steamAppIdNames, appId)) {
-    return {
+    const item: Item = {
       name,
       appId: appId as keyof typeof steamAppIdNames,
+      isStatTrak: getIsItemStatTrak(name),
+      isSouvenir: getIsItemSouvenir(name),
     };
+
+    return item;
   }
 
   return null;
@@ -46,7 +50,28 @@ export function getHasItemExterior(itemName: string) {
   );
 }
 
-export type Item = { name: string; appId: keyof typeof steamAppIdNames };
+export function getIsItemStatTrak(itemName?: string) {
+  if (itemName) {
+    return /^StatTrak™/.test(decodeURIComponent(itemName));
+  }
+
+  return false;
+}
+
+export function getIsItemSouvenir(itemName?: string) {
+  if (itemName) {
+    return /^Souvenir/.test(decodeURIComponent(itemName));
+  }
+
+  return false;
+}
+
+export type Item = {
+  name: string;
+  appId: keyof typeof steamAppIdNames;
+  isStatTrak: boolean;
+  isSouvenir: boolean;
+};
 
 export function getItemFromSteamMarketUrl(
   url: string = window.location.pathname,
@@ -62,6 +87,8 @@ export function getItemFromSteamMarketUrl(
   return {
     name: decodeURIComponent(name),
     appId,
+    isStatTrak: getIsItemStatTrak(name),
+    isSouvenir: getIsItemSouvenir(name),
   } as Item;
 }
 

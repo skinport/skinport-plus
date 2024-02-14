@@ -43,6 +43,12 @@ export const tailwindBaseConfig: Config = {
           DEFAULT: "#323738",
           foreground: "#9fa1a2",
         },
+        stattrak: {
+          DEFAULT: "#CF6A32",
+        },
+        souvenir: {
+          DEFAULT: "#ffd700",
+        },
       },
       fontSize: {
         "2xs": [
