@@ -96,6 +96,7 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
   if (extensionOptions.steamCommunityTradeOffersShowItemPrices) {
     for (const tradeOfferItemElement of allTradeOfferItemElements) {
       tradeOfferItemElement.style.borderColor = "#1d1d1d";
+      tradeOfferItemElement.style.borderTopWidth = "2px";
 
       const [itemSkinportPriceElement] = createWidgetElement(() => {
         const [tradeOfferItem, setTradeOfferItem] = useState<Item>();
@@ -121,7 +122,6 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
           if (skinportItemPrice?.price?.[2]) {
             tradeOfferItemElement.style.borderTopColor =
               skinportItemPrice.price[2];
-            tradeOfferItemElement.style.borderTopWidth = "2px";
           }
         }, [skinportItemPrice?.price]);
 
