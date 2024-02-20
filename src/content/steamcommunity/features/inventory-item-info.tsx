@@ -8,7 +8,10 @@ import elementReady from "element-ready";
 import { $ } from "select-dom";
 
 featureManager.add(
-  async ({ getHasFeatureAttribute, setFeatureAttribute }) => {
+  async ({
+    createNotMatchingFeatureAttributeSelector,
+    setFeatureAttribute,
+  }) => {
     let cleanupPreviousItemFns: (() => void)[] = [];
 
     const cleanupPreviousItem = () => {
@@ -23,11 +26,13 @@ featureManager.add(
 
     const observer = new MutationObserver(async () => {
       const itemInfoElement = $(
-        ".inventory_page_right .inventory_iteminfo[style*='z-index: 1']",
+        createNotMatchingFeatureAttributeSelector(
+          ".inventory_page_right .inventory_iteminfo[style*='z-index: 1']",
+        ),
         inventoryContentElement,
       );
 
-      if (!itemInfoElement || getHasFeatureAttribute(itemInfoElement)) {
+      if (!itemInfoElement) {
         return;
       }
 

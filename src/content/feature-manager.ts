@@ -3,7 +3,7 @@ import domLoaded from "dom-loaded";
 
 export type Feature = (props: {
   featureAttribute: string;
-  getNotMatchingFeatureAttributeSelector: (selector: string) => string;
+  createNotMatchingFeatureAttributeSelector: (selector: string) => string;
   setFeatureAttribute(target: HTMLElement): {
     removeFeatureAttribute: () => void;
   };
@@ -62,7 +62,7 @@ async function run() {
 
       feature({
         featureAttribute,
-        getNotMatchingFeatureAttributeSelector: (selector) =>
+        createNotMatchingFeatureAttributeSelector: (selector) =>
           `${selector}:not([${featureAttribute}])`,
         getHasFeatureAttribute: (target) =>
           target.hasAttribute(featureAttribute),

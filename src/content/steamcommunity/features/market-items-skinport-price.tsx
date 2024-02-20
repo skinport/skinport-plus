@@ -11,12 +11,12 @@ import { getPercentageDecrease, parseCurrency } from "@/lib/utils";
 import { $, $$ } from "select-dom";
 
 const marketItemsSkinportPrice: Feature = async ({
-  getNotMatchingFeatureAttributeSelector,
+  createNotMatchingFeatureAttributeSelector,
   setFeatureAttribute,
 }) => {
   const addWidgets = async (contextSelector: string) => {
     const marketTableHeaderElement = $(
-      getNotMatchingFeatureAttributeSelector(
+      createNotMatchingFeatureAttributeSelector(
         `${contextSelector} .market_listing_table_header .market_listing_price_listings_block`,
       ),
     );
@@ -43,7 +43,7 @@ const marketItemsSkinportPrice: Feature = async ({
     }
 
     const marketListingElements = $$(
-      getNotMatchingFeatureAttributeSelector(
+      createNotMatchingFeatureAttributeSelector(
         `${contextSelector} a[href*='/market/listings/']`,
       ),
     );
