@@ -106,6 +106,10 @@ export function createUseSkinportItemPrices(
               : maybePromiseRequestItemNames;
         }
 
+        if (resolvedRequestItems.length === 0) {
+          return;
+        }
+
         const currencySearchParam = [
           "currency",
           (await steamUserWalletCurrency) || fallbackCurrency,
@@ -174,7 +178,7 @@ export function createUseSkinportItemPrices(
 }
 
 export function selectSkinportItemPrice(
-  skinportItemPrices: SWRResponse<SkinportItemPricesResponse>,
+  skinportItemPrices: SWRResponse<SkinportItemPricesResponse | undefined>,
   itemName?: string,
 ):
   | { error: unknown; isError: true; price: undefined; currency: undefined }
@@ -185,7 +189,7 @@ export function selectSkinportItemPrice(
       isError: false;
     }
   | undefined {
-  if (skinportItemPrices.error) {
+  if (skinportItemPrices?.error) {
     return {
       error: skinportItemPrices.error,
       isError: true,
@@ -194,7 +198,7 @@ export function selectSkinportItemPrice(
     };
   }
 
-  if (itemName && skinportItemPrices.data?.items[itemName]) {
+  if (itemName && skinportItemPrices?.data?.items[itemName]) {
     return {
       price: skinportItemPrices.data.items[itemName],
       currency: skinportItemPrices.data.currency,

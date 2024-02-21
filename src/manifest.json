@@ -46,7 +46,8 @@
         "favicon.ico",
         "phishing-blocker/index.html",
         "phishing-blocker/index.css",
-        "phishing-blocker/index.js"
+        "phishing-blocker/index.js",
+        "content/steamcommunity/bridge/script.js"
       ],
       "use_dynamic_url": true,
       "matches": ["*://*/*"]

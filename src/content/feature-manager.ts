@@ -1,5 +1,6 @@
 import { type Options, optionsStorage } from "@/lib/options-storage";
 import domLoaded from "dom-loaded";
+import browser from "webextension-polyfill";
 
 export type Feature = (props: {
   featureAttribute: string;
@@ -16,6 +17,7 @@ interface FeatureConfig {
   matchPathname?: string | RegExp;
   extensionOptionsKey?: keyof Options;
   awaitDomReady?: boolean;
+  withBridge?: boolean;
 }
 
 const features: [Feature, FeatureConfig][] = [];
@@ -25,12 +27,40 @@ function add(feature: Feature, featureConfig: FeatureConfig) {
 }
 
 let extensionOptions: Options | undefined;
+let bridgeLoaded = false;
 
 async function run() {
   for (const [
     feature,
-    { name: featureName, matchPathname, extensionOptionsKey, awaitDomReady },
+    {
+      name: featureName,
+      matchPathname,
+      extensionOptionsKey,
+      awaitDomReady,
+      withBridge,
+    },
   ] of features) {
+    if (withBridge && bridgeLoaded === false) {
+      const scriptElement = document.createElement("script");
+
+      scriptElement.src = browser.runtime.getURL(
+        "content/steamcommunity/bridge/script.js",
+      );
+
+      await new Promise<void>((resolve) => {
+        const listener = () => {
+          scriptElement.removeEventListener("load", listener);
+          resolve();
+        };
+
+        scriptElement.addEventListener("load", listener);
+
+        document.head.append(scriptElement);
+      });
+
+      bridgeLoaded = true;
+    }
+
     if (
       (matchPathname instanceof RegExp &&
         !matchPathname.test(window.location.pathname)) ||

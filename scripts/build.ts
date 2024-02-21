@@ -128,6 +128,20 @@ async function copyStaticFiles(srcFiles: string[]) {
   }
 }
 
+const esbuildLogPlugin: esbuild.Plugin = {
+  name: "log",
+  setup: (build) => {
+    build.onEnd((result) => {
+      if (result.metafile?.outputs) {
+        for (const outputFile of Object.keys(result.metafile.outputs)) {
+          // biome-ignore lint/suspicious/noConsoleLog:
+          console.log("[info] compiled", outputFile.replace("dist/", ""));
+        }
+      }
+    });
+  },
+};
+
 async function buildExtensionContext(
   context: string,
   {
@@ -191,19 +205,27 @@ async function buildExtensionContext(
     );
   }
 
-  esbuildOptions.plugins.push({
-    name: "log",
-    setup: (build) => {
-      build.onEnd((result) => {
-        if (result.metafile?.outputs) {
-          for (const outputFile of Object.keys(result.metafile.outputs)) {
-            // biome-ignore lint/suspicious/noConsoleLog:
-            console.log("[info] compiled", outputFile.replace("dist/", ""));
-          }
-        }
-      });
-    },
-  });
+  esbuildOptions.plugins.push(esbuildLogPlugin);
+
+  if (IS_DEV) {
+    const esbuildContext = await esbuild.context(esbuildOptions);
+
+    return esbuildContext.watch();
+  }
+
+  return esbuild.build(esbuildOptions);
+}
+
+async function buildScript(src: string) {
+  const esbuildOptions: esbuild.BuildOptions & { plugins: esbuild.Plugin[] } = {
+    entryPoints: [getSrcPath(src)],
+    outfile: getDistPath(src.replace(".ts", ".js")),
+    bundle: true,
+    minify: !IS_DEV,
+    metafile: true,
+    target: TARGET_BROWSER.replace(" ", ""),
+    plugins: [esbuildLogPlugin],
+  };
 
   if (IS_DEV) {
     const esbuildContext = await esbuild.context(esbuildOptions);
@@ -250,6 +272,7 @@ async function buildExtensionContext(
         indexSuffix: "tsx",
         tailwind: true,
       }),
+      buildScript("content/steamcommunity/bridge/script.ts"),
     ]);
   } catch (error) {
     console.error(error);

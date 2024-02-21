@@ -1,22 +1,13 @@
 import { Feature, featureManager } from "@/content/feature-manager";
+import { InventoryItemInfo } from "@/content/steamcommunity/components/inventory-item-info";
 import { createWidgetElement } from "@/content/widget";
 import {
   createUseSkinportItemPrices,
   selectSkinportItemPrice,
 } from "@/lib/skinport";
-import {
-  Item,
-  getSteamUserInventory,
-  parseSteamItem,
-  parseSupportedSteamAppId,
-} from "@/lib/steam";
-import { wait } from "@/lib/utils";
+import { parseSteamItem, parseSupportedSteamAppId } from "@/lib/steam";
 import { $, $$ } from "select-dom";
-import { InventoryItemInfo } from "../components/inventory-item-info";
-
-function getAssetIdFromIdAttribute(element: HTMLElement) {
-  return element?.getAttribute("id")?.replace(/^\d+_\d+_/, "");
-}
+import { bridge } from "../bridge";
 
 const inventoryItemsInfo: Feature = async ({
   createNotMatchingFeatureAttributeSelector,
@@ -43,115 +34,74 @@ const inventoryItemsInfo: Feature = async ({
     setFeatureAttribute(inventoryElement);
 
     const inventoryAppId = parseSupportedSteamAppId(
-      inventoryElement
-        .getAttribute("id")
-        ?.replace(/^inventory_\d+_(\d+)_\d$/, "$1"),
+      inventoryElement.getAttribute("id")?.split("_")[2],
     );
 
     if (!inventoryAppId) {
       return;
     }
 
-    await wait(2000);
+    const inventory = await bridge.inventoryLoadCompleteInventory.request();
 
-    const userInventory = await getSteamUserInventory({
-      appId: inventoryAppId,
-    });
+    const skinportItemNames = new Set<string>();
 
-    const userInventoryAssetsByAssetId: Record<
-      string,
-      (typeof userInventory.assets)[0]
-    > = {};
-
-    for (const userInventoryAsset of userInventory.assets) {
-      userInventoryAssetsByAssetId[userInventoryAsset.assetid] =
-        userInventoryAsset;
+    for (const item of Object.values(inventory.itemsByAssetId)) {
+      if (item.marketable === 1) {
+        skinportItemNames.add(item.market_hash_name);
+      }
     }
 
-    const userInventoryDescriptionsByClassId: Record<
-      string,
-      (typeof userInventory.descriptions)[0]
-    > = {};
+    const useSkinportItemPrices = createUseSkinportItemPrices(
+      Array.from(skinportItemNames),
+    );
 
-    for (const userInventoryDescription of userInventory.descriptions) {
-      userInventoryDescriptionsByClassId[userInventoryDescription.classid] =
-        userInventoryDescription;
-    }
+    const inventoryItemElements = $$(".itemHolder .item", inventoryElement);
 
-    const addItemsInfo = () => {
-      const inventoryItemElements = $$(
-        createNotMatchingFeatureAttributeSelector(
-          ".itemHolder .item:not(.pendingItem)",
-        ),
-        inventoryElement,
+    for (const inventoryItemElement of inventoryItemElements) {
+      const inventoryItemAssetId = inventoryItemElement
+        .getAttribute("id")
+        ?.split("_")[2];
+
+      if (!inventoryItemAssetId) {
+        continue;
+      }
+
+      const inventoryItemDescription =
+        inventory.itemsByAssetId[inventoryItemAssetId];
+
+      if (!inventoryItemDescription) {
+        continue;
+      }
+
+      const inventoryItem = parseSteamItem(
+        inventoryItemDescription.market_hash_name,
+        String(inventoryItemDescription.appid),
+        inventoryItemDescription.marketable === 1,
       );
 
-      const inventoryItems = new Map<HTMLElement, Item>();
+      if (!inventoryItem) {
+        continue;
+      }
 
-      for (const inventoryItemElement of inventoryItemElements) {
-        setFeatureAttribute(inventoryItemElement);
+      const [itemInfoElement] = createWidgetElement(() => {
+        const skinportItemPrices = useSkinportItemPrices();
 
-        const itemAssetId = getAssetIdFromIdAttribute(inventoryItemElement);
-
-        if (!itemAssetId) {
-          continue;
-        }
-
-        const itemDescription =
-          userInventoryDescriptionsByClassId[
-            userInventoryAssetsByAssetId[itemAssetId].classid
-          ];
-
-        if (!itemDescription) {
-          continue;
-        }
-
-        const item = parseSteamItem(
-          itemDescription.market_hash_name,
-          String(itemDescription.appid),
-          itemDescription.marketable === 1,
+        const skinportItemPrice = selectSkinportItemPrice(
+          skinportItemPrices,
+          inventoryItem?.name,
         );
 
-        if (item) {
-          inventoryItems.set(inventoryItemElement, item);
-        }
-      }
+        return (
+          <InventoryItemInfo
+            inventoryItem={inventoryItem}
+            inventoryItemElement={inventoryItemElement}
+            skinportItemPrice={skinportItemPrice}
+          />
+        );
+      });
 
-      const useSkinportItemPrices = createUseSkinportItemPrices(
-        Array.from(inventoryItems.values()).map(({ name }) => name),
-      );
-
-      for (const inventoryItemElement of inventoryItemElements) {
-        const [itemInfoElement] = createWidgetElement(() => {
-          const inventoryItem = inventoryItems.get(inventoryItemElement);
-
-          const skinportItemPrices = useSkinportItemPrices();
-
-          const skinportItemPrice = selectSkinportItemPrice(
-            skinportItemPrices,
-            inventoryItem?.name,
-          );
-
-          return (
-            <InventoryItemInfo
-              inventoryItem={inventoryItem}
-              inventoryItemElement={inventoryItemElement}
-              skinportItemPrice={skinportItemPrice}
-            />
-          );
-        });
-
-        inventoryItemElement.append(itemInfoElement);
-      }
-    };
-
-    addItemsInfo();
-
-    const inventoryObserver = new MutationObserver(addItemsInfo);
-
-    inventoryObserver.observe(inventoryElement, {
-      childList: true,
-    });
+      inventoryItemElement.append(itemInfoElement);
+    }
   });
 
   observer.observe(inventoriesElement, { childList: true, subtree: true });
@@ -161,4 +111,5 @@ featureManager.add(inventoryItemsInfo, {
   name: "inventory-items-info",
   awaitDomReady: true,
   matchPathname: /\/(id|profiles)\/\w+\/inventory/,
+  withBridge: true,
 });
