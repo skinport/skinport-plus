@@ -1,8 +1,9 @@
-import ky from "ky";
+import ky, { SearchParamsOption } from "ky";
 import pMemoize from "p-memoize";
 import { $$ } from "select-dom";
 import browser from "webextension-polyfill";
 import { countryCurrencies } from "./country-currencies";
+import { findInScriptElements } from "./dom";
 
 export const steamAppIdNames = {
   "730": "cs2",
@@ -13,17 +14,30 @@ export const steamAppIdNames = {
 
 export const supportedSteamAppIds = Object.keys(steamAppIdNames);
 
+export type SupportedSteamAppIds = keyof typeof steamAppIdNames;
+
 export function getIsSupportedSteamAppId(appId: string) {
   return Object.hasOwn(steamAppIdNames, appId);
 }
 
-export function parseSteamItem(name: string, appId: string) {
+export function parseSupportedSteamAppId(appId?: string) {
+  if (appId && getIsSupportedSteamAppId(appId)) {
+    return appId as SupportedSteamAppIds;
+  }
+}
+
+export function parseSteamItem(
+  name: string,
+  appId: string,
+  isMarketable?: boolean,
+) {
   if (Object.hasOwn(steamAppIdNames, appId)) {
     const item: Item = {
       name,
       appId: appId as keyof typeof steamAppIdNames,
       isStatTrak: getIsItemStatTrak(name),
       isSouvenir: getIsItemSouvenir(name),
+      isMarketable,
     };
 
     return item;
@@ -71,6 +85,7 @@ export type Item = {
   appId: keyof typeof steamAppIdNames;
   isStatTrak: boolean;
   isSouvenir: boolean;
+  isMarketable?: boolean;
 };
 
 export function getItemFromSteamMarketUrl(
@@ -119,3 +134,82 @@ export const getSteamUserWalletCurrency = pMemoize(async () => {
 
   return null;
 });
+
+export function getSteamUserSteamId() {
+  const userSteamId = findInScriptElements(/g_steamID = "(\d+)"/);
+
+  return userSteamId;
+}
+
+export async function getSteamUserInventory({
+  steamId,
+  appId,
+  count = 5000, // Max
+  startAssetId, // Pagination (Cursor)
+}: {
+  steamId?: string;
+  appId: SupportedSteamAppIds;
+  count?: number;
+  startAssetId?: string;
+}) {
+  const searchParams: SearchParamsOption = { l: "english", count };
+
+  if (startAssetId) {
+    searchParams.start_assetid = startAssetId;
+  }
+
+  return ky(
+    `https://steamcommunity.com/inventory/${
+      steamId || getSteamUserSteamId()
+    }/${appId}/2`,
+    { searchParams, retry: 10 },
+  ).json<{
+    assets: {
+      amount: string;
+      appid: number;
+      assetid: string;
+      classid: string;
+      contextid: string;
+      instanceid: string;
+    }[];
+    descriptions: {
+      actions: { link: string; name: string }[];
+      appid: number;
+      background_color: string;
+      classid: string;
+      commodity: number;
+      currency: number;
+      descriptions: { type: "html"; value: string }[];
+      icon_url: string;
+      instanceid: string;
+      market_actions: {
+        link: string;
+        name: string;
+      }[];
+      market_hash_name: string;
+      market_name: string;
+      market_tradable_restriction: string;
+      marketable: number;
+      name: string;
+      name_color: string;
+      tags: {
+        category:
+          | "Type"
+          | "Weapon"
+          | "ItemSet"
+          | "Quality"
+          | "Rarity"
+          | "Exterior";
+        internal_name: string;
+        localized_category_name: string;
+        localized_tag_name: string;
+        tradable: number;
+        type: string;
+      }[];
+    }[];
+    last_assetid: string;
+    more_items: number;
+    success: number;
+    total_inventory_count: number;
+  }>();
+}

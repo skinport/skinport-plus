@@ -1,5 +1,4 @@
 import { InterpolateMessage } from "@/components/interpolate-message";
-import { ItemSkinportPrice } from "@/components/item-skinport-price";
 import { SkinportPlusLogo } from "@/components/skinport-plus-logo";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -22,6 +21,7 @@ import { AlertCircleIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
 import { $, $$ } from "select-dom";
 import { StoreApi, UseBoundStore, create } from "zustand";
+import { InventoryItemInfo } from "../components/inventory-item-info";
 
 async function getAllTradeOfferItems(tradeOfferItemElements: HTMLElement[]) {
   const itemInfoRequests = new Map<HTMLElement, Promise<string>>();
@@ -118,32 +118,12 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
           getTradeOfferItem();
         }, []);
 
-        useEffect(() => {
-          if (skinportItemPrice?.price?.[2]) {
-            tradeOfferItemElement.style.borderTopColor =
-              skinportItemPrice.price[2];
-          }
-        }, [skinportItemPrice?.price]);
-
         return (
-          <>
-            <div className="absolute left-1.5 bottom-0.5 z-10">
-              {tradeOfferItem?.isStatTrak && (
-                <div className="text-2xs text-stattrak font-bold">ST</div>
-              )}
-              {tradeOfferItem?.isSouvenir && (
-                <div className="text-2xs text-souvenir font-bold">S</div>
-              )}
-              <ItemSkinportPrice
-                price={skinportItemPrice?.price?.[1]}
-                currency={skinportItemPrice?.currency}
-                size="xs"
-                priceTitle="none"
-                linkItem={tradeOfferItem}
-                loadingFailed={skinportItemPrice?.isError}
-              />
-            </div>
-          </>
+          <InventoryItemInfo
+            inventoryItem={tradeOfferItem}
+            inventoryItemElement={tradeOfferItemElement}
+            skinportItemPrice={skinportItemPrice}
+          />
         );
       });
 
