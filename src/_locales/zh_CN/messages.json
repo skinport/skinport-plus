@@ -65,10 +65,10 @@
     "message": "检查Steam账户的安全漏洞"
   },
   "options_steamCommunityInventoryShowItemPrices_description": {
-    "message": "Show suggested item prices from Skinport on each item."
+    "message": "在每个物品上显示Skinport的建议价格。"
   },
   "options_steamCommunityInventoryShowItemPrices_label": {
-    "message": "Show item prices"
+    "message": "显示物品价格"
   },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
     "message": "在每个物品上显示来自Skinport的建议物品价格。"
@@ -92,7 +92,7 @@
     "message": "账户"
   },
   "options_steamCommunity_inventories": {
-    "message": "Inventories"
+    "message": "库存"
   },
   "options_steamCommunity_tradeOffers": {
     "message": "交易提议"

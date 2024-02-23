@@ -65,10 +65,10 @@
     "message": "Vérifiez les vulnérabilités de sécurité du compte Steam"
   },
   "options_steamCommunityInventoryShowItemPrices_description": {
-    "message": "Show suggested item prices from Skinport on each item."
+    "message": "Affiche les prix suggérés des objets de Skinport sur chaque objet."
   },
   "options_steamCommunityInventoryShowItemPrices_label": {
-    "message": "Show item prices"
+    "message": "Afficher les prix des objets"
   },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
     "message": "Affiche les prix suggérés pour chaque objet de Skinport."
@@ -92,7 +92,7 @@
     "message": "Compte"
   },
   "options_steamCommunity_inventories": {
-    "message": "Inventories"
+    "message": "Inventaires"
   },
   "options_steamCommunity_tradeOffers": {
     "message": "Offres de commerce"

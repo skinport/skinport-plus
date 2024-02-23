@@ -65,10 +65,10 @@
     "message": "Steam hesap güvenlik açıklarını kontrol et"
   },
   "options_steamCommunityInventoryShowItemPrices_description": {
-    "message": "Show suggested item prices from Skinport on each item."
+    "message": "Her esya üzerinde Skinport'tan önerilen fiyatları göster."
   },
   "options_steamCommunityInventoryShowItemPrices_label": {
-    "message": "Show item prices"
+    "message": "Eşya fiyatlarını göster"
   },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
     "message": "Her esyada Skinport'tan önerilen fiyatları göster."
@@ -92,7 +92,7 @@
     "message": "Hesap"
   },
   "options_steamCommunity_inventories": {
-    "message": "Inventories"
+    "message": "Envanterler"
   },
   "options_steamCommunity_tradeOffers": {
     "message": "Takas teklifleri"

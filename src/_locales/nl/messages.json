@@ -65,10 +65,10 @@
     "message": "Controleer op beveiligingskwetsbaarheden in je Steam-account"
   },
   "options_steamCommunityInventoryShowItemPrices_description": {
-    "message": "Show suggested item prices from Skinport on each item."
+    "message": "Toon voorgestelde prijzen van Skinport op elk voorwerp."
   },
   "options_steamCommunityInventoryShowItemPrices_label": {
-    "message": "Show item prices"
+    "message": "Toon prijzen van voorwerpen"
   },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
     "message": "Toon voorgestelde voorwerp prijzen van Skinport op elk voorwerp."
@@ -92,7 +92,7 @@
     "message": "Account"
   },
   "options_steamCommunity_inventories": {
-    "message": "Inventories"
+    "message": "Inventarissen"
   },
   "options_steamCommunity_tradeOffers": {
     "message": "Handelsaanbiedingen"
