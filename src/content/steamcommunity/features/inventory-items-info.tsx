@@ -41,13 +41,13 @@ const inventoryItemsInfo: Feature = async ({
       return;
     }
 
-    const inventory = await bridge.inventoryLoadCompleteInventory.request();
+    const inventory = await bridge.inventory.loadCompleteInventory();
 
     const skinportItemNames = new Set<string>();
 
     for (const item of Object.values(inventory.itemsByAssetId)) {
       if (item.marketable === 1) {
-        skinportItemNames.add(item.market_hash_name);
+        skinportItemNames.add(item.marketHashName);
       }
     }
 
@@ -74,7 +74,7 @@ const inventoryItemsInfo: Feature = async ({
       }
 
       const inventoryItem = parseSteamItem(
-        inventoryItemDescription.market_hash_name,
+        inventoryItemDescription.marketHashName,
         String(inventoryItemDescription.appid),
         inventoryItemDescription.marketable === 1,
       );

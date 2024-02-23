@@ -16,14 +16,14 @@ import { Link } from "./ui/link";
 
 export function ItemSkinportActions({
   item,
-  inspectIngameLink,
+  screenshotInspectIngameLink,
   className,
   container,
   children,
   action = "view",
 }: {
   item: Item;
-  inspectIngameLink?: string;
+  screenshotInspectIngameLink?: string;
   className?: string;
   container: HTMLElement;
   children?: ReactNode;
@@ -42,7 +42,11 @@ export function ItemSkinportActions({
     </Button>
   );
 
-  if (inspectIngameLink || children)
+  if (
+    screenshotInspectIngameLink ||
+    (item.inspectIngameLink && item.hasExterior) ||
+    children
+  )
     return (
       <div className="flex mb-4 [&>*:first-child]:rounded-tr-none [&>*:first-child]:rounded-br-none [&>*:not(:first-child)]:rounded-tl-none [&>*:not(:first-child)]:rounded-bl-none [&>*:not(:first-child)]:border-l [&>*:not(:first-child)]:border-l-background">
         {viewOnSkinportButton}
@@ -53,11 +57,14 @@ export function ItemSkinportActions({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent container={container}>
-            {inspectIngameLink && (
+            {(screenshotInspectIngameLink ||
+              (item.inspectIngameLink && item.hasExterior)) && (
               <DropdownMenuItem asChild>
                 <Link
                   href={getSkinportScreenshotUrl(
-                    `direct?link=${inspectIngameLink}`,
+                    `direct?link=${
+                      screenshotInspectIngameLink || item.inspectIngameLink
+                    }`,
                   )}
                   target="_blank"
                 >

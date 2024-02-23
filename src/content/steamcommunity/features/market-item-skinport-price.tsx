@@ -87,7 +87,7 @@ async function marketItemSkinportPrice() {
         />
         <ItemSkinportActions
           item={item}
-          inspectIngameLink={inspectIngameLink}
+          screenshotInspectIngameLink={inspectIngameLink}
           container={shadowRoot}
           action="buy"
         />

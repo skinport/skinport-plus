@@ -1,4 +1,21 @@
-import { bridge } from ".";
+import { ParsedRgAsset, bridge } from ".";
+
+function parseRgAsset(rgAsset: RgAsset, mSteamId: string) {
+  const parsedRgAsset: ParsedRgAsset = {
+    amount: rgAsset.amount,
+    appid: rgAsset.description.appid,
+    classid: rgAsset.description.classid,
+    inspectIngameLink: rgAsset.description.actions?.find(({ link }) =>
+      link.includes("+csgo_econ_action_preview"),
+    )?.link,
+    marketHashName: rgAsset.description.market_hash_name,
+    marketable: rgAsset.description.marketable,
+    tradable: rgAsset.description.tradable,
+    isUserOwner: mSteamId === g_steamID,
+  };
+
+  return parsedRgAsset;
+}
 
 window.addEventListener("message", async (event) => {
   if (event.source !== window) {
@@ -6,7 +23,7 @@ window.addEventListener("message", async (event) => {
   }
 
   switch (event.data.type) {
-    case bridge.inventoryLoadCompleteInventory.requestType: {
+    case bridge.inventory.loadCompleteInventory.requestType: {
       await g_ActiveInventory.LoadCompleteInventory();
 
       for (let i = 0; i < g_ActiveInventory.m_rgPages.length; i++) {
@@ -14,25 +31,29 @@ window.addEventListener("message", async (event) => {
         g_ActiveInventory.PreloadPageImages(i);
       }
 
-      const itemsByAssetId: Record<string, RgDescription> = {};
+      const itemsByAssetId: Record<string, ParsedRgAsset> = {};
 
-      for (const asset of Object.values(g_ActiveInventory.m_rgAssets)) {
-        if (Object.hasOwn(asset, "assetid"))
-          itemsByAssetId[asset.assetid] = {
-            appid: asset.description.appid,
-            classid: asset.description.classid,
-            market_hash_name: asset.description.market_hash_name,
-            marketable: asset.description.marketable,
-            tradable: asset.description.tradable,
-          };
+      for (const rgAsset of Object.values(g_ActiveInventory.m_rgAssets)) {
+        if (Object.hasOwn(rgAsset, "assetid"))
+          itemsByAssetId[rgAsset.assetid] = parseRgAsset(
+            rgAsset,
+            g_ActiveInventory.m_steamid,
+          );
       }
 
-      bridge.inventoryLoadCompleteInventory.response({
+      bridge.inventory.loadCompleteInventory.response({
         itemsByAssetId,
       });
 
       break;
     }
-    default:
+    case bridge.inventory.getSelectedItem.requestType: {
+      bridge.inventory.getSelectedItem.response(
+        parseRgAsset(
+          g_ActiveInventory.selectedItem,
+          g_ActiveInventory.m_steamid,
+        ),
+      );
+    }
   }
 });

@@ -3,9 +3,10 @@ import { ItemSkinportPrice } from "@/components/item-skinport-price";
 import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { selectSkinportItemPrice, useSkinportItemPrices } from "@/lib/skinport";
-import { getHasItemExterior, getItemFromSteamMarketUrl } from "@/lib/steam";
+import { parseSteamItem } from "@/lib/steam";
 import elementReady from "element-ready";
 import { $ } from "select-dom";
+import { bridge } from "../bridge";
 
 featureManager.add(
   async ({
@@ -42,40 +43,28 @@ featureManager.add(
 
       cleanupPreviousItemFns.push(removeFeatureAttribute);
 
-      const marketLinkElement = $(
-        ".item_market_actions a[href*='/market/listings/']",
-        itemInfoElement,
+      const selectedItem = await bridge.inventory.getSelectedItem();
+
+      const parsedSelectedItem = parseSteamItem(
+        selectedItem.marketHashName,
+        String(selectedItem.appid),
+        selectedItem.marketable === 1,
+        selectedItem.inspectIngameLink,
       );
-      const marketLinkElementHref = marketLinkElement?.getAttribute("href");
 
-      if (!marketLinkElement || !marketLinkElementHref) {
+      if (!parsedSelectedItem) {
         return;
       }
-
-      const item = getItemFromSteamMarketUrl(marketLinkElementHref);
-
-      if (!item) {
-        return;
-      }
-
-      const inspectIngameLink =
-        (getHasItemExterior(item.name) &&
-          (
-            await elementReady("a[href*='csgo_econ_action_preview']", {
-              target: itemInfoElement,
-              stopOnDomReady: false,
-              timeout: 5000,
-            })
-          )?.getAttribute("href")) ||
-        undefined;
 
       const [viewOnSkinportElement, removeViewOnSkinportElement] =
         createWidgetElement(({ shadowRoot }) => {
-          const skinportItemPrices = useSkinportItemPrices(item.name);
+          const skinportItemPrices = useSkinportItemPrices(
+            parsedSelectedItem.name,
+          );
 
           const skinportItemPrice = selectSkinportItemPrice(
             skinportItemPrices,
-            item.name,
+            parsedSelectedItem.name,
           );
 
           return (
@@ -87,10 +76,9 @@ featureManager.add(
                 loadingFailed={skinportItemPrice?.isError}
               />
               <ItemSkinportActions
-                item={item}
-                inspectIngameLink={inspectIngameLink}
+                item={parsedSelectedItem}
                 container={shadowRoot}
-                action="sell"
+                action={selectedItem.isUserOwner ? "sell" : "buy"}
               />
             </div>
           );

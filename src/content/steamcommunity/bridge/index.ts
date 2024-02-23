@@ -2,45 +2,63 @@ function createBridgeAction<
   RequestData extends Record<string, unknown>,
   ResponseData extends Record<string, unknown>,
 >(type: string) {
-  return {
-    requestType: type,
-    responseType: `${type}.response`,
-    request(requestData?: RequestData) {
-      return new Promise<Omit<ResponseData, "type">>((resolve) => {
-        const listener = (event: MessageEvent<ResponseData>) => {
-          if (event.source !== window) {
-            return;
-          }
+  const requestType = type;
+  const responseType = `${type}.response` as const;
 
-          if (event.data?.type === this.responseType) {
-            window.removeEventListener("message", listener);
+  const bridgeAction = (requestData?: RequestData) => {
+    return new Promise<Omit<ResponseData, "type">>((resolve) => {
+      const listener = (event: MessageEvent<ResponseData>) => {
+        if (event.source !== window) {
+          return;
+        }
 
-            const { type: _, ...data } = event.data;
+        if (event.data?.type === responseType) {
+          window.removeEventListener("message", listener);
 
-            resolve(data);
-          }
-        };
+          const { type: _, ...data } = event.data;
 
-        window.addEventListener("message", listener);
+          resolve(data);
+        }
+      };
 
-        window.postMessage({
-          type: this.requestType,
-          ...requestData,
-        });
-      });
-    },
-    response(responseData?: ResponseData) {
+      window.addEventListener("message", listener);
+
       window.postMessage({
-        type: this.responseType,
-        ...responseData,
+        type: requestType,
+        ...requestData,
       });
-    },
+    });
   };
+
+  bridgeAction.requestType = requestType;
+
+  bridgeAction.response = (responseData?: ResponseData) => {
+    window.postMessage({
+      type: responseType,
+      ...responseData,
+    });
+  };
+
+  bridgeAction.responseType = responseType;
+
+  return bridgeAction;
 }
 
+export type ParsedRgAsset = Pick<RgAsset, "amount"> &
+  Omit<RgDescription, "actions" | "market_hash_name"> & {
+    marketHashName: RgDescription["market_hash_name"];
+    inspectIngameLink?: string;
+    isUserOwner: boolean;
+  };
+
 export const bridge = {
-  inventoryLoadCompleteInventory: createBridgeAction<
-    never,
-    { itemsByAssetId: Record<string, RgDescription> }
-  >("inventory.loadCompleteInventory"),
+  inventory: {
+    loadCompleteInventory: createBridgeAction<
+      never,
+      { itemsByAssetId: Record<string, ParsedRgAsset> }
+    >("inventory.loadCompleteInventory"),
+    getSelectedItem: createBridgeAction<never, ParsedRgAsset>(
+      "inventory.getSelectedItem",
+    ),
+  },
 };
