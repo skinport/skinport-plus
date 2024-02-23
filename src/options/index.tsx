@@ -108,6 +108,23 @@ function App() {
                 </div>
               </div>
               <div className="space-y-4">
+                <h3>{getI18nMessage("options_steamCommunity_inventories")}</h3>
+                <div className="space-y-0.5">
+                  <OptionField
+                    labelKey="options_steamCommunityInventoryShowItemPrices_label"
+                    descriptionKey="options_steamCommunityInventoryShowItemPrices_description"
+                    defaultChecked={
+                      options.steamCommunityInventoryShowItemPrices
+                    }
+                    onCheckedChange={(checked) =>
+                      optionsStorage.set({
+                        steamCommunityInventoryShowItemPrices: checked,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+              <div className="space-y-4">
                 <h3>{getI18nMessage("options_steamCommunity_tradeOffers")}</h3>
                 <div className="space-y-0.5">
                   <OptionField

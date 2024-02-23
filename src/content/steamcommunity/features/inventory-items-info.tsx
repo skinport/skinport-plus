@@ -112,4 +112,5 @@ featureManager.add(inventoryItemsInfo, {
   awaitDomReady: true,
   matchPathname: /\/(id|profiles)\/\w+\/inventory/,
   withBridge: true,
+  extensionOptionsKey: "steamCommunityInventoryShowItemPrices",
 });
