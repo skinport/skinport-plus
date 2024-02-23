@@ -64,6 +64,12 @@
   "options_steamCommunityAccountCheckSecurityVulnerabilities_label": {
     "message": "Tjek for sikkerhedsproblemer med din Steam-konto"
   },
+  "options_steamCommunityInventoryShowItemPrices_description": {
+    "message": "Show suggested item prices from Skinport on each item."
+  },
+  "options_steamCommunityInventoryShowItemPrices_label": {
+    "message": "Show item prices"
+  },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
     "message": "Vis foreslåede genstandspriser fra Skinport på hver genstand."
   },
@@ -84,6 +90,9 @@
   },
   "options_steamCommunity_account": {
     "message": "Konto"
+  },
+  "options_steamCommunity_inventories": {
+    "message": "Inventories"
   },
   "options_steamCommunity_tradeOffers": {
     "message": "Handelstilbud"
