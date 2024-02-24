@@ -1,5 +1,3 @@
-import { InterpolateMessage } from "@/components/interpolate-message";
-import { SkinportPlusLogo } from "@/components/skinport-plus-logo";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
@@ -22,6 +20,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { $, $$ } from "select-dom";
 import { StoreApi, UseBoundStore, create } from "zustand";
 import { InventoryItemInfo } from "../components/inventory-item-info";
+import { PricingBySkinportPlus } from "../components/pricing-by-skinport-plus";
 
 async function getAllTradeOfferItems(tradeOfferItemElements: HTMLElement[]) {
   const itemInfoRequests = new Map<HTMLElement, Promise<string>>();
@@ -364,14 +363,7 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
 
       if (tradeOfferFooterElement) {
         const [pricingBySkinportPlusElement] = createWidgetElement(() => (
-          <div className="flex gap-1 text-xs items-baseline">
-            <InterpolateMessage
-              message={getI18nMessage("common_pricingBySkinportPlus")}
-              values={{
-                skinportPlusLogo: <SkinportPlusLogo className="h-4 w-auto" />,
-              }}
-            />
-          </div>
+          <PricingBySkinportPlus />
         ));
 
         tradeOfferFooterElement.style.display = "flex";

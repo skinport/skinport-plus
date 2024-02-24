@@ -29,7 +29,7 @@ export function getSkinportUrl(input?: string) {
   return url.toString();
 }
 
-export function getSkinportItemUrl(item: Item) {
+export function getSkinportItemUrl(item: Pick<Item, "appId" | "name">) {
   const steamAppName = steamAppIdNames[item.appId];
 
   return getSkinportUrl(
@@ -82,7 +82,15 @@ type SkinportItemPricesResponse = {
 };
 
 export function createUseSkinportItemPrices(
-  itemNames: string | string[] | (() => Promise<string | string[]>), // Item market hash names
+  itemNames:
+    | string
+    | string[]
+    | Set<string>
+    | (() =>
+        | string
+        | string[]
+        | Set<string>
+        | Promise<string | string[] | Set<string>>), // Item market hash names
   fallbackCurrency = "USD",
   requestItemsLimit = 50, // If items is more than limit, multiple request are made
 ) {
@@ -102,8 +110,12 @@ export function createUseSkinportItemPrices(
         if (resolvedRequestItems === undefined) {
           resolvedRequestItems =
             maybePromiseRequestItemNames instanceof Promise
-              ? await maybePromiseRequestItemNames
-              : maybePromiseRequestItemNames;
+              ? ((await maybePromiseRequestItemNames.then((itemNames) =>
+                  itemNames instanceof Set ? Array.from(itemNames) : itemNames,
+                )) as string | string[])
+              : maybePromiseRequestItemNames instanceof Set
+                ? Array.from(maybePromiseRequestItemNames)
+                : maybePromiseRequestItemNames;
         }
 
         if (resolvedRequestItems.length === 0) {
@@ -195,6 +207,19 @@ export function selectSkinportItemPrice(
       isError: true,
       price: undefined,
       currency: undefined,
+    };
+  }
+
+  if (
+    itemName &&
+    skinportItemPrices.data?.items &&
+    skinportItemPrices.data.items[itemName] === undefined
+  ) {
+    return {
+      price: [null, null, null],
+      currency: skinportItemPrices.data.currency,
+      error: undefined,
+      isError: false,
     };
   }
 

@@ -1,3 +1,5 @@
+import { SteamItem } from "../lib/items";
+
 function createBridgeAction<
   RequestData extends Record<string, unknown>,
   ResponseData extends Record<string, unknown>,
@@ -32,7 +34,7 @@ function createBridgeAction<
 
   bridgeAction.requestType = requestType;
 
-  bridgeAction.response = (responseData?: ResponseData) => {
+  bridgeAction.response = (responseData: ResponseData) => {
     window.postMessage({
       type: responseType,
       ...responseData,
@@ -66,5 +68,14 @@ export const bridge = {
       never,
       { walletCountryCode: string }
     >("wallet.getWalletCountryCode"),
+  },
+  tradeOffer: {
+    getTradeItems: createBridgeAction<never, Record<string, SteamItem>>(
+      "tradeOffer.getTradeItems",
+    ),
+    getItemsByAssetId: createBridgeAction<
+      { assetIds: string[] },
+      { itemsByAssetId: Record<string, SteamItem> }
+    >("tradeOffer.getInventoryItems"),
   },
 };
