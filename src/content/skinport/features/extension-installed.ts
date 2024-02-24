@@ -6,5 +6,4 @@ async function skinportExtensionInstalled() {
 
 featureManager.add(skinportExtensionInstalled, {
   name: "skinport-extension-installed",
-  awaitDomReady: true,
 });

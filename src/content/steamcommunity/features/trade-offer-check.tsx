@@ -196,5 +196,4 @@ featureManager.add(tradeOfferCheck, {
   name: "trade-offer-check",
   matchPathname: "/tradeoffer",
   extensionOptionsKey: "steamCommunityTradeOffersVerifyTradePartner",
-  awaitDomReady: true,
 });

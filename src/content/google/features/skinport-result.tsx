@@ -73,5 +73,4 @@ async function skinportResult() {
 
 featureManager.add(skinportResult, {
   name: "skinport-result",
-  awaitDomReady: true,
 });

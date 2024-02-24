@@ -109,8 +109,7 @@ const inventoryItemsInfo: Feature = async ({
 
 featureManager.add(inventoryItemsInfo, {
   name: "inventory-items-info",
-  awaitDomReady: true,
   matchPathname: /\/(id|profiles)\/\w+\/inventory/,
-  withBridge: true,
+  useBridge: true,
   extensionOptionsKey: "steamCommunityInventoryShowItemPrices",
 });

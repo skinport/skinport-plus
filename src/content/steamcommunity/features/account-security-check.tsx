@@ -183,5 +183,4 @@ async function accountSecurityCheck() {
 featureManager.add(accountSecurityCheck, {
   name: "account-security-check",
   extensionOptionsKey: "steamCommunityAccountCheckSecurityVulnerabilities",
-  awaitDomReady: true,
 });

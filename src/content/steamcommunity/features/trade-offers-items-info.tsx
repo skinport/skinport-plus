@@ -397,5 +397,4 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
 featureManager.add(tradeOffersItemsInfo, {
   name: "trade-offers-items-info",
   matchPathname: /\/tradeoffers\/(sent\/)?$/,
-  awaitDomReady: true,
 });

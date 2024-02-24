@@ -10,4 +10,4 @@ import "./features/trade-offer-check";
 import "./features/trade-offers-items-info";
 
 addToaster();
-featureManager.run();
+featureManager.run({ bridgeContext: "steamcommunity" });

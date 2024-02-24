@@ -16,8 +16,7 @@ interface FeatureConfig {
   name: string;
   matchPathname?: string | RegExp;
   extensionOptionsKey?: keyof Options;
-  awaitDomReady?: boolean;
-  withBridge?: boolean;
+  useBridge?: boolean;
 }
 
 const features: [Feature, FeatureConfig][] = [];
@@ -26,41 +25,16 @@ function add(feature: Feature, featureConfig: FeatureConfig) {
   features.push([feature, featureConfig]);
 }
 
-let extensionOptions: Options | undefined;
-let bridgeLoaded = false;
+async function run({
+  bridgeContext,
+}: { bridgeContext?: "steamcommunity" } = {}) {
+  const extensionOptions = await optionsStorage.getAll();
+  let bridgeScriptLoaded = false;
 
-async function run() {
   for (const [
     feature,
-    {
-      name: featureName,
-      matchPathname,
-      extensionOptionsKey,
-      awaitDomReady,
-      withBridge,
-    },
+    { name: featureName, matchPathname, extensionOptionsKey, useBridge },
   ] of features) {
-    if (withBridge && bridgeLoaded === false) {
-      const scriptElement = document.createElement("script");
-
-      scriptElement.src = browser.runtime.getURL(
-        "content/steamcommunity/bridge/script.js",
-      );
-
-      await new Promise<void>((resolve) => {
-        const listener = () => {
-          scriptElement.removeEventListener("load", listener);
-          resolve();
-        };
-
-        scriptElement.addEventListener("load", listener);
-
-        document.head.append(scriptElement);
-      });
-
-      bridgeLoaded = true;
-    }
-
     if (
       (matchPathname instanceof RegExp &&
         !matchPathname.test(window.location.pathname)) ||
@@ -70,22 +44,32 @@ async function run() {
       continue;
     }
 
-    if (extensionOptions === undefined) {
-      extensionOptions = await optionsStorage.getAll();
-    } else if (extensionOptions instanceof Promise) {
-      await extensionOptions;
-    }
-
-    if (
-      extensionOptionsKey &&
-      extensionOptions[extensionOptionsKey] === false
-    ) {
+    if (extensionOptionsKey && extensionOptions[extensionOptionsKey] !== true) {
       continue;
     }
 
     try {
-      if (awaitDomReady) {
-        await domLoaded;
+      await domLoaded;
+
+      if (useBridge && bridgeScriptLoaded === false) {
+        const scriptElement = document.createElement("script");
+
+        scriptElement.src = browser.runtime.getURL(
+          `content/${bridgeContext}/bridge/script.js`,
+        );
+
+        await new Promise<void>((resolve) => {
+          const listener = () => {
+            scriptElement.removeEventListener("load", listener);
+            resolve();
+          };
+
+          scriptElement.addEventListener("load", listener);
+
+          document.head.append(scriptElement);
+        });
+
+        bridgeScriptLoaded = true;
       }
 
       const featureAttribute = `data-skinport-feature-${featureName}`;

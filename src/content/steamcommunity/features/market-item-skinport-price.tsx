@@ -103,5 +103,4 @@ featureManager.add(marketItemSkinportPrice, {
   matchPathname: new RegExp(
     `/market/listings/(${supportedSteamAppIds.join(")|(")})`,
   ),
-  awaitDomReady: true,
 });
