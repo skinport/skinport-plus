@@ -61,4 +61,10 @@ export const bridge = {
       "inventory.getSelectedItem",
     ),
   },
+  wallet: {
+    getWalletCountryCode: createBridgeAction<
+      never,
+      { walletCountryCode: string }
+    >("wallet.getWalletCountryCode"),
+  },
 };

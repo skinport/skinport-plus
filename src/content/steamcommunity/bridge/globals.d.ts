@@ -52,3 +52,7 @@ declare const g_ActiveInventory: CInventory;
 declare const g_ActiveUser: UserYou;
 
 declare const g_steamID: string;
+
+declare const g_rgWalletInfo: {
+  wallet_country: string;
+};

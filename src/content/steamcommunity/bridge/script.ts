@@ -54,6 +54,15 @@ window.addEventListener("message", async (event) => {
           g_ActiveInventory.m_steamid,
         ),
       );
+
+      break;
+    }
+    case bridge.wallet.getWalletCountryCode.requestType: {
+      bridge.wallet.getWalletCountryCode.response({
+        walletCountryCode: g_rgWalletInfo.wallet_country,
+      });
+
+      break;
     }
   }
 });
