@@ -56,7 +56,7 @@ async function getAllTradeOfferItems(tradeOfferItemElements: HTMLElement[]) {
 
   for (const [tradeOfferItemElement, itemInfoRequest] of itemInfoRequests) {
     const itemInfoMatches = (await itemInfoRequest).match(
-      /"market_hash_name\":"([^"]+)".*"appid":"(\d+)"/,
+      /"market_hash_name":"([^"]+)".*"marketable":(0|1).*"appid":"(\d+)"/,
     );
 
     if (!itemInfoMatches) {
@@ -65,10 +65,11 @@ async function getAllTradeOfferItems(tradeOfferItemElements: HTMLElement[]) {
 
     const item = parseSteamItem(
       JSON.parse(`"${itemInfoMatches[1]}"`),
-      itemInfoMatches[2],
+      itemInfoMatches[3],
+      itemInfoMatches[2] === "1",
     );
 
-    if (!item) {
+    if (!item || !item.isMarketable) {
       continue;
     }
 

@@ -22,7 +22,7 @@ import { create } from "zustand";
 import { bridge } from "../bridge";
 import { ItemInfo } from "../components/item-info";
 import { PricingBySkinportPlus } from "../components/pricing-by-skinport-plus";
-import { SteamItem } from "../lib/items";
+import { SteamItem } from "../lib/steam";
 
 const tradeOfferItemsInfo: Feature = async ({
   setFeatureAttribute,

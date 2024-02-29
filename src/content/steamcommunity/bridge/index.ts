@@ -1,4 +1,4 @@
-import { SteamItem } from "../lib/items";
+import { SteamItem } from "../lib/steam";
 
 function createBridgeAction<
   RequestData extends Record<string, unknown>,

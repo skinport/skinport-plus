@@ -1,6 +1,6 @@
 import { selectSkinportItemPrice } from "@/lib/skinport";
 import { useEffect } from "react";
-import { SteamItem } from "../lib/items";
+import { SteamItem } from "../lib/steam";
 import {
   ItemSkinportPrice,
   ItemSkinportPriceProps,

@@ -39,7 +39,7 @@ export type Item = {
 export function parseSteamItem(
   name: string,
   appId: string,
-  isMarketable?: boolean,
+  isMarketable: boolean,
   inspectIngameLink?: string,
 ) {
   if (Object.hasOwn(steamAppIdNames, appId)) {

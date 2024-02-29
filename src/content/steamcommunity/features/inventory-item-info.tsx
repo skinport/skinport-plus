@@ -52,7 +52,7 @@ featureManager.add(
         selectedItem.inspectIngameLink,
       );
 
-      if (!parsedSelectedItem) {
+      if (!parsedSelectedItem || !parsedSelectedItem.isMarketable) {
         return;
       }
 

@@ -1,3 +1,9 @@
+export type SteamAppId =
+  | 730 // cs2
+  | 440 // tf2
+  | 570 // dota2
+  | 252490; // rust
+
 export interface SteamItem {
   appId: number;
   assetId: string | null;

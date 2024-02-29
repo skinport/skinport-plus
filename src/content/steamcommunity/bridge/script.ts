@@ -1,5 +1,5 @@
 import { ParsedRgAsset, bridge } from ".";
-import { SteamItem, parseSteamItem } from "../lib/items";
+import { SteamItem, parseSteamItem } from "../lib/steam";
 
 function parseRgAsset(rgAsset: RgAsset, mSteamId: string) {
   const parsedRgAsset: ParsedRgAsset = {

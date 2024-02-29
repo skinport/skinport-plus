@@ -10,7 +10,7 @@ import {
 import { formatPrice } from "@/lib/format";
 import { I18nMessageKey, getI18nMessage } from "@/lib/i18n";
 import { getSkinportItemUrl } from "@/lib/skinport";
-import { SteamItem } from "../lib/items";
+import { SteamItem } from "../lib/steam";
 
 export interface ItemSkinportPriceProps {
   item: SteamItem;
@@ -31,6 +31,10 @@ export function ItemSkinportPrice({
   currency,
   tooltipType,
 }: ItemSkinportPriceProps) {
+  if (!item.isMarketable) {
+    return;
+  }
+
   if (price === undefined || !currency) {
     return <Skeleton className="w-8 h-3 my-0.5" />;
   }
