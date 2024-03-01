@@ -389,6 +389,6 @@ const tradeOfferItemsInfo: Feature = async ({
 
 featureManager.add(tradeOfferItemsInfo, {
   name: "trade-offer-items-info",
-  matchPathname: /^\/tradeoffer\/\d+\//,
+  matchPathname: /^\/tradeoffer\/(?:new|\d+)\/$/,
   useBridge: true,
 });
