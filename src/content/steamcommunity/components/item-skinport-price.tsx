@@ -9,13 +9,14 @@ import {
 } from "@/components/ui/tooltip";
 import { formatPrice } from "@/lib/format";
 import { I18nMessageKey, getI18nMessage } from "@/lib/i18n";
-import { getSkinportItemUrl } from "@/lib/skinport";
+import { SelectedSkinportItemPrice, getSkinportItemUrl } from "@/lib/skinport";
+import { AlertCircleIcon } from "lucide-react";
 import { SteamItem } from "../lib/steam";
 
 export interface ItemSkinportPriceProps {
   item: SteamItem;
-  price?: number | null;
-  currency?: string;
+  skinportPrice: SelectedSkinportItemPrice;
+  skinportPriceType: "lowest" | "suggested";
   tooltipType: "view" | "buy" | "sell";
 }
 
@@ -27,17 +28,38 @@ const tooltipI18nMessageKey = {
 
 export function ItemSkinportPrice({
   item,
-  price,
-  currency,
+  skinportPrice,
+  skinportPriceType,
   tooltipType,
 }: ItemSkinportPriceProps) {
   if (!item.isMarketable) {
     return;
   }
 
-  if (price === undefined || !currency) {
+  if (skinportPrice?.isError) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <AlertCircleIcon className="text-red-light w-3 h-3 my-0.5" />
+        </TooltipTrigger>
+        <TooltipContent>
+          {getI18nMessage("common_failedLoadingItemPrices")}
+        </TooltipContent>
+      </Tooltip>
+    );
+  }
+
+  if (!skinportPrice?.price || !skinportPrice?.currency) {
     return <Skeleton className="w-8 h-3 my-0.5" />;
   }
+
+  const skinportPriceIndex = {
+    lowest: 0,
+    suggested: 1,
+  } as const;
+
+  const skinportPriceValue =
+    skinportPrice.price[skinportPriceIndex[skinportPriceType]];
 
   return (
     <Tooltip>
@@ -55,7 +77,9 @@ export function ItemSkinportPrice({
           className="flex gap-2 items-center"
         >
           <div className="text-xs font-semibold">
-            {typeof price === "number" ? formatPrice(price, currency) : "-"}
+            {skinportPriceValue !== null
+              ? formatPrice(skinportPriceValue, skinportPrice.currency)
+              : "-"}
           </div>
         </Link>
       </TooltipTrigger>

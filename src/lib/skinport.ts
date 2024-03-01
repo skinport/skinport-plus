@@ -189,10 +189,7 @@ export function createUseSkinportItemPrices(
   };
 }
 
-export function selectSkinportItemPrice(
-  skinportItemPrices: SWRResponse<SkinportItemPricesResponse | undefined>,
-  itemName?: string,
-):
+export type SelectedSkinportItemPrice =
   | { error: unknown; isError: true; price: undefined; currency: undefined }
   | {
       price: [number | null, number | null, string | null];
@@ -200,7 +197,12 @@ export function selectSkinportItemPrice(
       error: undefined;
       isError: false;
     }
-  | undefined {
+  | undefined;
+
+export function selectSkinportItemPrice(
+  skinportItemPrices: SWRResponse<SkinportItemPricesResponse | undefined>,
+  itemName?: string,
+): SelectedSkinportItemPrice {
   if (skinportItemPrices?.error) {
     return {
       error: skinportItemPrices.error,

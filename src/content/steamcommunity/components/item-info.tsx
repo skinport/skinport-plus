@@ -1,4 +1,4 @@
-import { selectSkinportItemPrice } from "@/lib/skinport";
+import { SelectedSkinportItemPrice } from "@/lib/skinport";
 import { useEffect } from "react";
 import { SteamItem } from "../lib/steam";
 import {
@@ -21,7 +21,7 @@ export function ItemInfo({
 }: {
   item: SteamItem;
   itemElement: HTMLElement;
-  skinportPrice: ReturnType<typeof selectSkinportItemPrice>;
+  skinportPrice: SelectedSkinportItemPrice;
   skinportPriceTooltipType?: ItemSkinportPriceProps["tooltipType"];
 }) {
   useEffect(() => {
@@ -53,8 +53,8 @@ export function ItemInfo({
         )}
         <ItemSkinportPrice
           item={item}
-          price={skinportPrice?.price?.[1]}
-          currency={skinportPrice?.currency}
+          skinportPrice={skinportPrice}
+          skinportPriceType="suggested"
           tooltipType={skinportPriceTooltipType}
         />
       </div>
