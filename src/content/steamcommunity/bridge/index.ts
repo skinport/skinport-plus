@@ -46,7 +46,7 @@ function createBridgeAction<
   return bridgeAction;
 }
 
-export type ParsedRgAsset = Pick<RgAsset, "amount"> &
+export type ParsedRgAsset = Pick<RgAsset, "amount" | "assetid"> &
   Omit<RgDescription, "actions" | "market_hash_name"> & {
     marketHashName: RgDescription["market_hash_name"];
     inspectIngameLink?: string;

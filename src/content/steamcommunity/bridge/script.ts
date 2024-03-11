@@ -2,13 +2,17 @@ import { ParsedRgAsset, bridge } from ".";
 import { SteamItem, parseSteamItem } from "../lib/steam";
 
 function parseRgAsset(rgAsset: RgAsset, mSteamId: string) {
+  const assetid = rgAsset.assetid;
+
   const parsedRgAsset: ParsedRgAsset = {
     amount: rgAsset.amount,
     appid: rgAsset.description.appid,
+    assetid,
     classid: rgAsset.description.classid,
-    inspectIngameLink: rgAsset.description.actions?.find(({ link }) =>
-      link.includes("+csgo_econ_action_preview"),
-    )?.link,
+    inspectIngameLink: rgAsset.description.actions
+      ?.find(({ link }) => link.includes("+csgo_econ_action_preview"))
+      ?.link.replace("%assetid%", assetid)
+      .replace("%owner_steamid%", mSteamId),
     marketHashName: rgAsset.description.market_hash_name,
     marketable: rgAsset.description.marketable,
     tradable: rgAsset.description.tradable,

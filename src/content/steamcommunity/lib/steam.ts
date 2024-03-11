@@ -55,22 +55,29 @@ export function parseSteamItem(
 ): SteamItem {
   const qualityTag = tags.find(({ category }) => category === "Quality");
   const rarityTag = tags.find(({ category }) => category === "Rarity");
+  const assetId = assetid || null;
+  const ownerSteamId = owner.strSteamId;
 
   return {
     appId: appid,
-    assetId: assetid || null,
+    assetId,
     classId: classid,
     contextId: contextid,
     exterior:
       tags.find(({ category }) => category === "Exterior")?.internal_name ||
       null,
     inspectIngameLink:
-      market_actions?.find(({ name }) => name === "+csgo_econ_action_preview")
-        ?.link || null,
+      (assetId &&
+        ownerSteamId &&
+        market_actions
+          ?.find(({ name }) => name === "+csgo_econ_action_preview")
+          ?.link.replace("%assetid%", assetId)
+          .replace("%owner_steamid%", ownerSteamId)) ||
+      null,
     isMarketable: marketable === 1,
     isTradable: tradable === 1,
     marketHashName: market_hash_name,
-    ownerSteamId: owner.strSteamId,
+    ownerSteamId,
     quality: qualityTag?.internal_name || null,
     qualityColor: qualityTag?.color ? `#${qualityTag.color}` : null,
     rarity: rarityTag?.internal_name || null,
