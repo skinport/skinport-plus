@@ -45,7 +45,7 @@
     "zustand": "^4.5.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.4.0",
+    "@biomejs/biome": "^1.6.3",
     "@japa/assert": "^2.0.0-2",
     "@japa/runner": "^3.0.0-9",
     "@tsconfig/node20": "^20.1.2",
@@ -77,6 +77,6 @@
     "sourceDir": "./dist"
   },
   "lint-staged": {
-    "*.{js,ts,tsx,json}": "biome check --apply"
+    "*.{js,ts,tsx,json}": "biome check --apply --no-errors-on-unmatched"
   }
 }

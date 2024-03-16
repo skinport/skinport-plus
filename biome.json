@@ -11,11 +11,11 @@
         "noConsoleLog": "error"
       },
       "correctness": {
-        "noUnusedVariables": "error"
-      },
-      "nursery": {
-        "noDefaultExport": "error",
+        "noUnusedVariables": "error",
         "noUnusedImports": "error"
+      },
+      "style": {
+        "noDefaultExport": "error"
       }
     }
   },
