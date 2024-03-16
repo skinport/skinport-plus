@@ -1,6 +1,8 @@
-import { Feature, featureManager } from "@/content/feature-manager";
+import { Skeleton } from "@/components/ui/skeleton";
+import { type Feature, featureManager } from "@/content/feature-manager";
 import { InventoryItemInfo } from "@/content/steamcommunity/components/inventory-item-info";
 import { createWidgetElement } from "@/content/widget";
+import { formatPrice } from "@/lib/format";
 import {
   createUseSkinportItemPrices,
   selectSkinportItemPrice,
@@ -102,6 +104,53 @@ const inventoryItemsInfo: Feature = async ({
 
       inventoryItemElement.append(itemInfoElement);
     }
+
+    const inventoryPageControlsElement = $("#inventory_pagecontrols");
+
+    if (!inventoryPageControlsElement) {
+      return;
+    }
+
+    const [totalInventoryValueElement] = createWidgetElement(() => {
+      const skinportItemPrices = useSkinportItemPrices();
+
+      const totalInventoryValue =
+        skinportItemPrices.data &&
+        Object.values(skinportItemPrices.data.prices).reduce(
+          (acc, { suggested }) => acc + suggested,
+          0,
+        );
+
+      return (
+        <div className="flex gap-2 bg-background px-4 py-3 rounded-md">
+          {totalInventoryValue ? (
+            <>
+              <div>Total value</div>
+              <div className="text-white font-semibold">
+                {formatPrice(
+                  totalInventoryValue,
+                  skinportItemPrices.data.currency,
+                )}
+              </div>
+            </>
+          ) : (
+            <Skeleton className="w-28 h-3.5 my-[0.2rem]" />
+          )}
+        </div>
+      );
+    });
+
+    inventoryPageControlsElement.style.float = "none";
+    inventoryPageControlsElement.style.display = "flex";
+    inventoryPageControlsElement.style.justifyContent = "space-between";
+
+    const pageControlsContainer = document.createElement("div");
+
+    pageControlsContainer.append(...inventoryPageControlsElement.children);
+
+    inventoryPageControlsElement.append(pageControlsContainer);
+
+    inventoryPageControlsElement.prepend(totalInventoryValueElement);
   });
 
   observer.observe(inventoriesElement, { childList: true, subtree: true });
