@@ -1,6 +1,6 @@
 import { ItemSkinportPrice } from "@/components/item-skinport-price";
 import { SkinportLogo } from "@/components/skinport-logo";
-import { Feature, featureManager } from "@/content/feature-manager";
+import { type Feature, featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import {
   createUseSkinportItemPrices,
@@ -117,18 +117,18 @@ const marketItemsSkinportPrice: Feature = async ({
           : undefined;
 
         const skinportItemPricePercentageDecrease =
-          marketListingItemPrice && skinportItemPrice?.price?.[0]
+          marketListingItemPrice && skinportItemPrice?.price?.lowest
             ? getPercentageDecrease(
                 marketListingItemPrice,
-                skinportItemPrice.price[0],
+                skinportItemPrice.price.lowest,
               )
             : undefined;
 
         return (
           <div className="h-full flex flex-col justify-center">
             <ItemSkinportPrice
-              price={skinportItemPrice?.price?.[0]}
-              currency={skinportItemPrice?.currency}
+              price={skinportItemPrice?.price?.lowest}
+              currency={skinportItemPrice?.price?.currency}
               discount={skinportItemPricePercentageDecrease}
               size="sm"
               linkItem={marketListing.item}

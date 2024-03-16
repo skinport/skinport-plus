@@ -1,6 +1,6 @@
 import { ItemSkinportPrice } from "@/components/item-skinport-price";
-import { selectSkinportItemPrice } from "@/lib/skinport";
-import { Item } from "@/lib/steam";
+import type { selectSkinportItemPrice } from "@/lib/skinport";
+import type { Item } from "@/lib/steam";
 import { useEffect } from "react";
 
 export function InventoryItemInfo({
@@ -17,11 +17,12 @@ export function InventoryItemInfo({
     inventoryItemElement.style.borderTopWidth = "2px";
   }, [inventoryItemElement]);
 
-  useEffect(() => {
-    if (skinportItemPrice?.price?.[2]) {
-      inventoryItemElement.style.borderTopColor = skinportItemPrice.price[2];
-    }
-  }, [skinportItemPrice?.price, inventoryItemElement]);
+  // @TODO
+  // useEffect(() => {
+  //   if (inventoryItem) {
+  //     inventoryItemElement.style.borderTopColor = inventoryItem.rarityColor;
+  //   }
+  // }, [inventoryItem, inventoryItemElement]);
 
   if (inventoryItem?.isMarketable === false) {
     return null;
@@ -37,8 +38,8 @@ export function InventoryItemInfo({
           <div className="text-2xs text-souvenir font-bold">S</div>
         )}
         <ItemSkinportPrice
-          price={skinportItemPrice?.price?.[1]}
-          currency={skinportItemPrice?.currency}
+          price={skinportItemPrice?.price?.suggested}
+          currency={skinportItemPrice?.price?.currency}
           size="xs"
           priceTitle="none"
           linkItem={inventoryItem}

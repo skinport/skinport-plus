@@ -1,9 +1,13 @@
 import { useToast } from "@/components/ui/use-toast";
 import type { Options as KyOptions } from "ky";
-import useSWR, { SWRResponse } from "swr";
+import useSWR, { type SWRResponse } from "swr";
 import browser from "webextension-polyfill";
 import { getI18nMessage } from "./i18n";
-import { Item, getSteamUserWalletCurrency, steamAppIdNames } from "./steam";
+import {
+  type Item,
+  getSteamUserWalletCurrency,
+  steamAppIdNames,
+} from "./steam";
 
 export const SKINPORT_BASE_URL = "https://skinport.com";
 
@@ -13,8 +17,8 @@ function setUtmParams(url: URL) {
   url.searchParams.set("utm_source", "skinportplus");
 }
 
-export function getSkinportItemSlug(itemName: string) {
-  return decodeURIComponent(itemName)
+export function getSkinportItemSlug(itemMarketHashName: string) {
+  return decodeURIComponent(itemMarketHashName)
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "-")
@@ -77,12 +81,17 @@ export function useSkinportApi<ResponseBody>(
 }
 
 type SkinportItemPricesResponse = {
-  items: Record<string, [number | null, number | null, string | null]>; // [lowestPrice, suggestedPrice, exteriorColor]
+  prices: {
+    [marketHashName: string]: {
+      lowest: number;
+      suggested: number;
+    };
+  };
   currency: string;
 };
 
 export function createUseSkinportItemPrices(
-  itemNames:
+  marketHashNames:
     | string
     | string[]
     | Set<string>
@@ -92,80 +101,81 @@ export function createUseSkinportItemPrices(
         | Set<string>
         | Promise<string | string[] | Set<string>>), // Item market hash names
   fallbackCurrency = "USD",
-  requestItemsLimit = 50, // If items is more than limit, multiple request are made
+  requestItemsLimit = 1000, // If items is more than limit, multiple request are made
 ) {
-  const maybePromiseRequestItemNames =
-    typeof itemNames === "function" ? itemNames() : itemNames;
+  const maybePromiseRequestMarketHashNames =
+    typeof marketHashNames === "function" ? marketHashNames() : marketHashNames;
 
   const steamUserWalletCurrency = getSteamUserWalletCurrency();
 
-  let resolvedRequestItems: string | string[] | undefined;
+  let resolvedRequestMarketHashNames: string | string[] | undefined;
 
   return () => {
     const { toast } = useToast();
 
     const swr = useSWR(
-      ["v1/extension/prices", itemNames, fallbackCurrency],
+      ["v1/extension/prices", marketHashNames, fallbackCurrency],
       async (args) => {
-        if (resolvedRequestItems === undefined) {
-          resolvedRequestItems =
-            maybePromiseRequestItemNames instanceof Promise
-              ? ((await maybePromiseRequestItemNames.then((itemNames) =>
-                  itemNames instanceof Set ? Array.from(itemNames) : itemNames,
+        if (resolvedRequestMarketHashNames === undefined) {
+          resolvedRequestMarketHashNames =
+            maybePromiseRequestMarketHashNames instanceof Promise
+              ? ((await maybePromiseRequestMarketHashNames.then(
+                  (marketHashNames) =>
+                    marketHashNames instanceof Set
+                      ? Array.from(marketHashNames)
+                      : marketHashNames,
                 )) as string | string[])
-              : maybePromiseRequestItemNames instanceof Set
-                ? Array.from(maybePromiseRequestItemNames)
-                : maybePromiseRequestItemNames;
+              : maybePromiseRequestMarketHashNames instanceof Set
+                ? Array.from(maybePromiseRequestMarketHashNames)
+                : maybePromiseRequestMarketHashNames;
         }
 
-        if (resolvedRequestItems.length === 0) {
+        if (resolvedRequestMarketHashNames.length === 0) {
           return;
         }
 
-        const currencySearchParam = [
-          "currency",
-          (await steamUserWalletCurrency) || fallbackCurrency,
-        ];
-
-        const getSkinportItemPrices = async (requestItems: string[]) =>
+        const getSkinportItemPrices = async (
+          requestMarketHashNames: string[],
+        ) =>
           skinportApi<SkinportItemPricesResponse>(args[0], {
-            searchParams: [
-              ...requestItems.map((item) => ["items[]", item]),
-              currencySearchParam,
-            ],
+            method: "post",
+            json: {
+              market_hash_names: requestMarketHashNames,
+              currency: (await steamUserWalletCurrency) || fallbackCurrency,
+            },
           });
 
-        if (typeof resolvedRequestItems === "string") {
-          return getSkinportItemPrices([resolvedRequestItems]);
+        if (typeof resolvedRequestMarketHashNames === "string") {
+          return getSkinportItemPrices([resolvedRequestMarketHashNames]);
         }
 
-        if (resolvedRequestItems.length > requestItemsLimit) {
+        if (resolvedRequestMarketHashNames.length > requestItemsLimit) {
           const skinportItemPricesRequests: Promise<SkinportItemPricesResponse>[] =
             [];
 
           for (
             let i = 0;
-            i < resolvedRequestItems.length;
+            i < resolvedRequestMarketHashNames.length;
             i += requestItemsLimit
           ) {
             skinportItemPricesRequests.push(
               getSkinportItemPrices(
-                resolvedRequestItems.slice(i, i + requestItemsLimit),
+                resolvedRequestMarketHashNames.slice(i, i + requestItemsLimit),
               ),
             );
           }
 
           const skinportItemPrices: SkinportItemPricesResponse = {
-            items: {},
+            prices: {},
             currency: fallbackCurrency,
           };
 
           for (const skinportItemPricesRequest of await Promise.all(
             skinportItemPricesRequests,
           )) {
-            skinportItemPrices.items = {
-              ...skinportItemPrices.items,
-              ...skinportItemPricesRequest.items,
+            skinportItemPrices.prices = {
+              ...skinportItemPrices.prices,
+              ...skinportItemPricesRequest.prices,
             };
             skinportItemPrices.currency = skinportItemPricesRequest.currency;
           }
@@ -173,7 +183,7 @@ export function createUseSkinportItemPrices(
           return skinportItemPrices;
         }
 
-        return getSkinportItemPrices(resolvedRequestItems);
+        return getSkinportItemPrices(resolvedRequestMarketHashNames);
       },
       {
         onError: () => {
@@ -189,46 +199,43 @@ export function createUseSkinportItemPrices(
   };
 }
 
-export type SelectedSkinportItemPrice =
-  | { error: unknown; isError: true; price: undefined; currency: undefined }
-  | {
-      price: [number | null, number | null, string | null];
-      currency: string;
-      error: undefined;
-      isError: false;
-    }
-  | undefined;
+export type SelectedSkinportItemPrice = ReturnType<
+  typeof selectSkinportItemPrice
+>;
 
 export function selectSkinportItemPrice(
   skinportItemPrices: SWRResponse<SkinportItemPricesResponse | undefined>,
-  itemName?: string,
-): SelectedSkinportItemPrice {
+  itemMarketHashName?: string,
+) {
   if (skinportItemPrices?.error) {
     return {
       error: skinportItemPrices.error,
       isError: true,
-      price: undefined,
-      currency: undefined,
+      price: null,
     };
   }
 
   if (
-    itemName &&
-    skinportItemPrices.data?.items &&
-    skinportItemPrices.data.items[itemName] === undefined
+    itemMarketHashName &&
+    skinportItemPrices.data?.prices &&
+    skinportItemPrices.data.prices[itemMarketHashName] === undefined
   ) {
     return {
-      price: [null, null, null],
-      currency: skinportItemPrices.data.currency,
+      price: null,
       error: undefined,
       isError: false,
     };
   }
 
-  if (itemName && skinportItemPrices?.data?.items[itemName]) {
+  if (
+    itemMarketHashName &&
+    skinportItemPrices?.data?.prices[itemMarketHashName]
+  ) {
     return {
-      price: skinportItemPrices.data.items[itemName],
-      currency: skinportItemPrices.data.currency,
+      price: {
+        ...skinportItemPrices.data.prices[itemMarketHashName],
+        currency: skinportItemPrices.data.currency,
+      },
       error: undefined,
       isError: false,
     };
@@ -236,12 +243,12 @@ export function selectSkinportItemPrice(
 }
 
 export function useSkinportItemPrices(
-  itemNames: string | string[], // Item market hash names
+  marketHashNames: string | string[],
   fallbackCurrency = "USD",
-  requestItemsLimit = 50, // If items is more than limit, multiple request are made
+  requestItemsLimit = 1000,
 ) {
   return createUseSkinportItemPrices(
-    itemNames,
+    marketHashNames,
     fallbackCurrency,
     requestItemsLimit,
   )();

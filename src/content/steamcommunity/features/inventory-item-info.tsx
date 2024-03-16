@@ -70,9 +70,9 @@ featureManager.add(
           return (
             <div className="space-y-1 mb-4">
               <ItemSkinportPrice
-                price={skinportItemPrice?.price?.[1]}
+                price={skinportItemPrice?.price?.suggested}
                 priceTitle="suggested_price"
-                currency={skinportItemPrice?.currency}
+                currency={skinportItemPrice?.price?.currency}
                 loadingFailed={skinportItemPrice?.isError}
               />
               <ItemSkinportActions
