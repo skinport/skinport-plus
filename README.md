@@ -1,6 +1,6 @@
 # Skinport Plus
 
-> Enhance your online trading experience on Skinport and Steam with Skinport Plus.
+> Enhance your online trading experience on [Skinport](https://skinport.com) and Steam with Skinport Plus.
 
 ## Install
 
