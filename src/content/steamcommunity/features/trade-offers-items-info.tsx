@@ -4,7 +4,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Feature, featureManager } from "@/content/feature-manager";
+import { type Feature, featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { formatPrice } from "@/lib/format";
 import { getI18nMessage } from "@/lib/i18n";
@@ -12,13 +12,13 @@ import {
   createUseSkinportItemPrices,
   selectSkinportItemPrice,
 } from "@/lib/skinport";
-import { Item, parseSteamItem } from "@/lib/steam";
+import { type Item, parseSteamItem } from "@/lib/steam";
 import { cn } from "@/lib/utils";
 import ky from "ky";
 import { AlertCircleIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
-import { ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { $, $$ } from "select-dom";
-import { StoreApi, UseBoundStore, create } from "zustand";
+import { type StoreApi, type UseBoundStore, create } from "zustand";
 import { InventoryItemInfo } from "../components/inventory-item-info";
 import { PricingBySkinportPlus } from "../components/pricing-by-skinport-plus";
 
@@ -278,8 +278,8 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
                 tradeOfferItem.name,
               );
 
-              if (skinportItemPrice?.price?.[1]) {
-                itemsValue += skinportItemPrice.price[1];
+              if (skinportItemPrice?.price?.suggested) {
+                itemsValue += skinportItemPrice.price.suggested;
               }
             }
           }

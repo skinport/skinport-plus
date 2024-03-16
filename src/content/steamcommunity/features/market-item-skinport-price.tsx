@@ -69,18 +69,18 @@ async function marketItemSkinportPrice() {
       parseCurrency(marketForSalePriceElementText);
 
     const itemSkinportPercentageDecrease =
-      marketStartingAtPrice && skinportItemPrice?.price?.[0]
+      marketStartingAtPrice && skinportItemPrice?.price?.lowest
         ? getPercentageDecrease(
             marketStartingAtPrice,
-            skinportItemPrice.price[0],
+            skinportItemPrice.price.lowest,
           )
         : undefined;
 
     return (
       <div className="space-y-1 mb-4">
         <ItemSkinportPrice
-          price={skinportItemPrice?.price?.[0]}
-          currency={skinportItemPrice?.currency}
+          price={skinportItemPrice?.price?.lowest}
+          currency={skinportItemPrice?.price?.currency}
           discount={itemSkinportPercentageDecrease}
           priceTitle="starting_at"
           loadingFailed={skinportItemPrice?.isError}

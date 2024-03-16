@@ -4,7 +4,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Feature, featureManager } from "@/content/feature-manager";
+import { type Feature, featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { formatPrice } from "@/lib/format";
 import { getI18nMessage } from "@/lib/i18n";
@@ -16,13 +16,13 @@ import { getIsSupportedSteamAppId } from "@/lib/steam";
 import { cn } from "@/lib/utils";
 import elementReady from "element-ready";
 import { AlertCircleIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { $, $$ } from "select-dom";
 import { create } from "zustand";
 import { bridge } from "../bridge";
 import { ItemInfo } from "../components/item-info";
 import { PricingBySkinportPlus } from "../components/pricing-by-skinport-plus";
-import { SteamItem } from "../lib/steam";
+import type { SteamItem } from "../lib/steam";
 
 const tradeOfferItemsInfo: Feature = async ({
   setFeatureAttribute,
@@ -287,8 +287,8 @@ const tradeOfferItemsInfo: Feature = async ({
                 tradeOfferItem.marketHashName,
               );
 
-              if (skinportItemPrice?.price?.[1]) {
-                itemsValue += skinportItemPrice.price[1];
+              if (skinportItemPrice?.price?.suggested) {
+                itemsValue += skinportItemPrice.price.suggested;
               }
             }
           }

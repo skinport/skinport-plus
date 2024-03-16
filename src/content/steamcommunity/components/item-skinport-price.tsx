@@ -8,10 +8,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { formatPrice } from "@/lib/format";
-import { I18nMessageKey, getI18nMessage } from "@/lib/i18n";
-import { SelectedSkinportItemPrice, getSkinportItemUrl } from "@/lib/skinport";
+import { type I18nMessageKey, getI18nMessage } from "@/lib/i18n";
+import {
+  type SelectedSkinportItemPrice,
+  getSkinportItemUrl,
+} from "@/lib/skinport";
 import { AlertCircleIcon } from "lucide-react";
-import { SteamItem } from "../lib/steam";
+import type { SteamItem } from "../lib/steam";
 
 export interface ItemSkinportPriceProps {
   item: SteamItem;
@@ -49,17 +52,9 @@ export function ItemSkinportPrice({
     );
   }
 
-  if (!skinportPrice?.price || !skinportPrice?.currency) {
+  if (!skinportPrice) {
     return <Skeleton className="w-8 h-3 my-0.5" />;
   }
-
-  const skinportPriceIndex = {
-    lowest: 0,
-    suggested: 1,
-  } as const;
-
-  const skinportPriceValue =
-    skinportPrice.price[skinportPriceIndex[skinportPriceType]];
 
   return (
     <Tooltip>
@@ -77,8 +72,11 @@ export function ItemSkinportPrice({
           className="flex gap-2 items-center"
         >
           <div className="text-xs font-semibold">
-            {skinportPriceValue !== null
-              ? formatPrice(skinportPriceValue, skinportPrice.currency)
+            {skinportPrice.price
+              ? formatPrice(
+                  skinportPrice.price[skinportPriceType],
+                  skinportPrice.price.currency,
+                )
               : "-"}
           </div>
         </Link>
