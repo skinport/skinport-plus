@@ -1,11 +1,12 @@
+import type { SteamItem } from "@/content/steamcommunity/lib/steam";
 import { formatPrice } from "@/lib/format";
-import { getI18nMessage } from "@/lib/i18n";
+import { type I18nMessageKey, getI18nMessage } from "@/lib/i18n";
+import type { SelectedSkinportItemPrice } from "@/lib/skinport";
 import { getSkinportItemUrl } from "@/lib/skinport";
-import { Item } from "@/lib/steam";
 import { cn } from "@/lib/utils";
-import { VariantProps, cva } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority";
 import { AlertCircleIcon } from "lucide-react";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Discount } from "./discount";
 import { InterpolateMessage } from "./interpolate-message";
 import { SkinportLogo } from "./skinport-logo";
@@ -70,35 +71,40 @@ const alertIconVariants = cva("text-red-light", {
   },
 });
 
-/**
- * Shows a skeleton if `price` and `currency` are `undefined` and loading.
- */
+type ItemSkinportPriceProps = {
+  price: SelectedSkinportItemPrice;
+  priceType: "lowest" | "suggested";
+  discount?: string;
+  className?: string;
+  startingAtClassName?: string;
+  item?: SteamItem;
+  hidePriceTitle?: boolean;
+  tooltipType?: "view" | "buy" | "sell";
+} & VariantProps<typeof priceVariants>;
+
+const tooltipI18nMessageKey = {
+  view: "common_viewOnSkinport",
+  buy: "common_buyOnSkinport",
+  sell: "common_sellOnSkinport",
+} as Record<NonNullable<ItemSkinportPriceProps["tooltipType"]>, I18nMessageKey>;
+
 export function ItemSkinportPrice({
   price,
-  currency,
+  priceType,
   discount,
   size,
   className,
   startingAtClassName,
-  linkItem,
-  priceTitle = "starting_at",
-  loadingFailed,
-}: {
-  price?: number | null;
-  currency?: string;
-  discount?: string;
-  className?: string;
-  startingAtClassName?: string;
-  linkItem?: Item;
-  priceTitle?: "starting_at" | "suggested_price" | "none";
-  loadingFailed?: boolean;
-} & VariantProps<typeof priceVariants>) {
-  const linkPriceToItem = (children: ReactNode) =>
-    linkItem ? (
+  item,
+  hidePriceTitle,
+  tooltipType = "view",
+}: ItemSkinportPriceProps) {
+  const renderAsLinkToSkinport = (children: ReactNode) =>
+    item ? (
       <Tooltip>
         <TooltipTrigger asChild>
           <Link
-            href={getSkinportItemUrl(linkItem)}
+            href={getSkinportItemUrl(item)}
             target="_blank"
             onClick={(event) => {
               event.stopPropagation();
@@ -110,11 +116,7 @@ export function ItemSkinportPrice({
         </TooltipTrigger>
         <TooltipContent className="flex gap-1 items-center">
           <InterpolateMessage
-            message={getI18nMessage(
-              priceTitle === "starting_at"
-                ? "common_buyOnSkinport"
-                : "common_viewOnSkinport",
-            )}
+            message={getI18nMessage(tooltipI18nMessageKey[tooltipType])}
             values={{ skinportLogo: <SkinportLogo size={10} isInverted /> }}
           />
         </TooltipContent>
@@ -134,7 +136,7 @@ export function ItemSkinportPrice({
         className,
       )}
     >
-      {loadingFailed ? (
+      {price?.error ? (
         <Tooltip>
           <TooltipTrigger asChild>
             <AlertCircleIcon className={alertIconVariants({ size })} />
@@ -143,13 +145,13 @@ export function ItemSkinportPrice({
             {getI18nMessage("common_failedLoadingItemPrices")}
           </TooltipContent>
         </Tooltip>
-      ) : price !== undefined && currency ? (
-        linkPriceToItem(
+      ) : price?.data !== undefined ? (
+        renderAsLinkToSkinport(
           <>
-            <div
-              className={cn(priceVariants({ size, asLink: Boolean(linkItem) }))}
-            >
-              {typeof price === "number" ? formatPrice(price, currency) : "-"}
+            <div className={cn(priceVariants({ size, asLink: Boolean(item) }))}>
+              {price.data !== null
+                ? formatPrice(price.data[priceType], price.data.currency)
+                : "-"}
             </div>
             {discount && typeof price === "number" && (
               <Discount discount={discount} />
@@ -162,11 +164,11 @@ export function ItemSkinportPrice({
     </div>
   );
 
-  return priceTitle !== "none" ? (
+  return hidePriceTitle !== true ? (
     <div>
       <div className={cn(startingAtVariants({ size }), startingAtClassName)}>
         {getI18nMessage(
-          priceTitle === "starting_at"
+          priceType === "lowest"
             ? "common_startingAt"
             : "common_suggestedPrice",
         )}

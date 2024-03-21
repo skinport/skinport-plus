@@ -4,7 +4,7 @@ export type SteamAppId =
   | 570 // dota2
   | 252490; // rust
 
-export interface SteamItem {
+export type SteamItem = {
   appId: number;
   assetId: string | null;
   classId: string;
@@ -13,74 +13,13 @@ export interface SteamItem {
   inspectIngameLink: string | null;
   isMarketable: boolean;
   isTradable: boolean;
+  isStatTrak: boolean;
+  isSouvenir: boolean;
+  isOwner: boolean;
   marketHashName: string;
   ownerSteamId: string;
   quality: string | null;
   qualityColor: string | null;
   rarity: string | null;
   rarityColor: string | null;
-}
-
-export function parseSteamItem(
-  {
-    appid,
-    assetid,
-    classid,
-    contextid,
-    market_actions,
-    market_hash_name,
-    marketable,
-    tags,
-    tradable,
-  }: {
-    appid: number;
-    assetid?: string;
-    classid: string;
-    contextid: "2" | "6";
-    market_actions?: { link: string; name: string }[];
-    market_hash_name: string;
-    marketable: 0 | 1;
-    tags: {
-      internal_name: string;
-      name: string;
-      category: string;
-      category_name: string;
-      color?: string;
-    }[];
-    tradable: 0 | 1;
-  },
-  owner: {
-    strSteamId: string;
-  },
-): SteamItem {
-  const qualityTag = tags.find(({ category }) => category === "Quality");
-  const rarityTag = tags.find(({ category }) => category === "Rarity");
-  const assetId = assetid || null;
-  const ownerSteamId = owner.strSteamId;
-
-  return {
-    appId: appid,
-    assetId,
-    classId: classid,
-    contextId: contextid,
-    exterior:
-      tags.find(({ category }) => category === "Exterior")?.internal_name ||
-      null,
-    inspectIngameLink:
-      (assetId &&
-        ownerSteamId &&
-        market_actions
-          ?.find(({ name }) => name === "+csgo_econ_action_preview")
-          ?.link.replace("%assetid%", assetId)
-          .replace("%owner_steamid%", ownerSteamId)) ||
-      null,
-    isMarketable: marketable === 1,
-    isTradable: tradable === 1,
-    marketHashName: market_hash_name,
-    ownerSteamId,
-    quality: qualityTag?.internal_name || null,
-    qualityColor: qualityTag?.color ? `#${qualityTag.color}` : null,
-    rarity: rarityTag?.internal_name || null,
-    rarityColor: rarityTag?.color ? `#${rarityTag.color}` : null,
-  };
-}
+};

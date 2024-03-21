@@ -7,7 +7,7 @@ import {
   createUseSkinportItemPrices,
   selectSkinportItemPrice,
 } from "@/lib/skinport";
-import { parseSteamItem, parseSupportedSteamAppId } from "@/lib/steam";
+import { parseSupportedSteamAppId } from "@/lib/steam";
 import { $, $$ } from "select-dom";
 import { bridge } from "../bridge";
 
@@ -47,8 +47,8 @@ const inventoryItemsInfo: Feature = async ({
 
     const skinportItemNames = new Set<string>();
 
-    for (const item of Object.values(inventory.itemsByAssetId)) {
-      if (item.marketable === 1) {
+    for (const item of Object.values(inventory)) {
+      if (item?.isMarketable) {
         skinportItemNames.add(item.marketHashName);
       }
     }
@@ -60,26 +60,13 @@ const inventoryItemsInfo: Feature = async ({
     const inventoryItemElements = $$(".itemHolder .item", inventoryElement);
 
     for (const inventoryItemElement of inventoryItemElements) {
-      const inventoryItemAssetId = inventoryItemElement
-        .getAttribute("id")
-        ?.split("_")[2];
+      const inventoryItemElementId = inventoryItemElement.getAttribute("id");
 
-      if (!inventoryItemAssetId) {
+      if (!inventoryItemElementId) {
         continue;
       }
 
-      const inventoryItemDescription =
-        inventory.itemsByAssetId[inventoryItemAssetId];
-
-      if (!inventoryItemDescription) {
-        continue;
-      }
-
-      const inventoryItem = parseSteamItem(
-        inventoryItemDescription.marketHashName,
-        String(inventoryItemDescription.appid),
-        inventoryItemDescription.marketable === 1,
-      );
+      const inventoryItem = inventory[inventoryItemElementId];
 
       if (!inventoryItem) {
         continue;
@@ -90,7 +77,7 @@ const inventoryItemsInfo: Feature = async ({
 
         const skinportItemPrice = selectSkinportItemPrice(
           skinportItemPrices,
-          inventoryItem?.name,
+          inventoryItem?.marketHashName,
         );
 
         return (
@@ -114,21 +101,17 @@ const inventoryItemsInfo: Feature = async ({
     const [totalInventoryValueElement] = createWidgetElement(() => {
       const skinportItemPrices = useSkinportItemPrices();
 
-      const totalInventoryValue =
-        skinportItemPrices.data &&
-        Object.values(skinportItemPrices.data.prices).reduce(
-          (acc, { suggested }) => acc + suggested,
-          0,
-        );
-
       return (
         <div className="flex gap-2 bg-background px-4 py-3 rounded-md">
-          {totalInventoryValue ? (
+          {skinportItemPrices.data ? (
             <>
               <div>Total value</div>
               <div className="text-white font-semibold">
                 {formatPrice(
-                  totalInventoryValue,
+                  Object.values(skinportItemPrices.data.prices).reduce(
+                    (acc, { suggested }) => acc + suggested,
+                    0,
+                  ),
                   skinportItemPrices.data.currency,
                 )}
               </div>

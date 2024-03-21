@@ -1,8 +1,8 @@
+import type { SteamItem } from "@/content/steamcommunity/lib/steam";
 import { getI18nMessage } from "@/lib/i18n";
 import { getSkinportItemUrl, getSkinportScreenshotUrl } from "@/lib/skinport";
-import { Item } from "@/lib/steam";
 import { ChevronDown } from "lucide-react";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { InterpolateMessage } from "./interpolate-message";
 import { SkinportLogo } from "./skinport-logo";
 import { Button } from "./ui/button";
@@ -16,24 +16,22 @@ import { Link } from "./ui/link";
 
 export function ItemSkinportActions({
   item,
-  screenshotInspectIngameLink,
   className,
   container,
   children,
-  action = "view",
+  actionType = "view",
 }: {
-  item: Item;
-  screenshotInspectIngameLink?: string;
+  item: SteamItem;
   className?: string;
   container: HTMLElement;
   children?: ReactNode;
-  action?: "view" | "buy" | "sell";
+  actionType?: "view" | "buy" | "sell";
 }) {
   const viewOnSkinportButton = (
     <Button className={className} asChild>
       <Link href={getSkinportItemUrl(item)} target="_blank">
         <InterpolateMessage
-          message={getI18nMessage(`common_${action}OnSkinport`)}
+          message={getI18nMessage(`common_${actionType}OnSkinport`)}
           values={{
             skinportLogo: <SkinportLogo size={10} />,
           }}
@@ -42,11 +40,7 @@ export function ItemSkinportActions({
     </Button>
   );
 
-  if (
-    screenshotInspectIngameLink ||
-    (item.inspectIngameLink && item.hasExterior) ||
-    children
-  )
+  if ((item.inspectIngameLink && item.exterior) || children)
     return (
       <div className="flex mb-4 [&>*:first-child]:rounded-tr-none [&>*:first-child]:rounded-br-none [&>*:not(:first-child)]:rounded-tl-none [&>*:not(:first-child)]:rounded-bl-none [&>*:not(:first-child)]:border-l [&>*:not(:first-child)]:border-l-background">
         {viewOnSkinportButton}
@@ -57,14 +51,11 @@ export function ItemSkinportActions({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent container={container}>
-            {(screenshotInspectIngameLink ||
-              (item.inspectIngameLink && item.hasExterior)) && (
+            {item.inspectIngameLink && item.exterior && (
               <DropdownMenuItem asChild>
                 <Link
                   href={getSkinportScreenshotUrl(
-                    `direct?link=${
-                      screenshotInspectIngameLink || item.inspectIngameLink
-                    }`,
+                    `direct?link=${item.inspectIngameLink}`,
                   )}
                   target="_blank"
                 >

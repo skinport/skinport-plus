@@ -15,6 +15,14 @@ declare type CPage = {
 
 type AssetMarketAction = { link: string; name: string };
 
+type Tag = {
+  internal_name: string;
+  name: string;
+  category: string;
+  category_name: string;
+  color?: string;
+};
+
 declare type RgDescription = {
   actions?: AssetMarketAction[];
   appid: AppId;
@@ -22,6 +30,7 @@ declare type RgDescription = {
   market_hash_name: string;
   marketable: 0 | 1;
   tradable: 0 | 1;
+  tags: Tag[];
 };
 
 declare type RgAsset = {
@@ -35,12 +44,12 @@ declare type RgAsset = {
 
 type RgInventory = {
   [assetId: AssetId]: {
+    actions?: AssetMarketAction[];
     amount: string;
     appid: AppId;
     classid: string;
     contextid: ContextId;
     id: AssetId;
-    market_actions?: AssetMarketAction[];
     market_hash_name: string;
     marketable: 0 | 1;
     tags: {
@@ -71,7 +80,7 @@ declare type CInventory = {
   pageCurrent?: number;
   pageList?: HTMLElement[];
   rgInventory?: RgInventory;
-  owner: {
+  m_owner: {
     strSteamId: string;
   };
   selectedItem: RgAsset;

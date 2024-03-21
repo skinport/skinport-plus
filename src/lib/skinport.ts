@@ -1,13 +1,10 @@
 import { useToast } from "@/components/ui/use-toast";
+import type { SteamItem } from "@/content/steamcommunity/lib/steam";
 import type { Options as KyOptions } from "ky";
 import useSWR, { type SWRResponse } from "swr";
 import browser from "webextension-polyfill";
 import { getI18nMessage } from "./i18n";
-import {
-  type Item,
-  getSteamUserWalletCurrency,
-  steamAppIdNames,
-} from "./steam";
+import { getSteamUserWalletCurrency } from "./steam";
 
 export const SKINPORT_BASE_URL = "https://skinport.com";
 
@@ -33,13 +30,20 @@ export function getSkinportUrl(input?: string) {
   return url.toString();
 }
 
-export function getSkinportItemUrl(item: Pick<Item, "appId" | "name">) {
-  const steamAppName = steamAppIdNames[item.appId];
+export function getSkinportItemUrl(
+  item: Pick<SteamItem, "appId" | "marketHashName">,
+) {
+  const steamAppName = {
+    "730": "cs2",
+    "440": "tf2",
+    "570": "dota2",
+    "252490": "rust",
+  }[item.appId];
 
   return getSkinportUrl(
     `${
       steamAppName !== "cs2" ? `/${steamAppName}` : ""
-    }/item/${getSkinportItemSlug(item.name)}`,
+    }/item/${getSkinportItemSlug(item.marketHashName)}`,
   );
 }
 
@@ -211,7 +215,7 @@ export function selectSkinportItemPrice(
     return {
       error: skinportItemPrices.error,
       isError: true,
-      price: null,
+      data: null,
     };
   }
 
@@ -221,7 +225,7 @@ export function selectSkinportItemPrice(
     skinportItemPrices.data.prices[itemMarketHashName] === undefined
   ) {
     return {
-      price: null,
+      data: null,
       error: undefined,
       isError: false,
     };
@@ -232,7 +236,7 @@ export function selectSkinportItemPrice(
     skinportItemPrices?.data?.prices[itemMarketHashName]
   ) {
     return {
-      price: {
+      data: {
         ...skinportItemPrices.data.prices[itemMarketHashName],
         currency: skinportItemPrices.data.currency,
       },

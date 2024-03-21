@@ -1,4 +1,4 @@
-import { SteamItem } from "../lib/steam";
+import type { SteamItem } from "../lib/steam";
 
 function createBridgeAction<
   RequestData extends Record<string, unknown>,
@@ -46,20 +46,13 @@ function createBridgeAction<
   return bridgeAction;
 }
 
-export type ParsedRgAsset = Pick<RgAsset, "amount" | "assetid"> &
-  Omit<RgDescription, "actions" | "market_hash_name"> & {
-    marketHashName: RgDescription["market_hash_name"];
-    inspectIngameLink?: string;
-    isUserOwner: boolean;
-  };
-
 export const bridge = {
   inventory: {
     loadCompleteInventory: createBridgeAction<
       never,
-      { itemsByAssetId: Record<string, ParsedRgAsset> }
+      Partial<{ [elementId: string]: SteamItem }>
     >("inventory.loadCompleteInventory"),
-    getSelectedItem: createBridgeAction<never, ParsedRgAsset>(
+    getSelectedItem: createBridgeAction<never, SteamItem>(
       "inventory.getSelectedItem",
     ),
   },

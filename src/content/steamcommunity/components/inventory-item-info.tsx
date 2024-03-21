@@ -1,49 +1,65 @@
 import { ItemSkinportPrice } from "@/components/item-skinport-price";
-import type { selectSkinportItemPrice } from "@/lib/skinport";
-import type { Item } from "@/lib/steam";
+import type { SelectedSkinportItemPrice } from "@/lib/skinport";
 import { useEffect } from "react";
+import type { SteamItem } from "../lib/steam";
 
 export function InventoryItemInfo({
   inventoryItem,
   inventoryItemElement,
   skinportItemPrice,
 }: {
-  inventoryItem?: Item;
+  inventoryItem?: SteamItem;
   inventoryItemElement: HTMLElement;
-  skinportItemPrice: ReturnType<typeof selectSkinportItemPrice>;
+  skinportItemPrice: SelectedSkinportItemPrice;
 }) {
   useEffect(() => {
     inventoryItemElement.style.borderColor = "#1d1d1d";
     inventoryItemElement.style.borderTopWidth = "2px";
   }, [inventoryItemElement]);
 
-  // @TODO
-  // useEffect(() => {
-  //   if (inventoryItem) {
-  //     inventoryItemElement.style.borderTopColor = inventoryItem.rarityColor;
-  //   }
-  // }, [inventoryItem, inventoryItemElement]);
+  useEffect(() => {
+    if (inventoryItem?.rarityColor) {
+      inventoryItemElement.style.borderTopColor = inventoryItem.rarityColor;
+    }
+  }, [inventoryItem, inventoryItemElement]);
 
   if (inventoryItem?.isMarketable === false) {
     return null;
   }
 
+  const renderItemQuality = () => {
+    const itemQuality = inventoryItem?.isStatTrak
+      ? "ST"
+      : inventoryItem?.isSouvenir
+        ? "S"
+        : null;
+
+    if (itemQuality) {
+      return (
+        <div
+          className="text-2xs font-bold"
+          style={
+            inventoryItem.qualityColor
+              ? { color: inventoryItem.qualityColor }
+              : undefined
+          }
+        >
+          {itemQuality}
+        </div>
+      );
+    }
+  };
+
   return (
     <>
       <div className="absolute left-1.5 bottom-0.5 z-10">
-        {inventoryItem?.isStatTrak && (
-          <div className="text-2xs text-stattrak font-bold">ST</div>
-        )}
-        {inventoryItem?.isSouvenir && (
-          <div className="text-2xs text-souvenir font-bold">S</div>
-        )}
+        {renderItemQuality()}
         <ItemSkinportPrice
-          price={skinportItemPrice?.price?.suggested}
-          currency={skinportItemPrice?.price?.currency}
+          price={skinportItemPrice}
+          priceType="suggested"
           size="xs"
-          priceTitle="none"
-          linkItem={inventoryItem}
-          loadingFailed={skinportItemPrice?.isError}
+          item={inventoryItem}
+          hidePriceTitle
         />
       </div>
     </>
