@@ -16,7 +16,6 @@ interface FeatureConfig {
   name: string;
   matchPathname?: string | RegExp;
   extensionOptionsKey?: keyof Options;
-  useBridge?: boolean;
 }
 
 const features: [Feature, FeatureConfig][] = [];
@@ -33,7 +32,7 @@ async function run({
 
   for (const [
     feature,
-    { name: featureName, matchPathname, extensionOptionsKey, useBridge },
+    { name: featureName, matchPathname, extensionOptionsKey },
   ] of features) {
     if (
       (matchPathname instanceof RegExp &&
@@ -51,7 +50,7 @@ async function run({
     try {
       await domLoaded;
 
-      if (useBridge && bridgeScriptLoaded === false) {
+      if (bridgeContext && bridgeScriptLoaded === false) {
         const scriptElement = document.createElement("script");
 
         scriptElement.src = browser.runtime.getURL(

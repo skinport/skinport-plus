@@ -1,115 +1,132 @@
-import ky, { SearchParamsOption } from "ky";
+import ky from "ky";
 import pMemoize from "p-memoize";
 import { $$ } from "select-dom";
-import browser from "webextension-polyfill";
 import { countryCurrencies } from "./country-currencies";
-import { findInScriptElements } from "./dom";
 
-export const steamAppIdNames = {
-  "730": "cs2",
-  "440": "tf2",
-  "570": "dota2",
-  "252490": "rust",
-} as const;
+export const steamItemExterior = [
+  "Battle-Scarred",
+  "Factory New",
+  "Field-Tested",
+  "Minimal Wear",
+  "Well-Worn",
+] as const;
 
-export const supportedSteamAppIds = Object.keys(steamAppIdNames);
+const steamItemMarketHashNameExteriorRegExp = new RegExp(
+  `(${steamItemExterior.join("|")}$)`,
+);
 
-export type SupportedSteamAppIds = keyof typeof steamAppIdNames;
+export type SteamItemExterior = (typeof steamItemExterior)[number];
 
-export function getIsSupportedSteamAppId(appId: string) {
-  return Object.hasOwn(steamAppIdNames, appId);
-}
+export type SteamItemContextId = "2" | "6";
 
-export function parseSupportedSteamAppId(appId?: string) {
-  if (appId && getIsSupportedSteamAppId(appId)) {
-    return appId as SupportedSteamAppIds;
-  }
-}
+export type SteamItemAppId = number;
 
-export type Item = {
-  name: string;
-  appId: keyof typeof steamAppIdNames;
+export type SteamItemAssetId = string;
+
+export type SteamItemClassId = string;
+
+export type SteamItem = {
+  appId: SteamItemAppId;
+  assetId: SteamItemAssetId | null;
+  classId: SteamItemClassId;
+  contextId: "2" | "6" | null;
+  exterior: SteamItemExterior | null;
+  inspectIngameLink: string | null;
+  isMarketable: boolean;
+  isTradable: boolean;
   isStatTrak: boolean;
   isSouvenir: boolean;
-  isMarketable?: boolean;
-  inspectIngameLink?: string;
-  hasExterior: boolean;
+  isOwner: boolean;
+  marketHashName: string;
+  ownerSteamId: string | null;
+  quality: string | null;
+  qualityColor: string | null;
+  rarity: string | null;
+  rarityColor: string | null;
 };
 
-export function parseSteamItem(
-  name: string,
-  appId: string,
-  isMarketable: boolean,
-  inspectIngameLink?: string,
-) {
-  if (Object.hasOwn(steamAppIdNames, appId)) {
-    const item: Item = {
-      name,
-      appId: appId as keyof typeof steamAppIdNames,
-      isStatTrak: getIsItemStatTrak(name),
-      isSouvenir: getIsItemSouvenir(name),
-      isMarketable,
-      inspectIngameLink,
-      hasExterior: getHasItemExterior(name),
-    };
+export function parseSteamItem({
+  actions,
+  appid,
+  assetid,
+  classid,
+  contextid,
+  market_hash_name,
+  marketable,
+  tags,
+  tradable,
+  owner_steamid,
+  user_steamid,
+}: {
+  actions?: { link: string; name: string }[];
+  appid: number;
+  assetid?: string;
+  classid: string;
+  contextid?: "2" | "6";
+  market_hash_name: string;
+  marketable: 0 | 1;
+  tags?: {
+    internal_name: string;
+    name: string;
+    category: string;
+    category_name: string;
+    color?: string;
+  }[];
+  tradable: 0 | 1;
+  owner_steamid?: string;
+  user_steamid?: string;
+}): SteamItem {
+  const qualityTag = tags?.find(({ category }) => category === "Quality");
 
-    return item;
+  const rarityTag = tags?.find(({ category }) => category === "Rarity");
+
+  const assetId = assetid || null;
+
+  const ownerSteamId = owner_steamid || null;
+
+  const marketHashName = market_hash_name;
+
+  const exterior =
+    (marketHashName.match(steamItemMarketHashNameExteriorRegExp)?.[0] as
+      | SteamItemExterior
+      | undefined) || null;
+
+  let inspectIngameLink =
+    actions?.find(
+      ({ link }) => link.indexOf("+csgo_econ_action_preview") !== -1,
+    )?.link || null;
+
+  if (inspectIngameLink && assetId) {
+    inspectIngameLink = inspectIngameLink.replace("%assetid%", assetId);
   }
 
-  return null;
-}
-
-export async function verifyTradingPartner(steamId: string) {
-  const { response, error } = await browser.runtime.sendMessage({
-    skinportApi: `v1/extension/bot/${steamId}`,
-  });
-
-  if (error) {
-    throw Error(error);
-  }
-
-  return response.verified;
-}
-
-export function getHasItemExterior(itemName: string) {
-  return /\(Battle-Scarred|Factory New|Field-Tested|Minimal Wear|Well-Worn\)$/.test(
-    decodeURIComponent(itemName),
-  );
-}
-
-export function getIsItemStatTrak(itemName?: string) {
-  if (itemName) {
-    return /^StatTrak™/.test(decodeURIComponent(itemName));
-  }
-
-  return false;
-}
-
-export function getIsItemSouvenir(itemName?: string) {
-  if (itemName) {
-    return /^Souvenir/.test(decodeURIComponent(itemName));
-  }
-
-  return false;
-}
-
-export function getItemFromSteamMarketUrl(
-  url: string = window.location.pathname,
-) {
-  const paths = url.split("/");
-  const name = paths.pop();
-  const appId = paths.pop();
-
-  if (!name || !appId || !getIsSupportedSteamAppId(appId)) {
-    return;
+  if (inspectIngameLink && ownerSteamId) {
+    inspectIngameLink = inspectIngameLink.replace(
+      "%owner_steamid%",
+      ownerSteamId,
+    );
   }
 
   return {
-    name: decodeURIComponent(name),
-    appId,
-    isStatTrak: getIsItemStatTrak(name),
-    isSouvenir: getIsItemSouvenir(name),
-  } as Item;
+    appId: appid,
+    assetId,
+    classId: classid,
+    contextId: contextid || null,
+    exterior,
+    inspectIngameLink,
+    isMarketable: marketable === 1,
+    isTradable: tradable === 1,
+    isStatTrak: /^StatTrak™/.test(market_hash_name),
+    isSouvenir: /^Souvenir/.test(market_hash_name),
+    isOwner:
+      ownerSteamId && user_steamid ? ownerSteamId === user_steamid : false,
+    marketHashName: market_hash_name,
+    ownerSteamId: ownerSteamId || null,
+    quality: qualityTag?.internal_name || null,
+    qualityColor: qualityTag?.color ? `#${qualityTag.color}` : null,
+    rarity: rarityTag?.internal_name || null,
+    rarityColor: rarityTag?.color ? `#${rarityTag.color}` : null,
+  };
 }
 
 function findWalletCountryCode(text: string) {
@@ -139,82 +156,3 @@ export const getSteamUserWalletCurrency = pMemoize(async () => {
 
   return null;
 });
-
-export function getSteamUserSteamId() {
-  const userSteamId = findInScriptElements(/g_steamID = "(\d+)"/);
-
-  return userSteamId;
-}
-
-export async function getSteamUserInventory({
-  steamId,
-  appId,
-  count = 5000, // Max
-  startAssetId, // Pagination (Cursor)
-}: {
-  steamId?: string;
-  appId: SupportedSteamAppIds;
-  count?: number;
-  startAssetId?: string;
-}) {
-  const searchParams: SearchParamsOption = { l: "english", count };
-
-  if (startAssetId) {
-    searchParams.start_assetid = startAssetId;
-  }
-
-  return ky(
-    `https://steamcommunity.com/inventory/${
-      steamId || getSteamUserSteamId()
-    }/${appId}/2`,
-    { searchParams, retry: 10 },
-  ).json<{
-    assets: {
-      amount: string;
-      appid: number;
-      assetid: string;
-      classid: string;
-      contextid: string;
-      instanceid: string;
-    }[];
-    descriptions: {
-      actions: { link: string; name: string }[];
-      appid: number;
-      background_color: string;
-      classid: string;
-      commodity: number;
-      currency: number;
-      descriptions: { type: "html"; value: string }[];
-      icon_url: string;
-      instanceid: string;
-      market_actions: {
-        link: string;
-        name: string;
-      }[];
-      market_hash_name: string;
-      market_name: string;
-      market_tradable_restriction: string;
-      marketable: number;
-      name: string;
-      name_color: string;
-      tags: {
-        category:
-          | "Type"
-          | "Weapon"
-          | "ItemSet"
-          | "Quality"
-          | "Rarity"
-          | "Exterior";
-        internal_name: string;
-        localized_category_name: string;
-        localized_tag_name: string;
-        tradable: number;
-        type: string;
-      }[];
-    }[];
-    last_assetid: string;
-    more_items: number;
-    success: number;
-    total_inventory_count: number;
-  }>();
-}

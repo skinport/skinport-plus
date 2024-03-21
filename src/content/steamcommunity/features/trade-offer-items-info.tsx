@@ -1,3 +1,5 @@
+import { PricingBySkinportPlus } from "@/components/pricing-by-skinport-plus";
+import { SteamInventoryItemInfo } from "@/components/steam-inventory-item-info";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
@@ -10,19 +12,17 @@ import { formatPrice } from "@/lib/format";
 import { getI18nMessage } from "@/lib/i18n";
 import {
   createUseSkinportItemPrices,
+  getIsSkinportSupportedSteamAppId,
   selectSkinportItemPrice,
 } from "@/lib/skinport";
-import { getIsSupportedSteamAppId } from "@/lib/steam";
+import type { SteamItem } from "@/lib/steam";
+import { steamCommunity } from "@/lib/steamCommunity";
 import { cn } from "@/lib/utils";
 import elementReady from "element-ready";
 import { AlertCircleIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { $, $$ } from "select-dom";
 import { create } from "zustand";
-import { bridge } from "../bridge";
-import { ItemInfo } from "../components/item-info";
-import { PricingBySkinportPlus } from "../components/pricing-by-skinport-plus";
-import type { SteamItem } from "../lib/steam";
 
 const tradeOfferItemsInfo: Feature = async ({
   setFeatureAttribute,
@@ -65,15 +65,16 @@ const tradeOfferItemsInfo: Feature = async ({
         itemElementsByAssetId[itemAssetId] = itemElement;
       }
 
-      const { itemsByAssetId } = await bridge.tradeOffer.getItemsByAssetId({
-        assetIds: Object.keys(itemElementsByAssetId),
-      });
+      const { itemsByAssetId } =
+        await steamCommunity.tradeOffer.getItemsByAssetId({
+          assetIds: Object.keys(itemElementsByAssetId),
+        });
 
       const useSkinportItemPrices = createUseSkinportItemPrices(() => {
         const itemNames = new Set<string>();
 
         for (const { appId, marketHashName } of Object.values(itemsByAssetId)) {
-          if (getIsSupportedSteamAppId(String(appId))) {
+          if (getIsSkinportSupportedSteamAppId(appId)) {
             itemNames.add(marketHashName);
           }
         }
@@ -97,10 +98,10 @@ const tradeOfferItemsInfo: Feature = async ({
           );
 
           return (
-            <ItemInfo
-              item={item}
-              itemElement={itemElement}
-              skinportPrice={skinportItemPrice}
+            <SteamInventoryItemInfo
+              inventoryItem={item}
+              inventoryItemElement={itemElement}
+              skinportItemPrice={skinportItemPrice}
             />
           );
         });
@@ -141,13 +142,13 @@ const tradeOfferItemsInfo: Feature = async ({
       }),
     );
 
-    const tradeItems = await bridge.tradeOffer.getTradeItems();
+    const tradeItems = await steamCommunity.tradeOffer.getTradeItems();
 
     const useSkinportItemPrices = createUseSkinportItemPrices(() => {
       const itemNames = new Set<string>();
 
       for (const { appId, marketHashName } of Object.values(tradeItems)) {
-        if (getIsSupportedSteamAppId(String(appId))) {
+        if (getIsSkinportSupportedSteamAppId(appId)) {
           itemNames.add(marketHashName);
         }
       }
@@ -198,10 +199,10 @@ const tradeOfferItemsInfo: Feature = async ({
           );
 
           return (
-            <ItemInfo
-              item={tradeItem}
-              itemElement={tradeItemElement}
-              skinportPrice={skinportItemPrice}
+            <SteamInventoryItemInfo
+              inventoryItem={tradeItem}
+              inventoryItemElement={tradeItemElement}
+              skinportItemPrice={skinportItemPrice}
             />
           );
         });
@@ -287,8 +288,8 @@ const tradeOfferItemsInfo: Feature = async ({
                 tradeOfferItem.marketHashName,
               );
 
-              if (skinportItemPrice?.price?.suggested) {
-                itemsValue += skinportItemPrice.price.suggested;
+              if (skinportItemPrice?.data?.suggested) {
+                itemsValue += skinportItemPrice.data.suggested;
               }
             }
           }
@@ -390,5 +391,4 @@ const tradeOfferItemsInfo: Feature = async ({
 featureManager.add(tradeOfferItemsInfo, {
   name: "trade-offer-items-info",
   matchPathname: /^\/tradeoffer\/(?:new|\d+)\/$/,
-  useBridge: true,
 });

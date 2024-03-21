@@ -1,12 +1,11 @@
-import { ItemSkinportActions } from "@/components/item-skinport-actions";
-import { ItemSkinportPrice } from "@/components/item-skinport-price";
+import { SteamItemSkinportActions } from "@/components/steam-item-skinport-actions";
+import { SteamItemSkinportPrice } from "@/components/steam-item-skinport-price";
 import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { selectSkinportItemPrice, useSkinportItemPrices } from "@/lib/skinport";
-import { parseSteamItem } from "@/lib/steam";
+import { steamCommunity } from "@/lib/steamCommunity";
 import elementReady from "element-ready";
 import { $ } from "select-dom";
-import { bridge } from "../bridge";
 
 featureManager.add(
   async ({
@@ -43,42 +42,33 @@ featureManager.add(
 
       cleanupPreviousItemFns.push(removeFeatureAttribute);
 
-      const selectedItem = await bridge.inventory.getSelectedItem();
+      const selectedItem = await steamCommunity.inventory.getSelectedItem();
 
-      const parsedSelectedItem = parseSteamItem(
-        selectedItem.marketHashName,
-        String(selectedItem.appid),
-        selectedItem.marketable === 1,
-        selectedItem.inspectIngameLink,
-      );
-
-      if (!parsedSelectedItem || !parsedSelectedItem.isMarketable) {
+      if (!selectedItem.isMarketable) {
         return;
       }
 
       const [viewOnSkinportElement, removeViewOnSkinportElement] =
         createWidgetElement(({ shadowRoot }) => {
           const skinportItemPrices = useSkinportItemPrices(
-            parsedSelectedItem.name,
+            selectedItem.marketHashName,
           );
 
           const skinportItemPrice = selectSkinportItemPrice(
             skinportItemPrices,
-            parsedSelectedItem.name,
+            selectedItem.marketHashName,
           );
 
           return (
             <div className="space-y-1 mb-4">
-              <ItemSkinportPrice
-                price={skinportItemPrice?.price?.suggested}
-                priceTitle="suggested_price"
-                currency={skinportItemPrice?.price?.currency}
-                loadingFailed={skinportItemPrice?.isError}
+              <SteamItemSkinportPrice
+                price={skinportItemPrice}
+                priceType={selectedItem.isOwner ? "suggested" : "lowest"}
               />
-              <ItemSkinportActions
-                item={parsedSelectedItem}
+              <SteamItemSkinportActions
+                item={selectedItem}
                 container={shadowRoot}
-                action={selectedItem.isUserOwner ? "sell" : "buy"}
+                actionType={selectedItem.isOwner ? "sell" : "buy"}
               />
             </div>
           );
@@ -121,7 +111,6 @@ featureManager.add(
   {
     name: "inventory-item-info",
     matchPathname: /\/(id|profiles)\/\w+\/inventory/,
-    useBridge: true,
     extensionOptionsKey: "steamCommunityInventoryShowItemPrices",
   },
 );

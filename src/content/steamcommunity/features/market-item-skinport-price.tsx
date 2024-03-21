@@ -1,25 +1,19 @@
-import { ItemSkinportActions } from "@/components/item-skinport-actions";
-import { ItemSkinportPrice } from "@/components/item-skinport-price";
+import { SteamItemSkinportActions } from "@/components/steam-item-skinport-actions";
+import { SteamItemSkinportPrice } from "@/components/steam-item-skinport-price";
 import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
-import { selectSkinportItemPrice, useSkinportItemPrices } from "@/lib/skinport";
 import {
-  getHasItemExterior,
-  getItemFromSteamMarketUrl,
-  supportedSteamAppIds,
-} from "@/lib/steam";
+  selectSkinportItemPrice,
+  skinportSupportedSteamApps,
+  useSkinportItemPrices,
+} from "@/lib/skinport";
+import { steamCommunity } from "@/lib/steamCommunity";
 import { getPercentageDecrease, parseCurrency } from "@/lib/utils";
 import elementReady from "element-ready";
 import { useEffect, useState } from "react";
 import { $ } from "select-dom";
 
 async function marketItemSkinportPrice() {
-  const item = getItemFromSteamMarketUrl();
-
-  if (!item) {
-    return;
-  }
-
   const itemDescriptionElement = $(
     ".market_listing_iteminfo .item_desc_descriptors",
   );
@@ -28,68 +22,86 @@ async function marketItemSkinportPrice() {
     return;
   }
 
-  const inspectIngameLink =
-    (getHasItemExterior(item.name) &&
-      (
-        await elementReady("a[href*='csgo_econ_action_preview']", {
-          stopOnDomReady: false,
-          timeout: 5000,
-        })
-      )?.getAttribute("href")) ||
-    undefined;
+  const marketListingElement = $(".market_listing_row[id^='listing_']");
+
+  const marketListingId =
+    marketListingElement?.getAttribute("id")?.split("_")[1] || undefined;
+
+  const marketListingItem = await steamCommunity.market.getListingItem(
+    marketListingId
+      ? {
+          listingId: marketListingId,
+        }
+      : undefined,
+  );
+
+  const marketListingPriceElementText =
+    marketListingElement &&
+    $(
+      ".market_listing_price.market_listing_price_with_fee",
+      marketListingElement,
+    )?.innerText;
 
   const [widgetElement] = createWidgetElement(({ shadowRoot }) => {
-    const skinportItemPrices = useSkinportItemPrices(item.name);
+    const skinportItemPrices = useSkinportItemPrices(
+      marketListingItem.marketHashName,
+    );
+
     const [marketForSalePriceElementText, setMarketForSalePriceElementText] =
       useState<string>();
 
     useEffect(() => {
-      (async () => {
-        const marketForSalePriceElement = await elementReady(
-          "#market_commodity_forsale > span:last-child",
-          {
-            stopOnDomReady: false,
-            timeout: 5000,
-          },
-        );
+      if (!marketListingPriceElementText) {
+        const getCommodityItemPrice = async () => {
+          const marketForSalePriceElement = await elementReady(
+            "#market_commodity_forsale > span:last-child",
+            {
+              stopOnDomReady: false,
+              timeout: 5000,
+            },
+          );
 
-        if (marketForSalePriceElement) {
-          setMarketForSalePriceElementText(marketForSalePriceElement.innerText);
-        }
-      })();
+          if (marketForSalePriceElement) {
+            setMarketForSalePriceElementText(
+              marketForSalePriceElement.innerText,
+            );
+          }
+        };
+
+        getCommodityItemPrice();
+      }
     }, []);
 
     const skinportItemPrice = selectSkinportItemPrice(
       skinportItemPrices,
-      item.name,
+      marketListingItem.marketHashName,
     );
 
     const marketStartingAtPrice =
-      marketForSalePriceElementText &&
-      parseCurrency(marketForSalePriceElementText);
+      (marketListingPriceElementText &&
+        parseCurrency(marketListingPriceElementText)) ||
+      (marketForSalePriceElementText &&
+        parseCurrency(marketForSalePriceElementText));
 
     const itemSkinportPercentageDecrease =
-      marketStartingAtPrice && skinportItemPrice?.price?.lowest
+      marketStartingAtPrice && skinportItemPrice?.data?.lowest
         ? getPercentageDecrease(
             marketStartingAtPrice,
-            skinportItemPrice.price.lowest,
+            skinportItemPrice.data.lowest,
           )
         : undefined;
 
     return (
       <div className="space-y-1 mb-4">
-        <ItemSkinportPrice
-          price={skinportItemPrice?.price?.lowest}
-          currency={skinportItemPrice?.price?.currency}
+        <SteamItemSkinportPrice
+          price={skinportItemPrice}
           discount={itemSkinportPercentageDecrease}
-          priceTitle="starting_at"
-          loadingFailed={skinportItemPrice?.isError}
+          priceType="lowest"
         />
-        <ItemSkinportActions
-          item={item}
-          screenshotInspectIngameLink={inspectIngameLink}
+        <SteamItemSkinportActions
+          item={marketListingItem}
           container={shadowRoot}
-          action="buy"
+          actionType="buy"
         />
       </div>
     );
@@ -101,6 +113,6 @@ async function marketItemSkinportPrice() {
 featureManager.add(marketItemSkinportPrice, {
   name: "market-item-skinport-price",
   matchPathname: new RegExp(
-    `/market/listings/(${supportedSteamAppIds.join(")|(")})`,
+    `/market/listings/(${Object.keys(skinportSupportedSteamApps).join(")|(")})`,
   ),
 });

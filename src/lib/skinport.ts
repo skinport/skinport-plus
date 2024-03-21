@@ -1,13 +1,9 @@
 import { useToast } from "@/components/ui/use-toast";
+import { type SteamItem, getSteamUserWalletCurrency } from "@/lib/steam";
 import type { Options as KyOptions } from "ky";
 import useSWR, { type SWRResponse } from "swr";
 import browser from "webextension-polyfill";
 import { getI18nMessage } from "./i18n";
-import {
-  type Item,
-  getSteamUserWalletCurrency,
-  steamAppIdNames,
-} from "./steam";
 
 export const SKINPORT_BASE_URL = "https://skinport.com";
 
@@ -33,13 +29,24 @@ export function getSkinportUrl(input?: string) {
   return url.toString();
 }
 
-export function getSkinportItemUrl(item: Pick<Item, "appId" | "name">) {
-  const steamAppName = steamAppIdNames[item.appId];
+export function getSkinportItemUrl(
+  item: Pick<SteamItem, "appId" | "marketHashName">,
+) {
+  const steamAppName = {
+    "730": "cs2",
+    "440": "tf2",
+    "570": "dota2",
+    "252490": "rust",
+  }[item.appId];
+
+  if (!steamAppName) {
+    return null;
+  }
 
   return getSkinportUrl(
     `${
       steamAppName !== "cs2" ? `/${steamAppName}` : ""
-    }/item/${getSkinportItemSlug(item.name)}`,
+    }/item/${getSkinportItemSlug(item.marketHashName)}`,
   );
 }
 
@@ -211,7 +218,7 @@ export function selectSkinportItemPrice(
     return {
       error: skinportItemPrices.error,
       isError: true,
-      price: null,
+      data: null,
     };
   }
 
@@ -221,7 +228,7 @@ export function selectSkinportItemPrice(
     skinportItemPrices.data.prices[itemMarketHashName] === undefined
   ) {
     return {
-      price: null,
+      data: null,
       error: undefined,
       isError: false,
     };
@@ -232,7 +239,7 @@ export function selectSkinportItemPrice(
     skinportItemPrices?.data?.prices[itemMarketHashName]
   ) {
     return {
-      price: {
+      data: {
         ...skinportItemPrices.data.prices[itemMarketHashName],
         currency: skinportItemPrices.data.currency,
       },
@@ -260,4 +267,27 @@ export async function getSkinportSteamBot(steamId: string) {
 
 export function useSkinportSteamBot(steamId: string) {
   return useSkinportApi<{ verified: boolean }>(`v1/extension/bot/${steamId}`);
+}
+
+export async function getIsSteamIdSkinportVerified(steamId: string) {
+  const { response, error } = await browser.runtime.sendMessage({
+    skinportApi: `v1/extension/bot/${steamId}`,
+  });
+
+  if (error) {
+    throw Error(error);
+  }
+
+  return response.verified;
+}
+
+export const skinportSupportedSteamApps = {
+  730: "cs2",
+  440: "tf2",
+  570: "dota2",
+  252490: "rust",
+};
+
+export function getIsSkinportSupportedSteamAppId(appId: number) {
+  return Object.hasOwn(skinportSupportedSteamApps, appId);
 }

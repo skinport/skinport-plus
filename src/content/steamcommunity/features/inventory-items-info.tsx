@@ -1,16 +1,16 @@
+import { SteamInventoryItemInfo } from "@/components/steam-inventory-item-info";
 import { Skeleton } from "@/components/ui/skeleton";
 import { type Feature, featureManager } from "@/content/feature-manager";
-import { InventoryItemInfo } from "@/content/steamcommunity/components/inventory-item-info";
 import { createWidgetElement } from "@/content/widget";
 import { formatPrice } from "@/lib/format";
 import { getI18nMessage } from "@/lib/i18n";
 import {
   createUseSkinportItemPrices,
+  getIsSkinportSupportedSteamAppId,
   selectSkinportItemPrice,
 } from "@/lib/skinport";
-import { parseSteamItem, parseSupportedSteamAppId } from "@/lib/steam";
+import { steamCommunity } from "@/lib/steamCommunity";
 import { $, $$ } from "select-dom";
-import { bridge } from "../bridge";
 
 const inventoryItemsInfo: Feature = async ({
   createNotMatchingFeatureAttributeSelector,
@@ -36,20 +36,21 @@ const inventoryItemsInfo: Feature = async ({
 
     setFeatureAttribute(inventoryElement);
 
-    const inventoryAppId = parseSupportedSteamAppId(
-      inventoryElement.getAttribute("id")?.split("_")[2],
-    );
+    const inventoryAppId = inventoryElement.getAttribute("id")?.split("_")[2];
 
-    if (!inventoryAppId) {
+    if (
+      !inventoryAppId ||
+      !getIsSkinportSupportedSteamAppId(Number(inventoryAppId))
+    ) {
       return;
     }
 
-    const inventory = await bridge.inventory.loadCompleteInventory();
+    const inventory = await steamCommunity.inventory.loadCompleteInventory();
 
     const skinportItemNames = new Set<string>();
 
-    for (const item of Object.values(inventory.itemsByAssetId)) {
-      if (item.marketable === 1) {
+    for (const item of Object.values(inventory)) {
+      if (item?.isMarketable) {
         skinportItemNames.add(item.marketHashName);
       }
     }
@@ -61,26 +62,13 @@ const inventoryItemsInfo: Feature = async ({
     const inventoryItemElements = $$(".itemHolder .item", inventoryElement);
 
     for (const inventoryItemElement of inventoryItemElements) {
-      const inventoryItemAssetId = inventoryItemElement
-        .getAttribute("id")
-        ?.split("_")[2];
+      const inventoryItemElementId = inventoryItemElement.getAttribute("id");
 
-      if (!inventoryItemAssetId) {
+      if (!inventoryItemElementId) {
         continue;
       }
 
-      const inventoryItemDescription =
-        inventory.itemsByAssetId[inventoryItemAssetId];
-
-      if (!inventoryItemDescription) {
-        continue;
-      }
-
-      const inventoryItem = parseSteamItem(
-        inventoryItemDescription.marketHashName,
-        String(inventoryItemDescription.appid),
-        inventoryItemDescription.marketable === 1,
-      );
+      const inventoryItem = inventory[inventoryItemElementId];
 
       if (!inventoryItem) {
         continue;
@@ -91,11 +79,11 @@ const inventoryItemsInfo: Feature = async ({
 
         const skinportItemPrice = selectSkinportItemPrice(
           skinportItemPrices,
-          inventoryItem?.name,
+          inventoryItem?.marketHashName,
         );
 
         return (
-          <InventoryItemInfo
+          <SteamInventoryItemInfo
             inventoryItem={inventoryItem}
             inventoryItemElement={inventoryItemElement}
             skinportItemPrice={skinportItemPrice}
@@ -115,21 +103,17 @@ const inventoryItemsInfo: Feature = async ({
     const [totalInventoryValueElement] = createWidgetElement(() => {
       const skinportItemPrices = useSkinportItemPrices();
 
-      const totalInventoryValue =
-        skinportItemPrices.data &&
-        Object.values(skinportItemPrices.data.prices).reduce(
-          (acc, { suggested }) => acc + suggested,
-          0,
-        );
-
       return (
         <div className="flex gap-2 bg-background px-4 py-3 rounded-md">
-          {totalInventoryValue ? (
+          {skinportItemPrices.data ? (
             <>
               <div>{getI18nMessage("common_totalValue")}</div>
               <div className="text-white font-semibold">
                 {formatPrice(
-                  totalInventoryValue,
+                  Object.values(skinportItemPrices.data.prices).reduce(
+                    (acc, { suggested }) => acc + suggested,
+                    0,
+                  ),
                   skinportItemPrices.data.currency,
                 )}
               </div>
@@ -160,6 +144,5 @@ const inventoryItemsInfo: Feature = async ({
 featureManager.add(inventoryItemsInfo, {
   name: "inventory-items-info",
   matchPathname: /\/(id|profiles)\/\w+\/inventory/,
-  useBridge: true,
   extensionOptionsKey: "steamCommunityInventoryShowItemPrices",
 });

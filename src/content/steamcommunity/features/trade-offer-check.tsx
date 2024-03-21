@@ -9,8 +9,13 @@ import { getI18nMessage } from "@/lib/i18n";
 import { getSkinportUrl, useSkinportSteamBot } from "@/lib/skinport";
 import { cn } from "@/lib/utils";
 import elementReady from "element-ready";
-import { Loader2, LucideIcon, ShieldAlert, ShieldCheck } from "lucide-react";
-import { ReactNode, useEffect } from "react";
+import {
+  Loader2,
+  type LucideIcon,
+  ShieldAlert,
+  ShieldCheck,
+} from "lucide-react";
+import { type ReactNode, useEffect } from "react";
 import { $, $$ } from "select-dom";
 
 function TradePartnerCheckResult({

@@ -1,3 +1,5 @@
+import { PricingBySkinportPlus } from "@/components/pricing-by-skinport-plus";
+import { SteamInventoryItemInfo } from "@/components/steam-inventory-item-info";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
@@ -12,15 +14,13 @@ import {
   createUseSkinportItemPrices,
   selectSkinportItemPrice,
 } from "@/lib/skinport";
-import { type Item, parseSteamItem } from "@/lib/steam";
+import { type SteamItem, parseSteamItem } from "@/lib/steam";
 import { cn } from "@/lib/utils";
 import ky from "ky";
 import { AlertCircleIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { type ReactNode, useEffect, useState } from "react";
 import { $, $$ } from "select-dom";
 import { type StoreApi, type UseBoundStore, create } from "zustand";
-import { InventoryItemInfo } from "../components/inventory-item-info";
-import { PricingBySkinportPlus } from "../components/pricing-by-skinport-plus";
 
 async function getAllTradeOfferItems(tradeOfferItemElements: HTMLElement[]) {
   const itemInfoRequests = new Map<HTMLElement, Promise<string>>();
@@ -52,24 +52,20 @@ async function getAllTradeOfferItems(tradeOfferItemElements: HTMLElement[]) {
 
   await Promise.all(itemInfoRequests.values());
 
-  const items = new Map<HTMLElement, Item>();
+  const items = new Map<HTMLElement, SteamItem>();
 
   for (const [tradeOfferItemElement, itemInfoRequest] of itemInfoRequests) {
     const itemInfoMatches = (await itemInfoRequest).match(
-      /"market_hash_name":"([^"]+)".*"marketable":(0|1).*"appid":"(\d+)"/,
+      /BuildHover\(\s*'economy_item_[0-9a-z]+',\s*({.+}) \);/,
     );
 
     if (!itemInfoMatches) {
       continue;
     }
 
-    const item = parseSteamItem(
-      JSON.parse(`"${itemInfoMatches[1]}"`),
-      itemInfoMatches[3],
-      itemInfoMatches[2] === "1",
-    );
+    const item = parseSteamItem(JSON.parse(itemInfoMatches[1]));
 
-    if (!item || !item.isMarketable) {
+    if (!item.isMarketable) {
       continue;
     }
 
@@ -88,7 +84,7 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
 
   const useSkinportItemPrices = createUseSkinportItemPrices(async () =>
     Array.from((await allTradeOfferItemRequests).values()).map(
-      ({ name }) => name,
+      ({ marketHashName }) => marketHashName,
     ),
   );
 
@@ -99,13 +95,13 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
       tradeOfferItemElement.style.borderTopWidth = "2px";
 
       const [itemSkinportPriceElement] = createWidgetElement(() => {
-        const [tradeOfferItem, setTradeOfferItem] = useState<Item>();
+        const [tradeOfferItem, setTradeOfferItem] = useState<SteamItem>();
 
         const skinportItemPrices = useSkinportItemPrices();
 
         const skinportItemPrice = selectSkinportItemPrice(
           skinportItemPrices,
-          tradeOfferItem?.name,
+          tradeOfferItem?.marketHashName,
         );
 
         useEffect(() => {
@@ -119,7 +115,7 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
         }, []);
 
         return (
-          <InventoryItemInfo
+          <SteamInventoryItemInfo
             inventoryItem={tradeOfferItem}
             inventoryItemElement={tradeOfferItemElement}
             skinportItemPrice={skinportItemPrice}
@@ -184,8 +180,8 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
 
       const [skinportItemsValueElement] = createWidgetElement(() => {
         const [tradeOfferPartyItems, setTradeOfferPartyItems] = useState<{
-          current: Item[];
-          other: Item[];
+          current: SteamItem[];
+          other: SteamItem[];
         }>();
 
         const skinportItemPrices = useSkinportItemPrices();
@@ -200,7 +196,7 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
             const getTradeOfferPartyItems = (
               tradeOfferPartyElement: Element,
             ) => {
-              const tradeOfferPartyItems: Item[] = [];
+              const tradeOfferPartyItems: SteamItem[] = [];
 
               const tradeOfferPartyItemElements = $$(
                 ".trade_item",
@@ -268,18 +264,18 @@ const tradeOffersItemsInfo: Feature = async ({ extensionOptions }) => {
           return render(<Skeleton className="w-28 h-3.5 my-[0.2rem]" />);
         }
 
-        const calculateItemsValue = (tradeOfferItems?: Item[]) => {
+        const calculateItemsValue = (tradeOfferItems?: SteamItem[]) => {
           let itemsValue = 0;
 
           if (tradeOfferItems) {
             for (const tradeOfferItem of tradeOfferItems) {
               const skinportItemPrice = selectSkinportItemPrice(
                 skinportItemPrices,
-                tradeOfferItem.name,
+                tradeOfferItem.marketHashName,
               );
 
-              if (skinportItemPrice?.price?.suggested) {
-                itemsValue += skinportItemPrice.price.suggested;
+              if (skinportItemPrice?.data?.suggested) {
+                itemsValue += skinportItemPrice.data.suggested;
               }
             }
           }

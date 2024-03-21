@@ -1,8 +1,8 @@
 import { getI18nMessage } from "@/lib/i18n";
 import { getSkinportItemUrl, getSkinportScreenshotUrl } from "@/lib/skinport";
-import { Item } from "@/lib/steam";
+import type { SteamItem } from "@/lib/steam";
 import { ChevronDown } from "lucide-react";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { InterpolateMessage } from "./interpolate-message";
 import { SkinportLogo } from "./skinport-logo";
 import { Button } from "./ui/button";
@@ -14,26 +14,33 @@ import {
 } from "./ui/dropdown-menu";
 import { Link } from "./ui/link";
 
-export function ItemSkinportActions({
+export function SteamItemSkinportActions({
   item,
-  screenshotInspectIngameLink,
   className,
   container,
   children,
-  action = "view",
+  actionType = "view",
 }: {
-  item: Item;
-  screenshotInspectIngameLink?: string;
+  item: Pick<
+    SteamItem,
+    "appId" | "marketHashName" | "inspectIngameLink" | "exterior"
+  >;
   className?: string;
   container: HTMLElement;
   children?: ReactNode;
-  action?: "view" | "buy" | "sell";
+  actionType?: "view" | "buy" | "sell";
 }) {
+  const itemSkinportLink = getSkinportItemUrl(item);
+
+  if (!itemSkinportLink) {
+    return;
+  }
+
   const viewOnSkinportButton = (
     <Button className={className} asChild>
-      <Link href={getSkinportItemUrl(item)} target="_blank">
+      <Link href={itemSkinportLink} target="_blank">
         <InterpolateMessage
-          message={getI18nMessage(`common_${action}OnSkinport`)}
+          message={getI18nMessage(`common_${actionType}OnSkinport`)}
           values={{
             skinportLogo: <SkinportLogo size={10} />,
           }}
@@ -42,11 +49,12 @@ export function ItemSkinportActions({
     </Button>
   );
 
-  if (
-    screenshotInspectIngameLink ||
-    (item.inspectIngameLink && item.hasExterior) ||
-    children
-  )
+  const itemSkinportScreenshotUrl =
+    item.inspectIngameLink &&
+    item.exterior &&
+    getSkinportScreenshotUrl(`direct?link=${item.inspectIngameLink}`);
+
+  if (itemSkinportScreenshotUrl || children) {
     return (
       <div className="flex mb-4 [&>*:first-child]:rounded-tr-none [&>*:first-child]:rounded-br-none [&>*:not(:first-child)]:rounded-tl-none [&>*:not(:first-child)]:rounded-bl-none [&>*:not(:first-child)]:border-l [&>*:not(:first-child)]:border-l-background">
         {viewOnSkinportButton}
@@ -57,17 +65,9 @@ export function ItemSkinportActions({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent container={container}>
-            {(screenshotInspectIngameLink ||
-              (item.inspectIngameLink && item.hasExterior)) && (
+            {itemSkinportScreenshotUrl && (
               <DropdownMenuItem asChild>
-                <Link
-                  href={getSkinportScreenshotUrl(
-                    `direct?link=${
-                      screenshotInspectIngameLink || item.inspectIngameLink
-                    }`,
-                  )}
-                  target="_blank"
-                >
+                <Link href={itemSkinportScreenshotUrl} target="_blank">
                   {getI18nMessage(
                     "steamcommunity_inventoryItemSkinportLinks_viewScreenshot",
                   )}
@@ -79,6 +79,7 @@ export function ItemSkinportActions({
         </DropdownMenu>
       </div>
     );
+  }
 
   return viewOnSkinportButton;
 }

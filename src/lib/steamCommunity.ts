@@ -1,4 +1,4 @@
-import { SteamItem } from "../lib/steam";
+import type { SteamItem } from "./steam";
 
 function createBridgeAction<
   RequestData extends Record<string, unknown>,
@@ -46,28 +46,22 @@ function createBridgeAction<
   return bridgeAction;
 }
 
-export type ParsedRgAsset = Pick<RgAsset, "amount" | "assetid"> &
-  Omit<RgDescription, "actions" | "market_hash_name"> & {
-    marketHashName: RgDescription["market_hash_name"];
-    inspectIngameLink?: string;
-    isUserOwner: boolean;
-  };
+export type SteamCommunityBridgeAction = ReturnType<typeof createBridgeAction>;
 
-export const bridge = {
+export const steamCommunity = {
   inventory: {
     loadCompleteInventory: createBridgeAction<
       never,
-      { itemsByAssetId: Record<string, ParsedRgAsset> }
+      Partial<{ [elementId: string]: SteamItem }>
     >("inventory.loadCompleteInventory"),
-    getSelectedItem: createBridgeAction<never, ParsedRgAsset>(
+    getSelectedItem: createBridgeAction<never, SteamItem>(
       "inventory.getSelectedItem",
     ),
   },
   wallet: {
-    getWalletCountryCode: createBridgeAction<
-      never,
-      { walletCountryCode: string }
-    >("wallet.getWalletCountryCode"),
+    getWallet: createBridgeAction<never, { countryCode: string }>(
+      "wallet.getWallet",
+    ),
   },
   tradeOffer: {
     getTradeItems: createBridgeAction<never, Record<string, SteamItem>>(
@@ -77,5 +71,11 @@ export const bridge = {
       { assetIds: string[] },
       { itemsByAssetId: Record<string, SteamItem> }
     >("tradeOffer.getInventoryItems"),
+  },
+  market: {
+    getListingItem: createBridgeAction<
+      { listingId: string } | never,
+      SteamItem
+    >("market.getListingItem"),
   },
 };
