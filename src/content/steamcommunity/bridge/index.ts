@@ -71,4 +71,10 @@ export const bridge = {
       { itemsByAssetId: Record<string, SteamItem> }
     >("tradeOffer.getInventoryItems"),
   },
+  market: {
+    getListingItem: createBridgeAction<
+      { listingId: string } | never,
+      SteamItem
+    >("market.getListingItem"),
+  },
 };

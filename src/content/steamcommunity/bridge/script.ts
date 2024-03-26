@@ -1,7 +1,7 @@
 import { bridge } from ".";
 import type { SteamItem } from "../lib/steam";
 
-export function parseSteamItem({
+function parseSteamItem({
   actions,
   appid,
   assetid,
@@ -11,16 +11,16 @@ export function parseSteamItem({
   marketable,
   tags,
   tradable,
-  strSteamId: ownerSteamId,
+  ownerSteamId,
 }: {
   actions?: { link: string; name: string }[];
   appid: number;
-  assetid?: string;
+  assetid: string;
   classid: string;
   contextid: "2" | "6";
   market_hash_name: string;
   marketable: 0 | 1;
-  tags: {
+  tags?: {
     internal_name: string;
     name: string;
     category: string;
@@ -28,35 +28,43 @@ export function parseSteamItem({
     color?: string;
   }[];
   tradable: 0 | 1;
-  strSteamId: string;
+  ownerSteamId?: string;
 }): SteamItem {
-  const qualityTag = tags.find(({ category }) => category === "Quality");
-  const rarityTag = tags.find(({ category }) => category === "Rarity");
-  const assetId = assetid || null;
+  const qualityTag = tags?.find(({ category }) => category === "Quality");
+  const rarityTag = tags?.find(({ category }) => category === "Rarity");
+  const assetId = assetid;
+  const marketHashName = market_hash_name;
+  const exterior =
+    marketHashName.match(
+      /\(Battle-Scarred|Factory New|Field-Tested|Minimal Wear|Well-Worn\)$/,
+    )?.[0] || null;
+
+  let inspectIngameLink =
+    actions
+      ?.find(({ link }) => link.indexOf("+csgo_econ_action_preview") !== -1)
+      ?.link.replace("%assetid%", assetId) || null;
+
+  if (inspectIngameLink && ownerSteamId) {
+    inspectIngameLink = inspectIngameLink.replace(
+      "%owner_steamid%",
+      ownerSteamId,
+    );
+  }
 
   return {
     appId: appid,
     assetId,
     classId: classid,
     contextId: contextid,
-    exterior:
-      tags.find(({ category }) => category === "Exterior")?.internal_name ||
-      null,
-    inspectIngameLink:
-      (assetId &&
-        ownerSteamId &&
-        actions
-          ?.find(({ link }) => link.indexOf("+csgo_econ_action_preview") !== -1)
-          ?.link.replace("%assetid%", assetId)
-          .replace("%owner_steamid%", ownerSteamId)) ||
-      null,
+    exterior,
+    inspectIngameLink,
     isMarketable: marketable === 1,
     isTradable: tradable === 1,
     isStatTrak: /^StatTrak™/.test(market_hash_name),
     isSouvenir: /^Souvenir/.test(market_hash_name),
     isOwner: ownerSteamId === g_steamID,
     marketHashName: market_hash_name,
-    ownerSteamId: ownerSteamId,
+    ownerSteamId: ownerSteamId || null,
     quality: qualityTag?.internal_name || null,
     qualityColor: qualityTag?.color ? `#${qualityTag.color}` : null,
     rarity: rarityTag?.internal_name || null,
@@ -64,20 +72,18 @@ export function parseSteamItem({
   };
 }
 
-window.addEventListener("message", async (event) => {
+window.addEventListener("message", (event) => {
   if (event.source !== window) {
     return;
   }
 
-  switch (event.data.type) {
-    case bridge.wallet.getWalletCountryCode.requestType: {
+  const bridgeActions = {
+    [bridge.wallet.getWalletCountryCode.requestType]: () => {
       bridge.wallet.getWalletCountryCode.response({
         walletCountryCode: g_rgWalletInfo.wallet_country,
       });
-
-      return;
-    }
-    case bridge.inventory.loadCompleteInventory.requestType: {
+    },
+    [bridge.inventory.loadCompleteInventory.requestType]: async () => {
       await g_ActiveInventory.LoadCompleteInventory();
 
       for (let i = 0; i < g_ActiveInventory.m_rgPages.length; i++) {
@@ -99,10 +105,8 @@ window.addEventListener("message", async (event) => {
       }
 
       bridge.inventory.loadCompleteInventory.response(inventory);
-
-      return;
-    }
-    case bridge.inventory.getSelectedItem.requestType: {
+    },
+    [bridge.inventory.getSelectedItem.requestType]: () => {
       bridge.inventory.getSelectedItem.response(
         parseSteamItem({
           ...g_ActiveInventory.selectedItem,
@@ -110,10 +114,8 @@ window.addEventListener("message", async (event) => {
           ...g_ActiveInventory.m_owner,
         }),
       );
-
-      return;
-    }
-    case bridge.tradeOffer.getTradeItems.requestType: {
+    },
+    [bridge.tradeOffer.getTradeItems.requestType]: () => {
       const tradeItems: Parameters<
         typeof bridge.tradeOffer.getTradeItems.response
       >[0] = {};
@@ -136,16 +138,18 @@ window.addEventListener("message", async (event) => {
           if (inventoryAsset) {
             tradeItems[
               `item${tradeAsset.appid}_${tradeAsset.contextid}_${tradeAsset.assetid}`
-            ] = parseSteamItem({ ...inventoryAsset, ...inventory.owner });
+            ] = parseSteamItem({
+              ...inventoryAsset,
+              assetid: tradeAsset.assetid,
+              ownerSteamId: inventory.owner.strSteamId,
+            });
           }
         }
       }
 
       bridge.tradeOffer.getTradeItems.response(tradeItems);
-
-      return;
-    }
-    case bridge.tradeOffer.getItemsByAssetId.requestType: {
+    },
+    [bridge.tradeOffer.getItemsByAssetId.requestType]: () => {
       const itemsByAssetId: Record<string, SteamItem> = {};
 
       if (!g_ActiveInventory.rgInventory) {
@@ -154,19 +158,49 @@ window.addEventListener("message", async (event) => {
 
       const { strSteamId } = g_ActiveInventory.m_owner;
 
-      for (const assetId of event.data.assetIds) {
+      for (const assetId of event.data.assetIds as string[]) {
         const item = g_ActiveInventory.rgInventory[assetId];
 
         if (!item) {
           continue;
         }
 
-        itemsByAssetId[assetId] = parseSteamItem({ strSteamId, ...item });
+        itemsByAssetId[assetId] = parseSteamItem({
+          ...item,
+          assetid: assetId,
+          ownerSteamId: strSteamId,
+        });
       }
 
       bridge.tradeOffer.getItemsByAssetId.response({ itemsByAssetId });
+    },
+    [bridge.market.getListingItem.requestType]: () => {
+      const listingInfo = event.data.listingId
+        ? g_rgListingInfo?.[event.data.listingId]
+        : Object.values(g_rgListingInfo)[0];
 
-      return;
-    }
+      if (!listingInfo) {
+        return;
+      }
+
+      const item =
+        g_rgAssets?.[listingInfo.asset.appid]?.[listingInfo.asset.contextid]?.[
+          listingInfo.asset.id
+        ];
+
+      if (!item) {
+        return;
+      }
+
+      bridge.market.getListingItem.response(
+        parseSteamItem({ ...item, assetid: item.id }),
+      );
+    },
+  };
+
+  const bridgeAction = bridgeActions[event.data.type];
+
+  if (bridgeAction) {
+    bridgeAction();
   }
 });

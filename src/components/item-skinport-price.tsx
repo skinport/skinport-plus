@@ -77,7 +77,7 @@ type ItemSkinportPriceProps = {
   discount?: string;
   className?: string;
   startingAtClassName?: string;
-  item?: SteamItem;
+  item?: Pick<SteamItem, "appId" | "marketHashName">;
   hidePriceTitle?: boolean;
   tooltipType?: "view" | "buy" | "sell";
 } & VariantProps<typeof priceVariants>;
@@ -99,31 +99,36 @@ export function ItemSkinportPrice({
   hidePriceTitle,
   tooltipType = "view",
 }: ItemSkinportPriceProps) {
-  const renderAsLinkToSkinport = (children: ReactNode) =>
-    item ? (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Link
-            href={getSkinportItemUrl(item)}
-            target="_blank"
-            onClick={(event) => {
-              event.stopPropagation();
-            }}
-            className="flex gap-2 items-center"
-          >
-            {children}
-          </Link>
-        </TooltipTrigger>
-        <TooltipContent className="flex gap-1 items-center">
-          <InterpolateMessage
-            message={getI18nMessage(tooltipI18nMessageKey[tooltipType])}
-            values={{ skinportLogo: <SkinportLogo size={10} isInverted /> }}
-          />
-        </TooltipContent>
-      </Tooltip>
-    ) : (
-      children
-    );
+  const renderAsLinkToSkinport = (children: ReactNode) => {
+    const skinportItemUrl = item && getSkinportItemUrl(item);
+
+    if (skinportItemUrl) {
+      return (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link
+              href={skinportItemUrl}
+              target="_blank"
+              onClick={(event) => {
+                event.stopPropagation();
+              }}
+              className="flex gap-2 items-center"
+            >
+              {children}
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent className="flex gap-1 items-center">
+            <InterpolateMessage
+              message={getI18nMessage(tooltipI18nMessageKey[tooltipType])}
+              values={{ skinportLogo: <SkinportLogo size={10} isInverted /> }}
+            />
+          </TooltipContent>
+        </Tooltip>
+      );
+    }
+
+    return children;
+  };
 
   const priceElement = (
     <div
@@ -153,7 +158,7 @@ export function ItemSkinportPrice({
                 ? formatPrice(price.data[priceType], price.data.currency)
                 : "-"}
             </div>
-            {discount && typeof price === "number" && (
+            {discount && price.data !== null && (
               <Discount discount={discount} />
             )}
           </>,

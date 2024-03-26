@@ -40,6 +40,10 @@ export function getSkinportItemUrl(
     "252490": "rust",
   }[item.appId];
 
+  if (!steamAppName) {
+    return null;
+  }
+
   return getSkinportUrl(
     `${
       steamAppName !== "cs2" ? `/${steamAppName}` : ""

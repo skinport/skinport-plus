@@ -17,7 +17,7 @@ export type SteamItem = {
   isSouvenir: boolean;
   isOwner: boolean;
   marketHashName: string;
-  ownerSteamId: string;
+  ownerSteamId: string | null;
   quality: string | null;
   qualityColor: string | null;
   rarity: string | null;

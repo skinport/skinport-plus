@@ -1,4 +1,4 @@
-import ky, { SearchParamsOption } from "ky";
+import ky, { type SearchParamsOption } from "ky";
 import pMemoize from "p-memoize";
 import { $$ } from "select-dom";
 import browser from "webextension-polyfill";
@@ -97,19 +97,23 @@ export function getItemFromSteamMarketUrl(
   url: string = window.location.pathname,
 ) {
   const paths = url.split("/");
-  const name = paths.pop();
+  const marketHashName = decodeURIComponent(paths.pop() || "");
   const appId = paths.pop();
 
-  if (!name || !appId || !getIsSupportedSteamAppId(appId)) {
+  if (!marketHashName || !appId) {
     return;
   }
 
   return {
-    name: decodeURIComponent(name),
-    appId,
-    isStatTrak: getIsItemStatTrak(name),
-    isSouvenir: getIsItemSouvenir(name),
-  } as Item;
+    marketHashName,
+    appId: Number(appId),
+    exterior:
+      marketHashName.match(
+        /\(Battle-Scarred|Factory New|Field-Tested|Minimal Wear|Well-Worn\)$/,
+      )?.[0] || null,
+    isStatTrak: getIsItemStatTrak(marketHashName),
+    isSouvenir: getIsItemSouvenir(marketHashName),
+  } as const;
 }
 
 function findWalletCountryCode(text: string) {

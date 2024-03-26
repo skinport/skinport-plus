@@ -6,9 +6,9 @@ import {
   createUseSkinportItemPrices,
   selectSkinportItemPrice,
 } from "@/lib/skinport";
-import { getItemFromSteamMarketUrl } from "@/lib/steam";
 import { getPercentageDecrease, parseCurrency } from "@/lib/utils";
 import { $, $$ } from "select-dom";
+import type { SteamItem } from "../lib/steam";
 
 const marketItemsSkinportPrice: Feature = async ({
   createNotMatchingFeatureAttributeSelector,
@@ -44,7 +44,7 @@ const marketItemsSkinportPrice: Feature = async ({
 
     const marketListingElements = $$(
       createNotMatchingFeatureAttributeSelector(
-        `${contextSelector} a[href*='/market/listings/']`,
+        `${contextSelector} a[href*='/market/listings/'] div[data-appid][data-hash-name]`,
       ),
     );
 
@@ -53,30 +53,31 @@ const marketItemsSkinportPrice: Feature = async ({
     }
 
     const marketListings: {
-      item: ReturnType<typeof getItemFromSteamMarketUrl>;
+      item: Pick<SteamItem, "appId" | "marketHashName"> | null;
       element: HTMLElement;
     }[] = [];
 
     for (const marketListingElement of marketListingElements) {
       setFeatureAttribute(marketListingElement);
 
-      const marketListingElementHref =
-        marketListingElement.getAttribute("href");
+      const appId = marketListingElement.getAttribute("data-appid");
+      const marketHashName =
+        marketListingElement.getAttribute("data-hash-name");
 
-      if (!marketListingElementHref) {
-        continue;
-      }
-
-      const item = getItemFromSteamMarketUrl(marketListingElementHref);
-
-      marketListings.push({ item, element: marketListingElement });
+      marketListings.push({
+        item:
+          appId && marketHashName
+            ? { appId: Number(appId), marketHashName }
+            : null,
+        element: marketListingElement,
+      });
     }
 
     const skinportItemNames: string[] = [];
 
     for (const { item } of marketListings) {
       if (item) {
-        skinportItemNames.push(item.name);
+        skinportItemNames.push(item.marketHashName);
       }
     }
 
@@ -96,15 +97,21 @@ const marketItemsSkinportPrice: Feature = async ({
       const [skinportStartingAtElement] = createWidgetElement(() => {
         const skinportItemPrices = useSkinportItemPrices();
 
-        const skinportItemPrice = selectSkinportItemPrice(
-          skinportItemPrices,
-          marketListing.item?.name,
+        const renderNoPrice = () => (
+          <div className="flex items-center justify-center h-full">–</div>
         );
 
         if (!marketListing.item) {
-          return (
-            <div className="flex items-center justify-center h-full">–</div>
-          );
+          return renderNoPrice();
+        }
+
+        const skinportItemPrice = selectSkinportItemPrice(
+          skinportItemPrices,
+          marketListing.item.marketHashName,
+        );
+
+        if (!skinportItemPrice) {
+          return renderNoPrice();
         }
 
         const marketListingItemPriceElement = $(
@@ -117,24 +124,23 @@ const marketItemsSkinportPrice: Feature = async ({
           : undefined;
 
         const skinportItemPricePercentageDecrease =
-          marketListingItemPrice && skinportItemPrice?.price?.lowest
+          marketListingItemPrice && skinportItemPrice?.data?.lowest
             ? getPercentageDecrease(
                 marketListingItemPrice,
-                skinportItemPrice.price.lowest,
+                skinportItemPrice.data.lowest,
               )
             : undefined;
 
         return (
           <div className="h-full flex flex-col justify-center">
             <ItemSkinportPrice
-              price={skinportItemPrice?.price?.lowest}
-              currency={skinportItemPrice?.price?.currency}
+              price={skinportItemPrice}
+              priceType="lowest"
               discount={skinportItemPricePercentageDecrease}
               size="sm"
-              linkItem={marketListing.item}
+              item={marketListing.item}
               className="justify-center"
               startingAtClassName="text-center"
-              loadingFailed={skinportItemPrice?.isError}
             />
           </div>
         );

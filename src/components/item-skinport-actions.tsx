@@ -21,15 +21,24 @@ export function ItemSkinportActions({
   children,
   actionType = "view",
 }: {
-  item: SteamItem;
+  item: Pick<
+    SteamItem,
+    "appId" | "marketHashName" | "inspectIngameLink" | "exterior"
+  >;
   className?: string;
   container: HTMLElement;
   children?: ReactNode;
   actionType?: "view" | "buy" | "sell";
 }) {
+  const itemSkinportLink = getSkinportItemUrl(item);
+
+  if (!itemSkinportLink) {
+    return;
+  }
+
   const viewOnSkinportButton = (
     <Button className={className} asChild>
-      <Link href={getSkinportItemUrl(item)} target="_blank">
+      <Link href={itemSkinportLink} target="_blank">
         <InterpolateMessage
           message={getI18nMessage(`common_${actionType}OnSkinport`)}
           values={{
@@ -40,7 +49,12 @@ export function ItemSkinportActions({
     </Button>
   );
 
-  if ((item.inspectIngameLink && item.exterior) || children)
+  const itemSkinportScreenshotUrl =
+    item.inspectIngameLink &&
+    item.exterior &&
+    getSkinportScreenshotUrl(`direct?link=${item.inspectIngameLink}`);
+
+  if (itemSkinportScreenshotUrl || children) {
     return (
       <div className="flex mb-4 [&>*:first-child]:rounded-tr-none [&>*:first-child]:rounded-br-none [&>*:not(:first-child)]:rounded-tl-none [&>*:not(:first-child)]:rounded-bl-none [&>*:not(:first-child)]:border-l [&>*:not(:first-child)]:border-l-background">
         {viewOnSkinportButton}
@@ -51,14 +65,9 @@ export function ItemSkinportActions({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent container={container}>
-            {item.inspectIngameLink && item.exterior && (
+            {itemSkinportScreenshotUrl && (
               <DropdownMenuItem asChild>
-                <Link
-                  href={getSkinportScreenshotUrl(
-                    `direct?link=${item.inspectIngameLink}`,
-                  )}
-                  target="_blank"
-                >
+                <Link href={itemSkinportScreenshotUrl} target="_blank">
                   {getI18nMessage(
                     "steamcommunity_inventoryItemSkinportLinks_viewScreenshot",
                   )}
@@ -70,6 +79,7 @@ export function ItemSkinportActions({
         </DropdownMenu>
       </div>
     );
+  }
 
   return viewOnSkinportButton;
 }

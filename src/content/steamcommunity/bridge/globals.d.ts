@@ -13,7 +13,7 @@ declare type CPage = {
   EnsurePageItemsCreated(): boolean;
 };
 
-type AssetMarketAction = { link: string; name: string };
+type MarketAction = { link: string; name: string };
 
 type Tag = {
   internal_name: string;
@@ -24,7 +24,7 @@ type Tag = {
 };
 
 declare type RgDescription = {
-  actions?: AssetMarketAction[];
+  actions?: MarketAction[];
   appid: AppId;
   classid: ClassId;
   market_hash_name: string;
@@ -44,7 +44,7 @@ declare type RgAsset = {
 
 type RgInventory = {
   [assetId: AssetId]: {
-    actions?: AssetMarketAction[];
+    actions?: MarketAction[];
     amount: string;
     appid: AppId;
     classid: string;
@@ -144,3 +144,35 @@ type AppContextData = {
 declare const g_rgAppContextData: AppContextData;
 
 declare const g_rgPartnerAppContextData: AppContextData;
+
+declare const g_rgAssets: Partial<{
+  [appId: string]: Partial<{
+    [contextId: string]: Partial<{
+      [assetId: string]: {
+        actions: MarketAction[];
+        amount: number;
+        appid: AppId;
+        classid: string;
+        contextid: ContextId;
+        id: string;
+        market_hash_name: string;
+        marketable: 0 | 1;
+        tradable: 0 | 1;
+      };
+    }>;
+  }>;
+}>;
+
+declare const g_rgListingInfo: Partial<{
+  [listingId: string]: {
+    asset: {
+      amount: string;
+      appid: AppId;
+      contextid: ContextId;
+      currency: number;
+      id: string;
+      market_actions: MarketAction[];
+    };
+    listingid: string;
+  };
+}>;
