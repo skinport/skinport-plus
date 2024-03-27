@@ -1,5 +1,10 @@
 import { SteamInventoryItemInfo } from "@/components/steam-inventory-item-info";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { type Feature, featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { formatPrice } from "@/lib/format";
@@ -10,6 +15,7 @@ import {
   selectSkinportItemPrice,
 } from "@/lib/skinport";
 import { steamCommunity } from "@/lib/steamCommunity";
+import { AlertCircleIcon } from "lucide-react";
 import { $, $$ } from "select-dom";
 
 const inventoryItemsInfo: Feature = async ({
@@ -105,24 +111,41 @@ const inventoryItemsInfo: Feature = async ({
       const [totalInventoryValueElement] = createWidgetElement(() => {
         const skinportItemPrices = useSkinportItemPrices();
 
+        const renderTotalValue = () => {
+          if (skinportItemPrices.error) {
+            return (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <AlertCircleIcon className="text-red-light w-3.5 h-3.5" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  {getI18nMessage("common_failedLoadingItemPrices")}
+                </TooltipContent>
+              </Tooltip>
+            );
+          }
+
+          if (!skinportItemPrices.data) {
+            return <Skeleton className="w-14 h-3.5 my-[0.1875rem]" />;
+          }
+
+          return (
+            <div className="text-white font-semibold">
+              {formatPrice(
+                Object.values(skinportItemPrices.data.prices).reduce(
+                  (acc, { suggested }) => acc + suggested,
+                  0,
+                ),
+                skinportItemPrices.data.currency,
+              )}
+            </div>
+          );
+        };
+
         return (
-          <div className="flex gap-2 bg-background px-4 py-3 rounded-md">
-            {skinportItemPrices.data ? (
-              <>
-                <div>{getI18nMessage("common_totalValue")}</div>
-                <div className="text-white font-semibold">
-                  {formatPrice(
-                    Object.values(skinportItemPrices.data.prices).reduce(
-                      (acc, { suggested }) => acc + suggested,
-                      0,
-                    ),
-                    skinportItemPrices.data.currency,
-                  )}
-                </div>
-              </>
-            ) : (
-              <Skeleton className="w-28 h-3.5 my-[0.2rem]" />
-            )}
+          <div className="flex gap-2 items-center bg-background px-4 py-3 rounded-md">
+            <div>{getI18nMessage("common_totalValue")}</div>
+            {renderTotalValue()}
           </div>
         );
       });
