@@ -30,7 +30,7 @@
     "message": "Precio sugerido"
   },
   "common_totalValue": {
-    "message": "Total value"
+    "message": "Valor total"
   },
   "common_viewOnSkinport": {
     "message": "Ver en <skinportLogo />"
@@ -72,6 +72,12 @@
   },
   "options_steamCommunityInventoryShowItemPrices_label": {
     "message": "Mostrar precios de objetos"
+  },
+  "options_steamCommunityInventoryShowTotalValue_description": {
+    "message": "Muestra el valor total del inventario basado en los precios sugeridos de los objetos de Skinport."
+  },
+  "options_steamCommunityInventoryShowTotalValue_label": {
+    "message": "Mostrar valor total"
   },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
     "message": "Muestra los precios sugeridos para cada objeto en Skinport."

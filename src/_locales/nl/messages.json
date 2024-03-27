@@ -30,7 +30,7 @@
     "message": "Voorgestelde Prijs"
   },
   "common_totalValue": {
-    "message": "Total value"
+    "message": "Totale waarde"
   },
   "common_viewOnSkinport": {
     "message": "Bekijk op <skinportLogo />"
@@ -72,6 +72,12 @@
   },
   "options_steamCommunityInventoryShowItemPrices_label": {
     "message": "Toon prijzen van voorwerpen"
+  },
+  "options_steamCommunityInventoryShowTotalValue_description": {
+    "message": "Toon de totale waarde van de inventaris op basis van de voorgestelde voorwerpprijzen van Skinport."
+  },
+  "options_steamCommunityInventoryShowTotalValue_label": {
+    "message": "Toon totale waarde"
   },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
     "message": "Toon voorgestelde voorwerp prijzen van Skinport op elk voorwerp."

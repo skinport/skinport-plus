@@ -30,7 +30,7 @@
     "message": "Foreslået pris"
   },
   "common_totalValue": {
-    "message": "Total value"
+    "message": "Samlet værdi"
   },
   "common_viewOnSkinport": {
     "message": "Se på <skinportLogo />"
@@ -72,6 +72,12 @@
   },
   "options_steamCommunityInventoryShowItemPrices_label": {
     "message": "Vis priser på genstande"
+  },
+  "options_steamCommunityInventoryShowTotalValue_description": {
+    "message": "Vis samlet værdi af lager baseret på foreslået genstandspriser fra Skinport."
+  },
+  "options_steamCommunityInventoryShowTotalValue_label": {
+    "message": "Vis samlet værdi"
   },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
     "message": "Vis foreslåede genstandspriser fra Skinport på hver genstand."

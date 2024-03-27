@@ -73,6 +73,12 @@
   "options_steamCommunityInventoryShowItemPrices_label": {
     "message": "Show item prices"
   },
+  "options_steamCommunityInventoryShowTotalValue_description": {
+    "message": "Show total inventory value based on suggested item prices from Skinport."
+  },
+  "options_steamCommunityInventoryShowTotalValue_label": {
+    "message": "Show total value"
+  },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
     "message": "Show suggested item prices from Skinport on each item."
   },

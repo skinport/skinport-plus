@@ -30,7 +30,7 @@
     "message": "Önerilen Fiyat"
   },
   "common_totalValue": {
-    "message": "Total value"
+    "message": "Toplam değer"
   },
   "common_viewOnSkinport": {
     "message": "<skinportLogo />'ta Görüntüle"
@@ -72,6 +72,12 @@
   },
   "options_steamCommunityInventoryShowItemPrices_label": {
     "message": "Eşya fiyatlarını göster"
+  },
+  "options_steamCommunityInventoryShowTotalValue_description": {
+    "message": "Skinport'tan önerilen esya fiyatlarına dayalı olarak toplam envanter değerini göster."
+  },
+  "options_steamCommunityInventoryShowTotalValue_label": {
+    "message": "Toplam değeri göster"
   },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
     "message": "Her esyada Skinport'tan önerilen fiyatları göster."

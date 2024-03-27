@@ -30,7 +30,7 @@
     "message": "建议价格"
   },
   "common_totalValue": {
-    "message": "Total value"
+    "message": "总价值"
   },
   "common_viewOnSkinport": {
     "message": "在<skinportLogo />上查看"
@@ -72,6 +72,12 @@
   },
   "options_steamCommunityInventoryShowItemPrices_label": {
     "message": "显示物品价格"
+  },
+  "options_steamCommunityInventoryShowTotalValue_description": {
+    "message": "根据Skinport建议的物品价格显示总库存价值。"
+  },
+  "options_steamCommunityInventoryShowTotalValue_label": {
+    "message": "显示总价值"
   },
   "options_steamCommunityTradeOffersShowItemPrices_description": {
     "message": "在每个物品上显示来自Skinport的建议物品价格。"
