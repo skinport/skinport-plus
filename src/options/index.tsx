@@ -126,6 +126,18 @@ function App() {
                       })
                     }
                   />
+                  <OptionField
+                    labelKey="options_steamCommunityInventoryShowTotalValue_label"
+                    descriptionKey="options_steamCommunityInventoryShowTotalValue_description"
+                    defaultChecked={
+                      options.steamCommunityInventoryShowTotalValue
+                    }
+                    onCheckedChange={(checked) =>
+                      optionsStorage.set({
+                        steamCommunityInventoryShowTotalValue: checked,
+                      })
+                    }
+                  />
                 </div>
               </div>
               <div className="space-y-4">
