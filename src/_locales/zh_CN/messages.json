@@ -29,6 +29,9 @@
   "common_suggestedPrice": {
     "message": "建议价格"
   },
+  "common_totalValue": {
+    "message": "Total value"
+  },
   "common_viewOnSkinport": {
     "message": "在<skinportLogo />上查看"
   },

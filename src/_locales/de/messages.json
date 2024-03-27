@@ -29,6 +29,9 @@
   "common_suggestedPrice": {
     "message": "Vorgeschlagener Preis"
   },
+  "common_totalValue": {
+    "message": "Total value"
+  },
   "common_viewOnSkinport": {
     "message": "Auf <skinportLogo /> betrachten"
   },

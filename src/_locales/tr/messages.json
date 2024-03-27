@@ -29,6 +29,9 @@
   "common_suggestedPrice": {
     "message": "Önerilen Fiyat"
   },
+  "common_totalValue": {
+    "message": "Total value"
+  },
   "common_viewOnSkinport": {
     "message": "<skinportLogo />'ta Görüntüle"
   },
