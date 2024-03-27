@@ -1,9 +1,9 @@
+import styles from "tailwind:./widget.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import React from "react";
+import type React from "react";
 import { createRoot } from "react-dom/client";
 import { elementExists } from "select-dom";
 import { SWRConfig } from "swr";
-import styles from "tailwind:./widget.css";
 
 export function createWidgetElement(
   Widget: React.ComponentType<{

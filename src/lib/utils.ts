@@ -114,7 +114,7 @@ export function parseCurrency(text: string) {
     }
   }
 
-  amount = parseFloat(slice);
+  amount = Number.parseFloat(slice);
 
   return amount;
 }

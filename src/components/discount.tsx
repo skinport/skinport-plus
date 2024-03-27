@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { VariantProps, cva } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority";
 
 const discountVariants = cva(
   "bg-[linear-gradient(135deg,#0073d5,#fa490a)] skew-x-[-15deg] rounded-[3px] inline-flex items-center text-white",

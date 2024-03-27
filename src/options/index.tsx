@@ -9,14 +9,18 @@ import {
 import { DialogHeader } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { I18nMessageKey, getI18nMessage } from "@/lib/i18n";
-import { optionsStorage, optionsStorageDefaults } from "@/lib/options-storage";
+import { type I18nMessageKey, getI18nMessage } from "@/lib/i18n";
+import {
+  optionsStorage,
+  type optionsStorageDefaults,
+} from "@/lib/options-storage";
 import {
   getHasAllUrlsPermission,
   requestAllUrlsPermission,
 } from "@/lib/permissions";
 import { getSkinportUrl } from "@/lib/skinport";
-import React, { useEffect, useId, useState } from "react";
+import type React from "react";
+import { useEffect, useId, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 

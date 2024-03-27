@@ -1,6 +1,6 @@
 // @ts-expect-error: No typings available
 import InterpolatePrimitive, { SYNTAX_I18NEXT } from "@doist/react-interpolate";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 export const InterpolateMessage = ({
   message,
