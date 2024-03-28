@@ -26,6 +26,7 @@ import { create } from "zustand";
 
 const tradeOfferItemsInfo: Feature = async ({
   setFeatureAttribute,
+  getHasFeatureAttribute,
   createNotMatchingFeatureAttributeSelector,
   extensionOptions,
 }) => {
@@ -166,199 +167,255 @@ const tradeOfferItemsInfo: Feature = async ({
       trade_theirs: [],
     };
 
-    for (const tradeItemElement of tradeItemElements) {
-      const tradeItemElementId = tradeItemElement.getAttribute("id");
+    if (extensionOptions.steamCommunityTradeOffersShowItemPrices) {
+      for (const tradeItemElement of tradeItemElements) {
+        const tradeItemElementId = tradeItemElement.getAttribute("id");
 
-      if (!tradeItemElementId) {
-        continue;
-      }
-
-      const tradeItem = tradeItems[tradeItemElementId];
-
-      if (!tradeItem) {
-        continue;
-      }
-
-      const tradeOfferParty = tradeItemElement.parentElement?.parentElement
-        ?.getAttribute("id")
-        ?.split("_")[0];
-
-      if (tradeOfferParty) {
-        tradeItemsByParty[`trade_${tradeOfferParty as "your" | "their"}s`].push(
-          tradeItem,
-        );
-      }
-
-      if (extensionOptions.steamCommunityTradeOffersShowItemPrices) {
-        const [tradeItemInfoElement] = createWidgetElement(() => {
-          const skinportItemPrices = useSkinportItemPrices();
-
-          const skinportItemPrice = selectSkinportItemPrice(
-            skinportItemPrices,
-            tradeItem.marketHashName,
-          );
-
-          return (
-            <SteamInventoryItemInfo
-              inventoryItem={tradeItem}
-              inventoryItemElement={tradeItemElement}
-              skinportItemPrice={skinportItemPrice}
-            />
-          );
-        });
-
-        tradeItemElement.append(tradeItemInfoElement);
-      }
-    }
-
-    if (!extensionOptions.steamCommunityTradeOffersShowTotalTradeValues) {
-      return;
-    }
-
-    const useShowTradeOfferValuePercentage = create<{
-      enabled: boolean;
-      toggle: () => void;
-    }>((set) => ({
-      enabled: false,
-      toggle: () =>
-        set((state) => ({
-          enabled: !state.enabled,
-        })),
-    }));
-
-    for (const tradeParty of tradeParties) {
-      const tradePartyItemBoxElement = $(`#${tradeParty} .trade_item_box`);
-
-      if (!tradePartyItemBoxElement) {
-        continue;
-      }
-
-      const [tradeOfferValueElement] = createWidgetElement(() => {
-        const skinportItemPrices = useSkinportItemPrices();
-
-        const showTradeOfferValuePercentage =
-          useShowTradeOfferValuePercentage();
-
-        if (!tradeItemsByParty[tradeParty].length) {
-          return;
+        if (!tradeItemElementId) {
+          continue;
         }
 
-        const render = (children: ReactNode) => (
-          <div className="flex justify-end mb-4">
-            <div
-              className={cn(
-                "flex items-center group relative z-10 bg-background px-4 py-3 rounded-md",
-                {
-                  "gap-1": !skinportItemPrices.error,
-                  "gap-1.5": skinportItemPrices.error,
-                },
-              )}
-              onMouseEnter={showTradeOfferValuePercentage.toggle}
-              onMouseLeave={showTradeOfferValuePercentage.toggle}
-            >
-              {children}
-            </div>
-          </div>
-        );
+        const tradeItem = tradeItems[tradeItemElementId];
 
-        if (skinportItemPrices.error) {
-          return render(
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <AlertCircleIcon className="text-red-light" size={16} />
-              </TooltipTrigger>
-              <TooltipContent>
-                {getI18nMessage("common_failedLoadingItemPrices")}
-              </TooltipContent>
-            </Tooltip>,
-          );
+        if (!tradeItem) {
+          continue;
         }
 
-        if (!skinportItemPrices.data) {
-          return render(<Skeleton className="w-28 h-3.5 my-[0.2rem]" />);
-        }
+        const tradeOfferParty = tradeItemElement.parentElement?.parentElement
+          ?.getAttribute("id")
+          ?.split("_")[0];
 
-        const calculateTradeItemsValue = (tradeItems?: SteamItem[]) => {
-          let itemsValue = 0;
-
-          if (tradeItems) {
-            for (const tradeOfferItem of tradeItems) {
-              const skinportItemPrice = selectSkinportItemPrice(
-                skinportItemPrices,
-                tradeOfferItem.marketHashName,
-              );
-
-              if (skinportItemPrice?.data?.suggested) {
-                itemsValue += skinportItemPrice.data.suggested;
-              }
-            }
-          }
-
-          return itemsValue;
-        };
-
-        const currentPartyItemsValue = calculateTradeItemsValue(
-          tradeItemsByParty[tradeParty],
-        );
-
-        const otherPartyItemsValue = calculateTradeItemsValue(
+        if (tradeOfferParty) {
           tradeItemsByParty[
-            tradeParty === tradeParties[0] ? tradeParties[1] : tradeParties[0]
-          ],
-        );
+            `trade_${tradeOfferParty as "your" | "their"}s`
+          ].push(tradeItem);
+        }
 
-        const itemsValueDifference =
-          otherPartyItemsValue - currentPartyItemsValue;
+        if (
+          extensionOptions.steamCommunityTradeOffersShowItemPrices &&
+          !getHasFeatureAttribute(tradeItemElement)
+        ) {
+          const [tradeItemInfoElement] = createWidgetElement(() => {
+            const skinportItemPrices = useSkinportItemPrices();
 
-        const itemsValueDifferencePercentage = (
-          (itemsValueDifference / currentPartyItemsValue) *
-          100
-        ).toFixed(2);
+            const skinportItemPrice = selectSkinportItemPrice(
+              skinportItemPrices,
+              tradeItem.marketHashName,
+            );
 
-        const ChevronIcon =
-          itemsValueDifference > 0 ? ChevronUpIcon : ChevronDownIcon;
+            return (
+              <SteamInventoryItemInfo
+                inventoryItem={tradeItem}
+                inventoryItemElement={tradeItemElement}
+                skinportItemPrice={skinportItemPrice}
+              />
+            );
+          });
 
-        return render(
-          <>
-            <div>
-              <span className="text-white font-semibold">
-                {formatPrice(
-                  currentPartyItemsValue,
-                  skinportItemPrices.data.currency,
-                )}
-              </span>
-            </div>
-            {otherPartyItemsValue !== 0 && itemsValueDifference !== 0 && (
-              <div
-                className={cn("flex items-center text-red-light", {
-                  "text-green-light": itemsValueDifference > 0,
-                })}
-              >
-                <ChevronIcon size={20} />
-                {showTradeOfferValuePercentage.enabled ? (
-                  <>
-                    {itemsValueDifference > 0 && "+"}
-                    {itemsValueDifferencePercentage}%
-                  </>
-                ) : (
-                  <>
-                    {itemsValueDifference > 0 && "+"}
+          tradeItemElement.append(tradeItemInfoElement);
+        }
+      }
+    }
+
+    if (extensionOptions.steamCommunityTradeOffersShowTotalTradeValues) {
+      const useShowTradeOfferValuePercentage = create<{
+        enabled: boolean;
+        toggle: () => void;
+      }>((set) => ({
+        enabled: false,
+        toggle: () =>
+          set((state) => ({
+            enabled: !state.enabled,
+          })),
+      }));
+
+      const tradeOfferValues: {
+        tradePartyItemBoxElement: HTMLElement;
+        removeTradeOfferValueElement: () => void;
+      }[] = [];
+
+      for (const tradeParty of tradeParties) {
+        const tradePartyItemBoxElement = $(`#${tradeParty} .trade_item_box`);
+
+        if (!tradePartyItemBoxElement) {
+          continue;
+        }
+
+        const [tradeOfferValueElement, removeTradeOfferValueElement] =
+          createWidgetElement(() => {
+            const skinportItemPrices = useSkinportItemPrices();
+
+            const showTradeOfferValuePercentage =
+              useShowTradeOfferValuePercentage();
+
+            if (!tradeItemsByParty[tradeParty].length) {
+              return;
+            }
+
+            const render = (children: ReactNode) => (
+              <div className="flex justify-end mb-4">
+                <div
+                  className={cn(
+                    "flex items-center group relative z-10 bg-background px-4 py-3 rounded-md",
+                    {
+                      "gap-1": !skinportItemPrices.error,
+                      "gap-1.5": skinportItemPrices.error,
+                    },
+                  )}
+                  onMouseEnter={showTradeOfferValuePercentage.toggle}
+                  onMouseLeave={showTradeOfferValuePercentage.toggle}
+                >
+                  {children}
+                </div>
+              </div>
+            );
+
+            if (skinportItemPrices.error) {
+              return render(
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <AlertCircleIcon className="text-red-light" size={16} />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {getI18nMessage("common_failedLoadingItemPrices")}
+                  </TooltipContent>
+                </Tooltip>,
+              );
+            }
+
+            if (!skinportItemPrices.data) {
+              return render(<Skeleton className="w-28 h-3.5 my-[0.2rem]" />);
+            }
+
+            const calculateTradeItemsValue = (tradeItems?: SteamItem[]) => {
+              let itemsValue = 0;
+
+              if (tradeItems) {
+                for (const tradeOfferItem of tradeItems) {
+                  const skinportItemPrice = selectSkinportItemPrice(
+                    skinportItemPrices,
+                    tradeOfferItem.marketHashName,
+                  );
+
+                  if (skinportItemPrice?.data?.suggested) {
+                    itemsValue += skinportItemPrice.data.suggested;
+                  }
+                }
+              }
+
+              return itemsValue;
+            };
+
+            const currentPartyItemsValue = calculateTradeItemsValue(
+              tradeItemsByParty[tradeParty],
+            );
+
+            const otherPartyItemsValue = calculateTradeItemsValue(
+              tradeItemsByParty[
+                tradeParty === tradeParties[0]
+                  ? tradeParties[1]
+                  : tradeParties[0]
+              ],
+            );
+
+            const itemsValueDifference =
+              otherPartyItemsValue - currentPartyItemsValue;
+
+            const itemsValueDifferencePercentage = (
+              (itemsValueDifference / currentPartyItemsValue) *
+              100
+            ).toFixed(2);
+
+            const ChevronIcon =
+              itemsValueDifference > 0 ? ChevronUpIcon : ChevronDownIcon;
+
+            return render(
+              <>
+                <div>
+                  <span className="text-white font-semibold">
                     {formatPrice(
-                      itemsValueDifference,
+                      currentPartyItemsValue,
                       skinportItemPrices.data.currency,
                     )}
-                  </>
+                  </span>
+                </div>
+                {otherPartyItemsValue !== 0 && itemsValueDifference !== 0 && (
+                  <div
+                    className={cn("flex items-center text-red-light", {
+                      "text-green-light": itemsValueDifference > 0,
+                    })}
+                  >
+                    <ChevronIcon size={20} />
+                    {showTradeOfferValuePercentage.enabled ? (
+                      <>
+                        {itemsValueDifference > 0 && "+"}
+                        {itemsValueDifferencePercentage}%
+                      </>
+                    ) : (
+                      <>
+                        {itemsValueDifference > 0 && "+"}
+                        {formatPrice(
+                          itemsValueDifference,
+                          skinportItemPrices.data.currency,
+                        )}
+                      </>
+                    )}
+                  </div>
                 )}
-              </div>
-            )}
-          </>,
-        );
-      });
+              </>,
+            );
+          });
 
-      tradePartyItemBoxElement.insertAdjacentElement(
-        "afterend",
-        tradeOfferValueElement,
-      );
+        tradePartyItemBoxElement.insertAdjacentElement(
+          "afterend",
+          tradeOfferValueElement,
+        );
+
+        tradeOfferValues.push({
+          tradePartyItemBoxElement,
+          removeTradeOfferValueElement,
+        });
+      }
+
+      if (/^\/tradeoffer\/new\/$/.test(location.pathname)) {
+        const observer = new MutationObserver((mutations) => {
+          for (const mutation of mutations) {
+            if (
+              (mutation.oldValue?.indexOf("has_item") === -1 &&
+                (mutation.target as HTMLElement).classList.contains(
+                  "has_item",
+                )) ||
+              (mutation.oldValue?.indexOf("has_item") !== -1 &&
+                !(mutation.target as HTMLElement).classList.contains(
+                  "has_item",
+                ))
+            ) {
+              observer.disconnect();
+
+              for (const { removeTradeOfferValueElement } of tradeOfferValues) {
+                removeTradeOfferValueElement();
+              }
+
+              handleTradeOfferItems();
+
+              return;
+            }
+          }
+        });
+
+        for (const { tradePartyItemBoxElement } of tradeOfferValues) {
+          for (const tradeSlotElement of $$(
+            ".trade_slot",
+            tradePartyItemBoxElement,
+          )) {
+            observer.observe(tradeSlotElement, {
+              attributes: true,
+              attributeFilter: ["class"],
+              attributeOldValue: true,
+            });
+          }
+        }
+      }
     }
   };
 
@@ -384,7 +441,9 @@ const tradeOfferItemsInfo: Feature = async ({
   };
 
   handleInventoryItems();
+
   handleTradeOfferItems();
+
   addPricingBySkinportPlus();
 };
 
