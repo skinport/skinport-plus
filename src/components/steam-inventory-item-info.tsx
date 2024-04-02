@@ -54,16 +54,14 @@ export function SteamInventoryItemInfo({
   const renderItemStickers = () => {
     if (inventoryItem?.stickers) {
       return (
-        <div className="absolute top-1.5 right-0.5 z-10">
+        <div className="absolute top-1.5 right-0.5 z-10 flex flex-col gap-1">
           {inventoryItem.stickers.map(({ image, marketHashName }, index) => (
-            <div key={`${index}_${marketHashName}`}>
-              <Tooltip>
-                <TooltipTrigger>
-                  <img src={image} alt={marketHashName} className="w-5" />
-                </TooltipTrigger>
-                <TooltipContent side="left">{marketHashName}</TooltipContent>
-              </Tooltip>
-            </div>
+            <Tooltip key={`${index}_${marketHashName}`}>
+              <TooltipTrigger>
+                <img src={image} alt={marketHashName} className="w-4" />
+              </TooltipTrigger>
+              <TooltipContent side="left">{marketHashName}</TooltipContent>
+            </Tooltip>
           ))}
         </div>
       );
