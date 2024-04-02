@@ -55,8 +55,8 @@ export function SteamInventoryItemInfo({
     if (inventoryItem?.stickers) {
       return (
         <div className="absolute top-1.5 right-0.5 z-10">
-          {inventoryItem.stickers.map(({ image, marketHashName }) => (
-            <div>
+          {inventoryItem.stickers.map(({ image, marketHashName }, index) => (
+            <div key={`${index}_${marketHashName}`}>
               <Tooltip>
                 <TooltipTrigger>
                   <img src={image} alt={marketHashName} className="w-5" />
