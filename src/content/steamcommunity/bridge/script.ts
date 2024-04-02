@@ -29,6 +29,7 @@ declare type RgDescription = {
   actions?: MarketAction[];
   appid: SteamItemAppId;
   classid: SteamItemClassId;
+  descriptions: { type: "html"; value: string }[];
   market_hash_name: string;
   marketable: 0 | 1;
   tradable: 0 | 1;

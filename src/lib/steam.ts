@@ -43,6 +43,7 @@ export type SteamItem = {
   qualityColor: string | null;
   rarity: string | null;
   rarityColor: string | null;
+  stickers: { image: string; marketHashName: string }[] | null;
 };
 
 export function parseSteamItem({
@@ -51,6 +52,7 @@ export function parseSteamItem({
   assetid,
   classid,
   contextid,
+  descriptions,
   market_hash_name,
   marketable,
   tags,
@@ -63,6 +65,7 @@ export function parseSteamItem({
   assetid?: string;
   classid: string;
   contextid?: "2" | "6";
+  descriptions?: { type: "html"; value: string }[];
   market_hash_name: string;
   marketable: 0 | 1;
   tags?: {
@@ -107,6 +110,37 @@ export function parseSteamItem({
     );
   }
 
+  let stickers: { image: string; marketHashName: string }[] | null = null;
+
+  if (descriptions) {
+    for (const { type, value } of descriptions) {
+      if (type === "html" && value.indexOf("sticker_info") !== -1) {
+        const images = value.match(
+          /(https:\/\/steamcdn-a\.akamaihd\.net\/apps\/[\w.\/]+)/g,
+        );
+
+        const marketHashNames = value
+          .match(/<br>[\w]+: (.+)<\/center>/)?.[1]
+          .split(",");
+
+        if (
+          images &&
+          marketHashNames &&
+          images.length === marketHashNames.length
+        ) {
+          stickers = [];
+
+          for (let i = 0; i < images.length; i++) {
+            stickers.push({
+              image: images[i],
+              marketHashName: marketHashNames[i].trim(),
+            });
+          }
+        }
+      }
+    }
+  }
+
   return {
     appId: appid,
     assetId,
@@ -126,6 +160,7 @@ export function parseSteamItem({
     qualityColor: qualityTag?.color ? `#${qualityTag.color}` : null,
     rarity: rarityTag?.internal_name || null,
     rarityColor: rarityTag?.color ? `#${rarityTag.color}` : null,
+    stickers,
   };
 }
 

@@ -2,6 +2,7 @@ import { SteamItemSkinportPrice } from "@/components/steam-item-skinport-price";
 import type { SelectedSkinportItemPrice } from "@/lib/skinport";
 import type { SteamItem } from "@/lib/steam";
 import { useEffect } from "react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export function SteamInventoryItemInfo({
   inventoryItem,
@@ -50,8 +51,28 @@ export function SteamInventoryItemInfo({
     }
   };
 
+  const renderItemStickers = () => {
+    if (inventoryItem?.stickers) {
+      return (
+        <div className="absolute top-1.5 right-0.5 z-10">
+          {inventoryItem.stickers.map(({ image, marketHashName }) => (
+            <div>
+              <Tooltip>
+                <TooltipTrigger>
+                  <img src={image} alt={marketHashName} className="w-5" />
+                </TooltipTrigger>
+                <TooltipContent side="left">{marketHashName}</TooltipContent>
+              </Tooltip>
+            </div>
+          ))}
+        </div>
+      );
+    }
+  };
+
   return (
     <>
+      {renderItemStickers()}
       <div className="absolute left-1.5 bottom-0.5 z-10">
         {renderItemQuality()}
         <SteamItemSkinportPrice
