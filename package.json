@@ -1,5 +1,6 @@
 {
   "name": "skinport-plus",
+  "private": true,
   "type": "module",
   "scripts": {
     "postinstall": "patch-package",
