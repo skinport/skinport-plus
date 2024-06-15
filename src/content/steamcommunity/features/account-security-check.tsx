@@ -15,7 +15,9 @@ import { Link } from "@/components/ui/link";
 import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement, widgetElementExists } from "@/content/widget";
 import { getI18nMessage } from "@/lib/i18n";
+import { optionsStorage } from "@/lib/options-storage";
 import { ExternalLink } from "lucide-react";
+import ms from "ms";
 import { $ } from "select-dom";
 
 const WIDGET_NAME = "account-security-check";
@@ -25,12 +27,25 @@ async function accountSecurityCheck() {
     return;
   }
 
+  const { steamCommunityAccountCheckApiKeyScannedAt } =
+    await optionsStorage.getAll();
+
+  const dateNow = Date.now();
+
+  if (dateNow - steamCommunityAccountCheckApiKeyScannedAt < ms("1h")) {
+    return;
+  }
+
   const webApiKeyRepsonse = await fetch("/dev/apikey").then((response) => {
     if (!response.ok) {
       throw new Error(response.statusText);
     }
 
     return response.text();
+  });
+
+  await optionsStorage.set({
+    steamCommunityAccountCheckApiKeyScannedAt: dateNow,
   });
 
   const isWebApiKeyExposed =

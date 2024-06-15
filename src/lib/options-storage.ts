@@ -4,6 +4,7 @@ export type Options = typeof optionsStorageDefaults;
 
 export const optionsStorageDefaults = {
   steamCommunityAccountCheckSecurityVulnerabilities: true,
+  steamCommunityAccountCheckApiKeyScannedAt: 0,
   steamCommunityInventoryShowItemPrices: true,
   steamCommunityInventoryShowTotalValue: true,
   steamCommunityTradeOffersVerifyTradePartner: true,
