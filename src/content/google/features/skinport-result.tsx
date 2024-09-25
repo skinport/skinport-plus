@@ -4,7 +4,7 @@ import { createWidgetElement } from "@/content/widget";
 import { injectStyle } from "@/lib/dom";
 import { SKINPORT_BASE_URL } from "@/lib/skinport";
 import { BadgeCheck } from "lucide-react";
-import { $ } from "select-dom";
+import { $, $$ } from "select-dom";
 
 function getResultRootElement(targetElement: HTMLElement) {
   if (
@@ -22,55 +22,57 @@ function getResultRootElement(targetElement: HTMLElement) {
 }
 
 async function skinportResult() {
-  const skinportLinkElement = $(`#search a[href^="${SKINPORT_BASE_URL}"]`);
+  const skinportLinkElements = $$(`#search a[href^="${SKINPORT_BASE_URL}"]`);
 
-  if (!skinportLinkElement) {
+  if (!skinportLinkElements) {
     return;
   }
 
   injectStyle(".uEierd { display: none !important; }");
-
-  const skinportResultElement = getResultRootElement(skinportLinkElement);
-
-  if (skinportResultElement) {
-    const googleResultsElement = skinportResultElement.parentElement;
-
-    if (googleResultsElement) {
-      googleResultsElement.prepend(skinportResultElement);
-    }
-  }
 
   const isGoogleDarkMode =
     window
       .getComputedStyle(document.body)
       .getPropertyValue("background-color") !== "rgb(255, 255, 255)";
 
-  const [officialSkinportWebsiteElement] = createWidgetElement(() => {
-    return (
-      <div className="flex gap-2 text-blue items-center absolute left-0 top-0 cursor-pointer">
-        <SkinportLogo isInverted={!isGoogleDarkMode} />
-        <BadgeCheck size={20} />
-      </div>
-    );
-  });
+  for (const skinportLinkElement of skinportLinkElements) {
+    const skinportResultElement = getResultRootElement(skinportLinkElement);
 
-  const skinportLinkInfoElement = $("div", skinportLinkElement);
+    if (skinportResultElement) {
+      const googleResultsElement = skinportResultElement.parentElement;
 
-  if (skinportLinkInfoElement) {
-    skinportLinkInfoElement.replaceWith(officialSkinportWebsiteElement);
-  }
+      if (googleResultsElement) {
+        googleResultsElement.prepend(skinportResultElement);
+      }
+    }
 
-  const skinportLinkHeadingElement = $("h3", skinportLinkElement);
+    const [officialSkinportWebsiteElement] = createWidgetElement(() => {
+      return (
+        <div className="flex gap-2 text-blue items-center absolute left-0 top-0 cursor-pointer">
+          <SkinportLogo isInverted={!isGoogleDarkMode} />
+          <BadgeCheck size={20} />
+        </div>
+      );
+    });
 
-  if (skinportLinkHeadingElement) {
-    skinportLinkHeadingElement.style.marginTop = "0px";
-  }
+    const skinportLinkInfoElement = $("div", skinportLinkElement);
 
-  const skinportLinkMoreOptionsElement =
-    skinportLinkElement.parentElement?.nextElementSibling;
+    if (skinportLinkInfoElement) {
+      skinportLinkInfoElement.replaceWith(officialSkinportWebsiteElement);
+    }
 
-  if (skinportLinkMoreOptionsElement) {
-    skinportLinkMoreOptionsElement.remove();
+    const skinportLinkHeadingElement = $("h3", skinportLinkElement);
+
+    if (skinportLinkHeadingElement) {
+      skinportLinkHeadingElement.style.marginTop = "0px";
+    }
+
+    const skinportLinkMoreOptionsElement =
+      skinportLinkElement.parentElement?.nextElementSibling;
+
+    if (skinportLinkMoreOptionsElement) {
+      skinportLinkMoreOptionsElement.remove();
+    }
   }
 }
 
