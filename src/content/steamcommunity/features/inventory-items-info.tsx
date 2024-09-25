@@ -169,15 +169,12 @@ const inventoryItemsInfo: Feature = async ({
       new MutationObserver(() => {
         if (inventoryElement.style.display === "none") {
           totalInventoryValueElement.remove();
-
-          inventoryPageControlsElement.style.justifyContent = "flex-end";
         } else {
           inventoryPageControlsElement.prepend(totalInventoryValueElement);
-
-          inventoryPageControlsElement.style.justifyContent = "space-between";
         }
       }).observe(inventoryElement, {
         attributeFilter: ["style"],
+        attributes: true,
       });
     }
   });
