@@ -125,6 +125,10 @@ const inventoryItemsInfo: Feature = async ({
             );
           }
 
+          if (!skinportItemNames.size) {
+            return <div className="text-white font-semibold">-</div>;
+          }
+
           if (!skinportItemPrices.data) {
             return <Skeleton className="w-14 h-3.5 my-[0.1875rem]" />;
           }
@@ -161,6 +165,20 @@ const inventoryItemsInfo: Feature = async ({
       inventoryPageControlsElement.append(pageControlsContainer);
 
       inventoryPageControlsElement.prepend(totalInventoryValueElement);
+
+      new MutationObserver(() => {
+        if (inventoryElement.style.display === "none") {
+          totalInventoryValueElement.remove();
+
+          inventoryPageControlsElement.style.justifyContent = "flex-end";
+        } else {
+          inventoryPageControlsElement.prepend(totalInventoryValueElement);
+
+          inventoryPageControlsElement.style.justifyContent = "space-between";
+        }
+      }).observe(inventoryElement, {
+        attributeFilter: ["style"],
+      });
     }
   });
 
