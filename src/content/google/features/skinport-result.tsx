@@ -4,7 +4,7 @@ import { createWidgetElement } from "@/content/widget";
 import { injectStyle } from "@/lib/dom";
 import { SKINPORT_BASE_URL } from "@/lib/skinport";
 import { BadgeCheck } from "lucide-react";
-import { $, elementExists } from "select-dom";
+import { $ } from "select-dom";
 
 function getResultRootElement(targetElement: HTMLElement) {
   if (
@@ -40,7 +40,10 @@ async function skinportResult() {
     }
   }
 
-  const isGoogleDarkMode = elementExists('[data-darkmode="true"]');
+  const isGoogleDarkMode =
+    window
+      .getComputedStyle(document.body)
+      .getPropertyValue("background-color") !== "rgb(255, 255, 255)";
 
   const [officialSkinportWebsiteElement] = createWidgetElement(() => {
     return (
