@@ -91,98 +91,92 @@ function App() {
       <div className="bg-background px-8 py-12 mt-[78px] max-w-screen-md mx-auto">
         <h1 className="text-white font-semibold mb-8">Steam Community</h1>
         {options && (
-          <>
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <h3>{getI18nMessage("options_steamCommunity_account")}</h3>
-                <div className="space-y-0.5">
-                  <OptionField
-                    labelKey="options_steamCommunityAccountCheckSecurityVulnerabilities_label"
-                    descriptionKey="options_steamCommunityAccountCheckSecurityVulnerabilities_description"
-                    defaultChecked={
-                      options.steamCommunityAccountCheckSecurityVulnerabilities
-                    }
-                    onCheckedChange={(checked) =>
-                      optionsStorage.set({
-                        steamCommunityAccountCheckSecurityVulnerabilities:
-                          checked,
-                      })
-                    }
-                  />
-                </div>
-              </div>
-              <div className="space-y-4">
-                <h3>{getI18nMessage("options_steamCommunity_inventories")}</h3>
-                <div className="space-y-0.5">
-                  <OptionField
-                    labelKey="options_steamCommunityInventoryShowItemPrices_label"
-                    descriptionKey="options_steamCommunityInventoryShowItemPrices_description"
-                    defaultChecked={
-                      options.steamCommunityInventoryShowItemPrices
-                    }
-                    onCheckedChange={(checked) =>
-                      optionsStorage.set({
-                        steamCommunityInventoryShowItemPrices: checked,
-                      })
-                    }
-                  />
-                  <OptionField
-                    labelKey="options_steamCommunityInventoryShowTotalValue_label"
-                    descriptionKey="options_steamCommunityInventoryShowTotalValue_description"
-                    defaultChecked={
-                      options.steamCommunityInventoryShowTotalValue
-                    }
-                    onCheckedChange={(checked) =>
-                      optionsStorage.set({
-                        steamCommunityInventoryShowTotalValue: checked,
-                      })
-                    }
-                  />
-                </div>
-              </div>
-              <div className="space-y-4">
-                <h3>{getI18nMessage("options_steamCommunity_tradeOffers")}</h3>
-                <div className="space-y-0.5">
-                  <OptionField
-                    labelKey="options_steamCommunityTradeOffersVerifyTradePartner_label"
-                    descriptionKey="options_steamCommunityTradeOffersVerifyTradePartner_description"
-                    defaultChecked={
-                      options.steamCommunityTradeOffersVerifyTradePartner
-                    }
-                    onCheckedChange={(checked) =>
-                      optionsStorage.set({
-                        steamCommunityTradeOffersVerifyTradePartner: checked,
-                      })
-                    }
-                  />
-                  <OptionField
-                    labelKey="options_steamCommunityTradeOffersShowItemPrices_label"
-                    descriptionKey="options_steamCommunityTradeOffersShowItemPrices_description"
-                    defaultChecked={
-                      options.steamCommunityTradeOffersShowItemPrices
-                    }
-                    onCheckedChange={(checked) =>
-                      optionsStorage.set({
-                        steamCommunityTradeOffersShowItemPrices: checked,
-                      })
-                    }
-                  />
-                  <OptionField
-                    labelKey="options_steamCommunityTradeOffersShowTotalTradeValues_label"
-                    descriptionKey="options_steamCommunityTradeOffersShowTotalTradeValues_description"
-                    defaultChecked={
-                      options.steamCommunityTradeOffersShowTotalTradeValues
-                    }
-                    onCheckedChange={(checked) =>
-                      optionsStorage.set({
-                        steamCommunityTradeOffersShowTotalTradeValues: checked,
-                      })
-                    }
-                  />
-                </div>
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <h3>{getI18nMessage("options_steamCommunity_account")}</h3>
+              <div className="space-y-0.5">
+                <OptionField
+                  labelKey="options_steamCommunityAccountCheckSecurityVulnerabilities_label"
+                  descriptionKey="options_steamCommunityAccountCheckSecurityVulnerabilities_description"
+                  defaultChecked={
+                    options.steamCommunityAccountCheckSecurityVulnerabilities
+                  }
+                  onCheckedChange={(checked) =>
+                    optionsStorage.set({
+                      steamCommunityAccountCheckSecurityVulnerabilities:
+                        checked,
+                    })
+                  }
+                />
               </div>
             </div>
-          </>
+            <div className="space-y-4">
+              <h3>{getI18nMessage("options_steamCommunity_inventories")}</h3>
+              <div className="space-y-0.5">
+                <OptionField
+                  labelKey="options_steamCommunityInventoryShowItemPrices_label"
+                  descriptionKey="options_steamCommunityInventoryShowItemPrices_description"
+                  defaultChecked={options.steamCommunityInventoryShowItemPrices}
+                  onCheckedChange={(checked) =>
+                    optionsStorage.set({
+                      steamCommunityInventoryShowItemPrices: checked,
+                    })
+                  }
+                />
+                <OptionField
+                  labelKey="options_steamCommunityInventoryShowTotalValue_label"
+                  descriptionKey="options_steamCommunityInventoryShowTotalValue_description"
+                  defaultChecked={options.steamCommunityInventoryShowTotalValue}
+                  onCheckedChange={(checked) =>
+                    optionsStorage.set({
+                      steamCommunityInventoryShowTotalValue: checked,
+                    })
+                  }
+                />
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h3>{getI18nMessage("options_steamCommunity_tradeOffers")}</h3>
+              <div className="space-y-0.5">
+                <OptionField
+                  labelKey="options_steamCommunityTradeOffersVerifyTradePartner_label"
+                  descriptionKey="options_steamCommunityTradeOffersVerifyTradePartner_description"
+                  defaultChecked={
+                    options.steamCommunityTradeOffersVerifyTradePartner
+                  }
+                  onCheckedChange={(checked) =>
+                    optionsStorage.set({
+                      steamCommunityTradeOffersVerifyTradePartner: checked,
+                    })
+                  }
+                />
+                <OptionField
+                  labelKey="options_steamCommunityTradeOffersShowItemPrices_label"
+                  descriptionKey="options_steamCommunityTradeOffersShowItemPrices_description"
+                  defaultChecked={
+                    options.steamCommunityTradeOffersShowItemPrices
+                  }
+                  onCheckedChange={(checked) =>
+                    optionsStorage.set({
+                      steamCommunityTradeOffersShowItemPrices: checked,
+                    })
+                  }
+                />
+                <OptionField
+                  labelKey="options_steamCommunityTradeOffersShowTotalTradeValues_label"
+                  descriptionKey="options_steamCommunityTradeOffersShowTotalTradeValues_description"
+                  defaultChecked={
+                    options.steamCommunityTradeOffersShowTotalTradeValues
+                  }
+                  onCheckedChange={(checked) =>
+                    optionsStorage.set({
+                      steamCommunityTradeOffersShowTotalTradeValues: checked,
+                    })
+                  }
+                />
+              </div>
+            </div>
+          </div>
         )}
       </div>
       <Dialog open={!hasAllUrlsPermissions}>
