@@ -186,8 +186,6 @@ declare const g_rgListingInfo: Partial<{
   };
 }>;
 
-type RequestData<D extends () => void> = NonNullable<Parameters<D>[0]>;
-
 const user_steamid = g_steamID;
 
 const bridgeActionHandlers = {
@@ -265,9 +263,9 @@ const bridgeActionHandlers = {
     steamCommunity.tradeOffer.getTradeItems.response(tradeItems);
   },
   [steamCommunity.tradeOffer.getItemsByAssetId.requestType]: (
-    requestData: RequestData<
+    requestData: Parameters<
       typeof steamCommunity.tradeOffer.getItemsByAssetId
-    >,
+    >[0],
   ) => {
     const itemsByAssetId: Record<string, SteamItem> = {};
 
@@ -293,7 +291,7 @@ const bridgeActionHandlers = {
     steamCommunity.tradeOffer.getItemsByAssetId.response({ itemsByAssetId });
   },
   [steamCommunity.market.getListingItem.requestType]: (
-    requestData: RequestData<typeof steamCommunity.market.getListingItem>,
+    requestData: Parameters<typeof steamCommunity.market.getListingItem>[0],
   ) => {
     const listingInfo = requestData.listingId
       ? g_rgListingInfo?.[requestData.listingId]

@@ -7,7 +7,11 @@ function createBridgeAction<
   const requestType = type;
   const responseType = `${type}.response` as const;
 
-  const bridgeAction = (requestData?: RequestData) => {
+  const bridgeAction = (
+    ...args: [RequestData] extends [never] ? [] : [requestData: RequestData]
+  ) => {
+    const [requestData] = args;
+
     return new Promise<Omit<ResponseData, "type">>((resolve) => {
       const listener = (event: MessageEvent<ResponseData>) => {
         if (event.source !== window) {
@@ -36,8 +40,8 @@ function createBridgeAction<
 
   bridgeAction.response = (responseData: ResponseData) => {
     window.postMessage({
-      type: responseType,
       ...responseData,
+      type: responseType,
     });
   };
 
@@ -74,7 +78,7 @@ export const steamCommunity = {
   },
   market: {
     getListingItem: createBridgeAction<
-      { listingId: string } | never,
+      { listingId?: string } | never,
       SteamItem
     >("market.getListingItem"),
   },

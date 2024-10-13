@@ -27,13 +27,9 @@ async function marketItemSkinportPrice() {
   const marketListingId =
     marketListingElement?.getAttribute("id")?.split("_")[1] || undefined;
 
-  const marketListingItem = await steamCommunity.market.getListingItem(
-    marketListingId
-      ? {
-          listingId: marketListingId,
-        }
-      : undefined,
-  );
+  const marketListingItem = await steamCommunity.market.getListingItem({
+    listingId: marketListingId,
+  });
 
   const marketListingPriceElementText =
     marketListingElement &&
