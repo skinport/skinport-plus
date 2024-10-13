@@ -160,6 +160,12 @@
   "steamcommunity_inventoryItemSkinportLinks_viewScreenshot": {
     "message": "Bekijk screenshot"
   },
+  "steamcommunity_inventoryItem_charm_tooltip": {
+    "message": "Charm: <charmName />"
+  },
+  "steamcommunity_inventoryItem_sticker_tooltip": {
+    "message": "Sticker: <stickerName />"
+  },
   "steamcommunity_profileVerified_verifiedSkinportBot": {
     "message": "Dit is een geverifieerde Skinport bot"
   },

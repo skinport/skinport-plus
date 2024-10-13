@@ -1,7 +1,9 @@
 import { SteamItemSkinportPrice } from "@/components/steam-item-skinport-price";
+import { getI18nMessage } from "@/lib/i18n";
 import type { SelectedSkinportItemPrice } from "@/lib/skinport";
 import type { SteamItem } from "@/lib/steam";
 import { useEffect } from "react";
+import { InterpolateMessage } from "./interpolate-message";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export function SteamInventoryItemInfo({
@@ -52,7 +54,7 @@ export function SteamInventoryItemInfo({
   };
 
   const renderItemStickers = () => {
-    if (inventoryItem?.stickers) {
+    if (inventoryItem?.stickers.length) {
       return (
         <div className="absolute top-1.5 right-0.5 z-10 flex flex-col gap-1">
           {inventoryItem.stickers.map(({ image, marketHashName }, index) => (
@@ -60,7 +62,42 @@ export function SteamInventoryItemInfo({
               <TooltipTrigger>
                 <img src={image} alt={marketHashName} className="w-4" />
               </TooltipTrigger>
-              <TooltipContent side="left">{marketHashName}</TooltipContent>
+              <TooltipContent side="left">
+                <InterpolateMessage
+                  message={getI18nMessage(
+                    "steamcommunity_inventoryItem_sticker_tooltip",
+                  )}
+                  values={{ stickerName: marketHashName }}
+                />
+              </TooltipContent>
+            </Tooltip>
+          ))}
+        </div>
+      );
+    }
+  };
+
+  const renderItemCharms = () => {
+    if (inventoryItem?.charms.length) {
+      return (
+        <div className="absolute top-1.5 left-0 z-10 flex flex-col gap-1">
+          {inventoryItem.charms.map(({ image, marketHashName }, index) => (
+            <Tooltip key={`${index}_${marketHashName}`}>
+              <TooltipTrigger>
+                <img
+                  src={image}
+                  alt={marketHashName}
+                  className="w-5 -ml-0.5 drop-shadow-[0_0_2px_rgba(0,0,0,0.75)]"
+                />
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                <InterpolateMessage
+                  message={getI18nMessage(
+                    "steamcommunity_inventoryItem_charm_tooltip",
+                  )}
+                  values={{ charmName: marketHashName }}
+                />
+              </TooltipContent>
             </Tooltip>
           ))}
         </div>
@@ -71,6 +108,7 @@ export function SteamInventoryItemInfo({
   return (
     <>
       {renderItemStickers()}
+      {renderItemCharms()}
       <div className="absolute left-1.5 bottom-0.5 z-10">
         {renderItemQuality()}
         <SteamItemSkinportPrice

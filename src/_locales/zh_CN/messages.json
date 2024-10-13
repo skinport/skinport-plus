@@ -160,6 +160,12 @@
   "steamcommunity_inventoryItemSkinportLinks_viewScreenshot": {
     "message": "查看截图"
   },
+  "steamcommunity_inventoryItem_charm_tooltip": {
+    "message": "Charm: <charmName />"
+  },
+  "steamcommunity_inventoryItem_sticker_tooltip": {
+    "message": "Sticker: <stickerName />"
+  },
   "steamcommunity_profileVerified_verifiedSkinportBot": {
     "message": "这是经过验证的Skinport机器人"
   },

@@ -43,7 +43,8 @@ export type SteamItem = {
   qualityColor: string | null;
   rarity: string | null;
   rarityColor: string | null;
-  stickers: { image: string; marketHashName: string }[] | null;
+  stickers: { image: string; marketHashName: string }[];
+  charms: { image: string; marketHashName: string }[];
 };
 
 export function parseSteamItem({
@@ -110,7 +111,8 @@ export function parseSteamItem({
     );
   }
 
-  let stickers: { image: string; marketHashName: string }[] | null = null;
+  const stickers: SteamItem["stickers"] = [];
+  const charms: SteamItem["charms"] = [];
 
   if (descriptions) {
     for (const { type, value } of descriptions) {
@@ -128,10 +130,10 @@ export function parseSteamItem({
           marketHashNames &&
           images.length === marketHashNames.length
         ) {
-          stickers = [];
+          const isCharms = value.indexOf("keychains") !== -1;
 
           for (let i = 0; i < images.length; i++) {
-            stickers.push({
+            (isCharms ? charms : stickers).push({
               image: images[i],
               marketHashName: marketHashNames[i].trim(),
             });
@@ -161,6 +163,7 @@ export function parseSteamItem({
     rarity: rarityTag?.internal_name || null,
     rarityColor: rarityTag?.color ? `#${rarityTag.color}` : null,
     stickers,
+    charms,
   };
 }
 
