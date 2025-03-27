@@ -1,0 +1,5 @@
+pre-commit:
+  commands:
+    check:
+      run: npm run lint:write {staged_files}
+      stage_fixed: true
