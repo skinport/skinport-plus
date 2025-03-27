@@ -22,7 +22,9 @@ function getResultRootElement(targetElement: HTMLElement) {
 }
 
 async function skinportResult() {
-  const skinportLinkElements = $$(`#search a[href^="${SKINPORT_BASE_URL}"]`);
+  const skinportLinkElements = $$(
+    `#search a[href^="${SKINPORT_BASE_URL}"]:has(h3)`,
+  );
 
   if (!skinportLinkElements) {
     return;
@@ -39,7 +41,7 @@ async function skinportResult() {
     const skinportResultElement = getResultRootElement(skinportLinkElement);
 
     if (skinportResultElement) {
-      const googleResultsElement = skinportResultElement.parentElement;
+      const googleResultsElement = $('div[data-async-context^="query:"]');
 
       if (googleResultsElement) {
         googleResultsElement.prepend(skinportResultElement);
@@ -48,7 +50,7 @@ async function skinportResult() {
 
     const [officialSkinportWebsiteElement] = createWidgetElement(() => {
       return (
-        <div className="flex gap-2 text-blue items-center absolute left-0 top-0 cursor-pointer">
+        <div className="flex gap-2 text-blue items-center cursor-pointer">
           <SkinportLogo isInverted={!isGoogleDarkMode} />
           <BadgeCheck size={20} />
         </div>
@@ -59,12 +61,6 @@ async function skinportResult() {
 
     if (skinportLinkInfoElement) {
       skinportLinkInfoElement.replaceWith(officialSkinportWebsiteElement);
-    }
-
-    const skinportLinkHeadingElement = $("h3", skinportLinkElement);
-
-    if (skinportLinkHeadingElement) {
-      skinportLinkHeadingElement.style.marginTop = "0px";
     }
 
     const skinportLinkMoreOptionsElement =
