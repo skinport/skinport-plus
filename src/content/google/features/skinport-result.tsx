@@ -50,7 +50,7 @@ async function skinportResult() {
 
     const [officialSkinportWebsiteElement] = createWidgetElement(() => {
       return (
-        <div className="flex gap-2 text-blue items-center cursor-pointer">
+        <div className="flex gap-2 text-blue items-center cursor-pointer scale-y-[-1]">
           <SkinportLogo isInverted={!isGoogleDarkMode} />
           <BadgeCheck size={20} />
         </div>
