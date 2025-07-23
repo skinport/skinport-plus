@@ -57,7 +57,7 @@ const inventoryItemsInfo: Feature = async ({
     const skinportItemNames = new Set<string>();
 
     for (const item of Object.values(inventory)) {
-      if (item?.isMarketable) {
+      if (item?.isMarketable || item?.isTradeProtected) {
         skinportItemNames.add(item.marketHashName);
       }
     }
@@ -70,13 +70,11 @@ const inventoryItemsInfo: Feature = async ({
 
     for (const inventoryItemElement of inventoryItemElements) {
       const inventoryItemElementId = inventoryItemElement.getAttribute("id");
-
       if (!inventoryItemElementId) {
         continue;
       }
 
       const inventoryItem = inventory[inventoryItemElementId];
-
       if (!inventoryItem) {
         continue;
       }

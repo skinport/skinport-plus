@@ -34,6 +34,7 @@ export type SteamItem = {
   inspectIngameLink: string | null;
   isMarketable: boolean;
   isTradable: boolean;
+  isTradeProtected: boolean;
   isStatTrak: boolean;
   isSouvenir: boolean;
   isOwner: boolean;
@@ -58,6 +59,7 @@ export function parseSteamItem({
   marketable,
   tags,
   tradable,
+  sealed,
   owner_steamid,
   user_steamid,
 }: {
@@ -77,6 +79,7 @@ export function parseSteamItem({
     color?: string;
   }[];
   tradable: 0 | 1;
+  sealed: 0 | 1;
   owner_steamid?: string;
   user_steamid?: string;
 }): SteamItem {
@@ -152,6 +155,7 @@ export function parseSteamItem({
     inspectIngameLink,
     isMarketable: marketable === 1,
     isTradable: tradable === 1,
+    isTradeProtected: sealed === 1,
     isStatTrak: /^StatTrak™/.test(market_hash_name),
     isSouvenir: /^Souvenir/.test(market_hash_name),
     isOwner:
