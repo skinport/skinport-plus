@@ -34,6 +34,7 @@ declare type RgDescription = {
   marketable: 0 | 1;
   tradable: 0 | 1;
   tags: Tag[];
+  sealed: 0 | 1;
 };
 
 declare type RgAsset = {
@@ -63,6 +64,7 @@ type RgInventory = {
       color?: string;
     }[];
     tradable: 0 | 1;
+    sealed: 0 | 1;
   };
 };
 
