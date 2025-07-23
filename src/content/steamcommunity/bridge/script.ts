@@ -172,6 +172,7 @@ declare const g_rgAssets: Partial<{
         market_hash_name: string;
         marketable: 0 | 1;
         tradable: 0 | 1;
+        sealed: 0 | 1;
       };
     }>;
   }>;
