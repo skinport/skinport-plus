@@ -17,7 +17,7 @@ const steamItemMarketHashNameExteriorRegExp = new RegExp(
 
 export type SteamItemExterior = (typeof steamItemExterior)[number];
 
-export type SteamItemContextId = "2" | "6";
+export type SteamItemContextId = 0 | "2" | "6";
 
 export type SteamItemAppId = number;
 
@@ -65,7 +65,7 @@ export function parseSteamItem({
   appid: number;
   assetid?: string;
   classid: string;
-  contextid?: "2" | "6";
+  contextid?: SteamItemContextId;
   descriptions?: { type: "html"; value: string }[];
   market_hash_name: string;
   marketable: 0 | 1;

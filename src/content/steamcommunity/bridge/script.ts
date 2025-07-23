@@ -76,6 +76,9 @@ declare type CInventory = {
   m_contextid: SteamItemContextId;
   m_iCurrentPage: number;
   m_rgAssets: RgAsset[];
+  m_rgChildInventories: {
+    [contextId: string]: CInventory;
+  };
   m_rgDescriptions: Record<string, RgDescription>;
   m_steamid: string;
   m_strCompositeID: string;
@@ -204,15 +207,28 @@ const bridgeActionHandlers = {
 
     const inventory: Record<string, SteamItem> = {};
 
-    for (const rgAsset of Object.values(g_ActiveInventory.m_rgAssets)) {
-      if (Object.hasOwn(rgAsset, "assetid"))
-        inventory[`${rgAsset.appid}_${rgAsset.contextid}_${rgAsset.assetid}`] =
-          parseSteamItem({
+    const handleRgAssets = (rgAssets: RgAsset[]) => {
+      for (const rgAsset of Object.values(rgAssets)) {
+        if (Object.hasOwn(rgAsset, "assetid"))
+          inventory[
+            `${rgAsset.appid}_${rgAsset.contextid}_${rgAsset.assetid}`
+          ] = parseSteamItem({
             ...rgAsset,
             ...rgAsset.description,
             owner_steamid: g_ActiveInventory.m_owner?.strSteamId,
             user_steamid,
           });
+      }
+    };
+
+    if (g_ActiveInventory.m_contextid === 0) {
+      for (const childInventory of Object.values(
+        g_ActiveInventory.m_rgChildInventories,
+      )) {
+        handleRgAssets(childInventory.m_rgAssets);
+      }
+    } else {
+      handleRgAssets(g_ActiveInventory.m_rgAssets);
     }
 
     steamCommunity.inventory.loadCompleteInventory.response(inventory);
