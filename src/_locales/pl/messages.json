@@ -164,13 +164,13 @@
     "message": "Czar: <charmName />"
   },
   "steamcommunity_inventoryItem_notTradable_tooltip": {
-    "message": "Item is not tradable and can't be sold on Skinport"
+    "message": "Przedmiot nie jest wymienialny i nie można go sprzedać na Skinport."
   },
   "steamcommunity_inventoryItem_sticker_tooltip": {
     "message": "Naklejka: <stickerName />"
   },
   "steamcommunity_inventoryItem_tradeProtected_tooltip": {
-    "message": "Item is trade protected and can't be sold on Skinport"
+    "message": "Przedmiot jest chroniony przed wymianą i nie może być sprzedany na Skinport."
   },
   "steamcommunity_profileVerified_verifiedSkinportBot": {
     "message": "To jest zweryfikowany bot Skinport"

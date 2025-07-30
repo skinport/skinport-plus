@@ -164,13 +164,13 @@
     "message": "Encanto: <charmName />"
   },
   "steamcommunity_inventoryItem_notTradable_tooltip": {
-    "message": "Item is not tradable and can't be sold on Skinport"
+    "message": "El objeto no se puede intercambiar y no se puede vender en Skinport."
   },
   "steamcommunity_inventoryItem_sticker_tooltip": {
     "message": "Pegatina: <stickerName />"
   },
   "steamcommunity_inventoryItem_tradeProtected_tooltip": {
-    "message": "Item is trade protected and can't be sold on Skinport"
+    "message": "El objeto está protegido por comercio y no se puede vender en Skinport."
   },
   "steamcommunity_profileVerified_verifiedSkinportBot": {
     "message": "Este es un bot verificado de Skinport"
