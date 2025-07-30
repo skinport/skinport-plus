@@ -71,8 +71,8 @@ export const steamCommunity = {
     getTradeItems: createBridgeAction<never, Record<string, SteamItem>>(
       "tradeOffer.getTradeItems",
     ),
-    getItemsByAssetId: createBridgeAction<
-      { assetIds: string[] },
+    getItems: createBridgeAction<
+      { items: { assetId: string; appId: string; contextId: string }[] },
       { itemsByAssetId: Record<string, SteamItem> }
     >("tradeOffer.getInventoryItems"),
   },

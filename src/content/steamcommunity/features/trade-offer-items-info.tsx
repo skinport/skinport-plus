@@ -52,24 +52,45 @@ const tradeOfferItemsInfo: Feature = async ({
         return;
       }
 
-      const itemElementsByAssetId: { [assetId: string]: HTMLElement } = {};
+      const itemElementsByAssetId: {
+        [assetId: string]: {
+          element: HTMLElement;
+          appId: string;
+          contextId: string;
+        };
+      } = {};
 
       for (const itemElement of itemElements) {
         setFeatureAttribute(itemElement);
 
-        const itemAssetId = itemElement.getAttribute("id")?.split("_")[2];
+        const itemElementId = itemElement.getAttribute("id");
 
-        if (!itemAssetId) {
+        if (!itemElementId) {
           continue;
         }
 
-        itemElementsByAssetId[itemAssetId] = itemElement;
+        const [appId, contextId, assetId] = itemElementId.split("_");
+
+        if (!appId || !contextId || !assetId) {
+          continue;
+        }
+
+        itemElementsByAssetId[assetId] = {
+          element: itemElement,
+          contextId,
+          appId,
+        };
       }
 
-      const { itemsByAssetId } =
-        await steamCommunity.tradeOffer.getItemsByAssetId({
-          assetIds: Object.keys(itemElementsByAssetId),
-        });
+      const { itemsByAssetId } = await steamCommunity.tradeOffer.getItems({
+        items: Object.entries(itemElementsByAssetId).map(
+          ([assetId, { appId, contextId }]) => ({
+            assetId,
+            appId,
+            contextId,
+          }),
+        ),
+      });
 
       const useSkinportItemPrices = createUseSkinportItemPrices(() => {
         const itemNames = new Set<string>();
@@ -83,7 +104,7 @@ const tradeOfferItemsInfo: Feature = async ({
         return itemNames;
       });
 
-      for (const [itemAssetId, itemElement] of Object.entries(
+      for (const [itemAssetId, { element: itemElement }] of Object.entries(
         itemElementsByAssetId,
       )) {
         const item = itemsByAssetId[itemAssetId];

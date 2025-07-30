@@ -68,6 +68,22 @@ type RgInventory = {
   };
 };
 
+type RgChildInventories = {
+  [contextId: string]: {
+    appid: SteamItemAppId;
+    bNeedsRepagination: boolean;
+    contextid: SteamItemContextId;
+    elInventory: HTMLElement;
+    elTagContainer: HTMLElement;
+    initialized: boolean;
+    owner: {
+      strSteamId: string;
+    };
+    rgInventory: RgInventory;
+    rgItemElements: HTMLElement[];
+  };
+};
+
 declare type CInventory = {
   appid: SteamItemAppId;
   contextid: string;
@@ -88,6 +104,7 @@ declare type CInventory = {
   pageCurrent?: number;
   pageList?: HTMLElement[];
   rgInventory?: RgInventory;
+  rgChildInventories?: RgChildInventories;
   m_owner?: {
     strSteamId: string;
   };
@@ -281,21 +298,37 @@ const bridgeActionHandlers = {
 
     steamCommunity.tradeOffer.getTradeItems.response(tradeItems);
   },
-  [steamCommunity.tradeOffer.getItemsByAssetId.requestType]: (
-    requestData: Parameters<
-      typeof steamCommunity.tradeOffer.getItemsByAssetId
-    >[0],
+  [steamCommunity.tradeOffer.getItems.requestType]: (
+    requestData: Parameters<typeof steamCommunity.tradeOffer.getItems>[0],
   ) => {
     const itemsByAssetId: Record<string, SteamItem> = {};
 
-    if (!g_ActiveInventory.rgInventory) {
+    if (!g_ActiveInventory.rgChildInventories) {
       throw new Error();
     }
 
-    for (const assetId of requestData.assetIds as string[]) {
-      const item = g_ActiveInventory.rgInventory[assetId];
+    for (const { assetId, contextId, appId } of requestData.items) {
+      const inventory = g_ActiveInventory.rgChildInventories[contextId];
+
+      if (!inventory) {
+        console.error("No inventory found for item:", {
+          assetId,
+          contextId,
+          appId,
+        });
+
+        continue;
+      }
+
+      const item = inventory.rgInventory[assetId];
 
       if (!item) {
+        console.error("No item found in inventory:", {
+          assetId,
+          contextId,
+          appId,
+        });
+
         continue;
       }
 
@@ -307,7 +340,7 @@ const bridgeActionHandlers = {
       });
     }
 
-    steamCommunity.tradeOffer.getItemsByAssetId.response({ itemsByAssetId });
+    steamCommunity.tradeOffer.getItems.response({ itemsByAssetId });
   },
   [steamCommunity.market.getListingItem.requestType]: (
     requestData: Parameters<typeof steamCommunity.market.getListingItem>[0],
