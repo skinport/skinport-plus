@@ -1,5 +1,9 @@
 import { getI18nMessage } from "@/lib/i18n";
-import { getSkinportItemUrl, getSkinportScreenshotUrl } from "@/lib/skinport";
+import {
+  getSkinportItemUrl,
+  getSkinportScreenshotUrl,
+  getSkinportSellSteamItemUrl,
+} from "@/lib/skinport";
 import type { SteamItem } from "@/lib/steam";
 import { ChevronDown } from "lucide-react";
 import type { ReactNode } from "react";
@@ -23,14 +27,17 @@ export function SteamItemSkinportActions({
 }: {
   item: Pick<
     SteamItem,
-    "appId" | "marketHashName" | "inspectIngameLink" | "exterior"
+    "appId" | "marketHashName" | "inspectIngameLink" | "exterior" | "assetId"
   >;
   className?: string;
   container: HTMLElement;
   children?: ReactNode;
   actionType?: "view" | "buy" | "sell";
 }) {
-  const itemSkinportLink = getSkinportItemUrl(item);
+  const itemSkinportLink =
+    actionType === "sell"
+      ? getSkinportSellSteamItemUrl(item)
+      : getSkinportItemUrl(item);
 
   if (!itemSkinportLink) {
     return;

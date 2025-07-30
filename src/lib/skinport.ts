@@ -50,6 +50,14 @@ export function getSkinportItemUrl(
   );
 }
 
+export function getSkinportSellSteamItemUrl(
+  item: Pick<SteamItem, "appId" | "assetId">,
+) {
+  return getSkinportUrl(
+    `/sell/steam?appid=${item.appId}&assetid=${item.assetId}`,
+  );
+}
+
 export function getSkinportScreenshotUrl(input?: string) {
   const url = new URL(
     input || SKINPORT_SCREENSHOT_BASE_URL,
