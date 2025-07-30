@@ -44,7 +44,7 @@ featureManager.add(
 
       const selectedItem = await steamCommunity.inventory.getSelectedItem();
 
-      if (!selectedItem.isMarketable && !selectedItem.isTradeProtected) {
+      if (!selectedItem) {
         return;
       }
 

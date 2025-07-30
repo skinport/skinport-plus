@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Link } from "./ui/link";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export function SteamItemSkinportActions({
   item,
@@ -27,7 +28,13 @@ export function SteamItemSkinportActions({
 }: {
   item: Pick<
     SteamItem,
-    "appId" | "marketHashName" | "inspectIngameLink" | "exterior" | "assetId"
+    | "appId"
+    | "marketHashName"
+    | "inspectIngameLink"
+    | "exterior"
+    | "assetId"
+    | "isTradable"
+    | "isTradeProtected"
   >;
   className?: string;
   container: HTMLElement;
@@ -43,15 +50,42 @@ export function SteamItemSkinportActions({
     return;
   }
 
+  const isButtonDisabled = actionType === "sell" && !item.isTradable;
+
+  const buttonContent = (
+    <InterpolateMessage
+      message={getI18nMessage(`common_${actionType}OnSkinport`)}
+      values={{
+        skinportLogo: (
+          <SkinportLogo
+            size={10}
+            className={isButtonDisabled ? "opacity-50" : undefined}
+          />
+        ),
+      }}
+    />
+  );
+
+  if (isButtonDisabled) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button className={className} disabled>
+            {buttonContent}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          Item is {item.isTradeProtected ? "trade protected" : "not tradable"}{" "}
+          and can't be sold on Skinport.
+        </TooltipContent>
+      </Tooltip>
+    );
+  }
+
   const viewOnSkinportButton = (
     <Button className={className} asChild>
       <Link href={itemSkinportLink} target="_blank">
-        <InterpolateMessage
-          message={getI18nMessage(`common_${actionType}OnSkinport`)}
-          values={{
-            skinportLogo: <SkinportLogo size={10} />,
-          }}
-        />
+        {buttonContent}
       </Link>
     </Button>
   );

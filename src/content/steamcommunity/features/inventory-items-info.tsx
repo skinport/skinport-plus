@@ -57,7 +57,7 @@ const inventoryItemsInfo: Feature = async ({
     const skinportItemNames = new Set<string>();
 
     for (const item of Object.values(inventory)) {
-      if (item?.isMarketable || item?.isTradeProtected) {
+      if (item) {
         skinportItemNames.add(item.marketHashName);
       }
     }
