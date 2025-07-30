@@ -75,8 +75,9 @@ export function SteamItemSkinportActions({
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          Item is {item.isTradeProtected ? "trade protected" : "not tradable"}{" "}
-          and can't be sold on Skinport.
+          {getI18nMessage(
+            `steamcommunity_inventoryItem_${item.isTradeProtected ? "tradeProtected" : "notTradable"}_tooltip`,
+          )}
         </TooltipContent>
       </Tooltip>
     );
