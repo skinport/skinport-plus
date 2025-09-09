@@ -3,6 +3,7 @@ import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
 import { injectStyle } from "@/lib/dom";
 import { SKINPORT_BASE_URL } from "@/lib/skinport";
+import { cn } from "@/lib/utils";
 import { BadgeCheck } from "lucide-react";
 import { $, $$ } from "select-dom";
 
@@ -48,20 +49,29 @@ async function skinportResult() {
       }
     }
 
+    const skinportLinkInfoElement = $("div", skinportLinkElement);
+
+    if (!skinportLinkInfoElement) {
+      continue;
+    }
+
     const [officialSkinportWebsiteElement] = createWidgetElement(() => {
       return (
-        <div className="flex gap-2 text-blue items-center cursor-pointer scale-y-[-1]">
+        <div
+          className={cn("flex gap-2 text-blue items-center cursor-pointer", {
+            "scale-y-[-1]":
+              skinportLinkElement.parentElement &&
+              window.getComputedStyle(skinportLinkElement.parentElement)
+                .transform === "matrix(1, 0, 0, -1, 0, 0)",
+          })}
+        >
           <SkinportLogo isInverted={!isGoogleDarkMode} />
           <BadgeCheck size={20} />
         </div>
       );
     });
 
-    const skinportLinkInfoElement = $("div", skinportLinkElement);
-
-    if (skinportLinkInfoElement) {
-      skinportLinkInfoElement.replaceWith(officialSkinportWebsiteElement);
-    }
+    skinportLinkInfoElement.replaceWith(officialSkinportWebsiteElement);
 
     const skinportLinkMoreOptionsElement =
       skinportLinkElement.parentElement?.nextElementSibling;
