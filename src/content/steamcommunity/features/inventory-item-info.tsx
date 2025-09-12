@@ -1,3 +1,4 @@
+import { FloatBar } from "@/components/float-bar";
 import { SteamItemSkinportActions } from "@/components/steam-item-skinport-actions";
 import { SteamItemSkinportPrice } from "@/components/steam-item-skinport-price";
 import { featureManager } from "@/content/feature-manager";
@@ -68,6 +69,9 @@ featureManager.add(
 
           return (
             <div className="space-y-1 mb-4">
+              {selectedItem.float && (
+                <FloatBar float={Number(selectedItem.float)} className="mb-2" />
+              )}
               <SteamItemSkinportPrice
                 price={skinportItemPrice}
                 priceType={selectedItem.isOwner ? "suggested" : "lowest"}

@@ -112,7 +112,7 @@ export function SteamInventoryItemInfo({
     <>
       {renderItemStickers()}
       {renderItemCharms()}
-      <div className="absolute left-1.5 bottom-0.5 z-10">
+      <div className="absolute left-1.5 bottom-0.5 right-1.5 z-10">
         {renderItemQuality()}
         <SteamItemSkinportPrice
           price={skinportItemPrice}

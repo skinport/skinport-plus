@@ -93,6 +93,22 @@ declare type CInventory = {
   m_cPages: number;
   m_contextid: SteamItemContextId;
   m_iCurrentPage: number;
+  m_rgAssetProperties: {
+    [assetid: string]: [
+      {
+        propertyid: 2;
+        float_value: string;
+        name: "Wear Rating";
+        assetid: string;
+      },
+      {
+        propertyid: 1;
+        int_value: string;
+        name: "Pattern Template";
+        assetid: string;
+      },
+    ];
+  };
   m_rgAssets: RgAsset[];
   m_rgChildInventories: {
     [contextId: string]: CInventory;
@@ -211,6 +227,20 @@ declare const g_rgListingInfo: Partial<{
 
 const user_steamid = g_steamID;
 
+function getAssetProperties({ contextid, assetid }: RgAsset) {
+  const assetProperties =
+    g_ActiveInventory.m_rgChildInventories[contextid].m_rgAssetProperties[
+      assetid
+    ];
+
+  return {
+    float: assetProperties?.find((property) => property.propertyid === 2)
+      ?.float_value,
+    pattern: assetProperties?.find((property) => property.propertyid === 1)
+      ?.int_value,
+  };
+}
+
 const bridgeActionHandlers = {
   [steamCommunity.wallet.getWallet.requestType]: () => {
     steamCommunity.wallet.getWallet.response({
@@ -229,7 +259,7 @@ const bridgeActionHandlers = {
 
     const handleRgAssets = (rgAssets: RgAsset[]) => {
       for (const rgAsset of Object.values(rgAssets)) {
-        if (Object.hasOwn(rgAsset, "assetid"))
+        if (Object.hasOwn(rgAsset, "assetid")) {
           inventory[
             `${rgAsset.appid}_${rgAsset.contextid}_${rgAsset.assetid}`
           ] = parseSteamItem({
@@ -237,7 +267,9 @@ const bridgeActionHandlers = {
             ...rgAsset.description,
             owner_steamid: g_ActiveInventory.m_owner?.strSteamId,
             user_steamid,
+            ...getAssetProperties(rgAsset),
           });
+        }
       }
     };
 
@@ -260,6 +292,7 @@ const bridgeActionHandlers = {
         ...g_ActiveInventory.selectedItem.description,
         owner_steamid: g_ActiveInventory.m_owner?.strSteamId,
         user_steamid,
+        ...getAssetProperties(g_ActiveInventory.selectedItem),
       }),
     );
   },

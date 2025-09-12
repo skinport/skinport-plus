@@ -46,6 +46,8 @@ export type SteamItem = {
   rarityColor: string | null;
   stickers: { image: string; marketHashName: string }[];
   charms: { image: string; marketHashName: string }[];
+  float: string | null;
+  pattern: string | null;
 };
 
 export function parseSteamItem({
@@ -62,6 +64,8 @@ export function parseSteamItem({
   sealed,
   owner_steamid,
   user_steamid,
+  float,
+  pattern,
 }: {
   actions?: { link: string; name: string }[];
   appid: number;
@@ -82,6 +86,8 @@ export function parseSteamItem({
   sealed: 0 | 1;
   owner_steamid?: string;
   user_steamid?: string;
+  float?: string;
+  pattern?: string;
 }): SteamItem {
   const qualityTag = tags?.find(({ category }) => category === "Quality");
 
@@ -168,6 +174,8 @@ export function parseSteamItem({
     rarityColor: rarityTag?.color ? `#${rarityTag.color}` : null,
     stickers,
     charms,
+    float: float || null,
+    pattern: pattern || null,
   };
 }
 
