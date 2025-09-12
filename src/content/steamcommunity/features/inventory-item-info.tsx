@@ -2,7 +2,11 @@ import { SteamItemSkinportActions } from "@/components/steam-item-skinport-actio
 import { SteamItemSkinportPrice } from "@/components/steam-item-skinport-price";
 import { featureManager } from "@/content/feature-manager";
 import { createWidgetElement } from "@/content/widget";
-import { selectSkinportItemPrice, useSkinportItemPrices } from "@/lib/skinport";
+import {
+  getIsSkinportSupportedSteamAppId,
+  selectSkinportItemPrice,
+  useSkinportItemPrices,
+} from "@/lib/skinport";
 import { steamCommunity } from "@/lib/steamCommunity";
 import elementReady from "element-ready";
 import { $ } from "select-dom";
@@ -44,7 +48,10 @@ featureManager.add(
 
       const selectedItem = await steamCommunity.inventory.getSelectedItem();
 
-      if (!selectedItem) {
+      if (
+        !selectedItem ||
+        !getIsSkinportSupportedSteamAppId(selectedItem.appId)
+      ) {
         return;
       }
 
