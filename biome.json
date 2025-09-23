@@ -16,6 +16,9 @@
       },
       "style": {
         "noDefaultExport": "error"
+      },
+      "a11y": {
+        "noSvgWithoutTitle": "off"
       }
     }
   },
