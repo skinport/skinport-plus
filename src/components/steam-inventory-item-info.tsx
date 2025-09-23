@@ -6,6 +6,29 @@ import { useEffect } from "react";
 import { InterpolateMessage } from "./interpolate-message";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
+const itemExteriorConfig = {
+  "Factory New": {
+    label: "FN",
+    color: "#5eb648",
+  },
+  "Minimal Wear": {
+    label: "MW",
+    color: "#79d154",
+  },
+  "Field-Tested": {
+    label: "FT",
+    color: "#e3e15b",
+  },
+  "Well-Worn": {
+    label: "WW",
+    color: "#e9a75d",
+  },
+  "Battle-Scarred": {
+    label: "BS",
+    color: "#e05a59",
+  },
+};
+
 export function SteamInventoryItemInfo({
   inventoryItem,
   inventoryItemElement,
@@ -108,12 +131,28 @@ export function SteamInventoryItemInfo({
     }
   };
 
+  const renderItemExterior = () => {
+    if (!inventoryItem?.exterior) {
+      return;
+    }
+
+    return (
+      <div
+        className="text-2xs font-bold"
+        style={{ color: itemExteriorConfig[inventoryItem.exterior].color }}
+      >
+        {itemExteriorConfig[inventoryItem.exterior].label}
+      </div>
+    );
+  };
+
   return (
     <>
       {renderItemStickers()}
       {renderItemCharms()}
-      <div className="absolute left-1.5 bottom-0.5 right-1.5 z-10">
+      <div className="absolute left-1.5 bottom-0.5 z-10">
         {renderItemQuality()}
+        {renderItemExterior()}
         <SteamItemSkinportPrice
           price={skinportItemPrice}
           priceType="suggested"

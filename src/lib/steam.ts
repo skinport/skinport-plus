@@ -4,15 +4,15 @@ import { $$ } from "select-dom";
 import { countryCurrencies } from "./country-currencies";
 
 export const steamItemExterior = [
-  "Battle-Scarred",
   "Factory New",
-  "Field-Tested",
   "Minimal Wear",
+  "Field-Tested",
   "Well-Worn",
+  "Battle-Scarred",
 ] as const;
 
 const steamItemMarketHashNameExteriorRegExp = new RegExp(
-  `(${steamItemExterior.join("|")}$)`,
+  `(${steamItemExterior.join("|")})`,
 );
 
 export type SteamItemExterior = (typeof steamItemExterior)[number];
