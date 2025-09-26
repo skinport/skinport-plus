@@ -110,7 +110,7 @@ declare type CInventory = {
     ];
   };
   m_rgAssets: RgAsset[];
-  m_rgChildInventories: {
+  m_rgChildInventories?: {
     [contextId: string]: CInventory;
   };
   m_rgDescriptions: Record<string, RgDescription>;
@@ -229,7 +229,7 @@ const user_steamid = g_steamID;
 
 function getAssetProperties({ contextid, assetid }: RgAsset) {
   const assetProperties =
-    g_ActiveInventory.m_rgChildInventories[contextid].m_rgAssetProperties[
+    g_ActiveInventory.m_rgChildInventories?.[contextid].m_rgAssetProperties[
       assetid
     ];
 
@@ -273,7 +273,10 @@ const bridgeActionHandlers = {
       }
     };
 
-    if (g_ActiveInventory.m_contextid === 0) {
+    if (
+      g_ActiveInventory.m_contextid === 0 &&
+      g_ActiveInventory.m_rgChildInventories
+    ) {
       for (const childInventory of Object.values(
         g_ActiveInventory.m_rgChildInventories,
       )) {

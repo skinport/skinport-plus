@@ -49,13 +49,6 @@ export function SteamInventoryItemInfo({
     }
   }, [inventoryItem, inventoryItemElement]);
 
-  if (
-    inventoryItem?.isMarketable === false &&
-    inventoryItem?.isTradeProtected === false
-  ) {
-    return null;
-  }
-
   const renderItemQuality = () => {
     const itemQuality = inventoryItem?.isStatTrak
       ? "ST"
