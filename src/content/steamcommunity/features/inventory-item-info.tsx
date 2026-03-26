@@ -32,12 +32,21 @@ featureManager.add(
     const observer = new MutationObserver(async () => {
       const itemInfoElement = $(
         createNotMatchingFeatureAttributeSelector(
-          ".inventory_page_right .inventory_iteminfo[style*='z-index: 1']",
+          ".inventory_page_right div[data-featuretarget='iteminfo'][style*='position: static']",
         ),
         inventoryContentElement,
       );
 
       if (!itemInfoElement) {
+        return;
+      }
+
+      const itemGameInfoElement = $(
+        "div:has(> a[href*='https://store.steampowered.com/app/'])",
+        itemInfoElement,
+      );
+
+      if (!itemGameInfoElement) {
         return;
       }
 
@@ -87,17 +96,8 @@ featureManager.add(
 
       cleanupPreviousItemFns.push(removeViewOnSkinportElement);
 
-      const itemDescriptorsElement = $(
-        ".item_desc_descriptors",
-        itemInfoElement,
-      );
-
-      if (!itemDescriptorsElement) {
-        return;
-      }
-
-      itemDescriptorsElement.insertAdjacentElement(
-        "beforebegin",
+      itemGameInfoElement.insertAdjacentElement(
+        "afterend",
         viewOnSkinportElement,
       );
     });
