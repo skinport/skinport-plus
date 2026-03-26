@@ -14,11 +14,15 @@ import { useEffect, useState } from "react";
 import { $ } from "select-dom";
 
 async function marketItemSkinportPrice() {
-  const itemDescriptionElement = $(
-    ".market_listing_iteminfo .item_desc_descriptors",
+  const itemGameInfoElement = await elementReady(
+    ".market_listing_iteminfo div:has(> a[href*='https://steamcommunity.com/market/search?appid='])",
+    {
+      stopOnDomReady: false,
+      timeout: 30000,
+    },
   );
 
-  if (!itemDescriptionElement) {
+  if (!itemGameInfoElement) {
     return;
   }
 
@@ -53,7 +57,7 @@ async function marketItemSkinportPrice() {
             "#market_commodity_forsale > span:last-child",
             {
               stopOnDomReady: false,
-              timeout: 5000,
+              timeout: 30000,
             },
           );
 
@@ -103,7 +107,7 @@ async function marketItemSkinportPrice() {
     );
   });
 
-  itemDescriptionElement.insertAdjacentElement("beforebegin", widgetElement);
+  itemGameInfoElement.insertAdjacentElement("beforebegin", widgetElement);
 }
 
 featureManager.add(marketItemSkinportPrice, {
