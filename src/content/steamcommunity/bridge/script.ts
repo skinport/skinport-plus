@@ -227,11 +227,8 @@ declare const g_rgListingInfo: Partial<{
 
 const user_steamid = g_steamID;
 
-function getAssetProperties({ contextid, assetid }: RgAsset) {
-  const assetProperties =
-    g_ActiveInventory.m_rgChildInventories?.[contextid].m_rgAssetProperties[
-      assetid
-    ];
+function getAssetProperties({ assetid }: RgAsset) {
+  const assetProperties = g_ActiveInventory.m_rgAssetProperties[assetid];
 
   return {
     float: assetProperties?.find((property) => property.propertyid === 2)
