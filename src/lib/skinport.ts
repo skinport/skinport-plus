@@ -1,6 +1,6 @@
 import { useToast } from "@/components/ui/use-toast";
 import { type SteamItem, getSteamUserWalletCurrency } from "@/lib/steam";
-import type { Options as KyOptions } from "ky";
+import type { FetchOptions } from "ofetch";
 import useSWR, { type SWRResponse } from "swr";
 import browser from "webextension-polyfill";
 import { getI18nMessage } from "./i18n";
@@ -71,7 +71,7 @@ export function getSkinportScreenshotUrl(input?: string) {
 
 export async function skinportApi<ResponseBody>(
   input: string,
-  options?: KyOptions,
+  options?: FetchOptions,
 ) {
   const { body, error }: { body: ResponseBody; error: string } =
     await browser.runtime.sendMessage({
@@ -88,7 +88,7 @@ export async function skinportApi<ResponseBody>(
 
 export function useSkinportApi<ResponseBody>(
   input: string,
-  options?: KyOptions,
+  options?: FetchOptions,
 ) {
   return useSWR([input, options], async (args) =>
     skinportApi<ResponseBody>(args[0], args[1]),
@@ -155,7 +155,7 @@ export function createUseSkinportItemPrices(
         ) =>
           skinportApi<SkinportItemPricesResponse>(args[0], {
             method: "post",
-            json: {
+            body: {
               market_hash_names: requestMarketHashNames,
               currency: (await steamUserWalletCurrency) || fallbackCurrency,
               ...(steamId && { steam_id: steamId }),

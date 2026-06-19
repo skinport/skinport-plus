@@ -16,8 +16,8 @@ import {
 } from "@/lib/skinport";
 import { type SteamItem, parseSteamItem } from "@/lib/steam";
 import { cn } from "@/lib/utils";
-import ky from "ky";
 import { AlertCircleIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
+import { ofetch } from "ofetch";
 import { type ReactNode, useEffect, useState } from "react";
 import { $, $$ } from "select-dom";
 import { type StoreApi, type UseBoundStore, create } from "zustand";
@@ -35,18 +35,18 @@ async function getAllTradeOfferItems(tradeOfferItemElements: HTMLElement[]) {
 
     itemInfoRequests.set(
       tradeOfferItemElement,
-      ky(
+      ofetch(
         `https://steamcommunity.com/economy/${dataEconomyItemValue.replace(
           "classinfo",
           "itemclasshover",
         )}`,
         {
-          searchParams: {
+          query: {
             content_only: 1,
             l: "english",
           },
         },
-      ).text(),
+      ),
     );
   }
 

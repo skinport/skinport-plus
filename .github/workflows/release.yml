@@ -27,8 +27,8 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v5
         with:
           cache: npm
       - run: npm ci
@@ -36,8 +36,8 @@ jobs:
   types:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v5
         with:
           cache: npm
       - run: npm ci
@@ -45,8 +45,8 @@ jobs:
   build-chrome:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v5
         with:
           cache: npm
       - run: npm ci
@@ -58,8 +58,8 @@ jobs:
   build-firefox:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v5
         with:
           cache: npm
       - run: npm ci
@@ -74,7 +74,7 @@ jobs:
       manifest_version: ${{ env.DAILY_VERSION }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - if: ${{ inputs.dry-run == false && ! inputs.retry-version }}
         uses: fregante/daily-version-action@v2
       - if: ${{ inputs.retry-version }}
@@ -90,8 +90,8 @@ jobs:
     if: ${{ needs.version.outputs.manifest_version && (! inputs.retry-version || inputs.retry-version && inputs.retry-chrome) }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v5
         with:
           cache: npm
       - run: npm ci
@@ -122,8 +122,8 @@ jobs:
     if: ${{ needs.version.outputs.manifest_version && (! inputs.retry-version || inputs.retry-version && inputs.retry-firefox) }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v5
         with:
           cache: npm
       - run: npm ci

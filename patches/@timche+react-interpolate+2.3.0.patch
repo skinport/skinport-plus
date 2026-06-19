@@ -1,7 +1,7 @@
-diff --git a/node_modules/@doist/react-interpolate/dist/react-interpolate.mjs b/node_modules/@doist/react-interpolate/dist/react-interpolate.mjs
+diff --git a/node_modules/@timche/react-interpolate/dist/react-interpolate.mjs b/node_modules/@timche/react-interpolate/dist/react-interpolate.mjs
 index d783a61..9907006 100644
---- a/node_modules/@doist/react-interpolate/dist/react-interpolate.mjs
-+++ b/node_modules/@doist/react-interpolate/dist/react-interpolate.mjs
+--- a/node_modules/@timche/react-interpolate/dist/react-interpolate.mjs
++++ b/node_modules/@timche/react-interpolate/dist/react-interpolate.mjs
 @@ -1,5 +1,4 @@
  import React from 'react';
 -import PropTypes from 'prop-types';

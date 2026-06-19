@@ -3,7 +3,7 @@ import {
   registerContentScripts,
 } from "@/lib/content-scripts";
 import { getHasAllUrlsPermission } from "@/lib/permissions";
-import ky from "ky";
+import { ofetch } from "ofetch";
 import browser from "webextension-polyfill";
 
 browser.declarativeNetRequest.updateDynamicRules({
@@ -62,10 +62,10 @@ browser.runtime.onInstalled.addListener(async ({ reason }) => {
 browser.runtime.onMessage.addListener(async (message) => {
   if (message.skinportApi) {
     try {
-      const body = await ky(
+      const body = await ofetch(
         `https://api.skinport.com/${message.skinportApi}`,
         message.options,
-      ).json();
+      );
 
       return { body };
     } catch (error) {

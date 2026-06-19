@@ -1,4 +1,4 @@
-import ky from "ky";
+import { ofetch } from "ofetch";
 import pMemoize from "p-memoize";
 import { $$ } from "select-dom";
 import { countryCurrencies } from "./country-currencies";
@@ -198,7 +198,7 @@ export const getSteamUserWalletCurrency = pMemoize(async () => {
     }
   }
 
-  const walletCountryCode = findWalletCountryCode(await ky("/market").text());
+  const walletCountryCode = findWalletCountryCode(await ofetch("/market"));
 
   if (walletCountryCode) {
     return walletCountryCode;
