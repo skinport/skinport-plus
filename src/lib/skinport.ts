@@ -115,6 +115,7 @@ export function createUseSkinportItemPrices(
         | string[]
         | Set<string>
         | Promise<string | string[] | Set<string>>), // Item market hash names
+  steamId?: string,
   fallbackCurrency = "USD",
   requestItemsLimit = 1000, // If items is more than limit, multiple request are made
 ) {
@@ -129,7 +130,7 @@ export function createUseSkinportItemPrices(
     const { toast } = useToast();
 
     const swr = useSWR(
-      ["v1/extension/prices", marketHashNames, fallbackCurrency],
+      ["v1/extension/prices", marketHashNames, fallbackCurrency, steamId],
       async (args) => {
         if (resolvedRequestMarketHashNames === undefined) {
           resolvedRequestMarketHashNames =
@@ -157,6 +158,7 @@ export function createUseSkinportItemPrices(
             json: {
               market_hash_names: requestMarketHashNames,
               currency: (await steamUserWalletCurrency) || fallbackCurrency,
+              ...(steamId && { steam_id: steamId }),
             },
           });
 
@@ -259,11 +261,13 @@ export function selectSkinportItemPrice(
 
 export function useSkinportItemPrices(
   marketHashNames: string | string[],
+  steamId?: string,
   fallbackCurrency = "USD",
   requestItemsLimit = 1000,
 ) {
   return createUseSkinportItemPrices(
     marketHashNames,
+    steamId,
     fallbackCurrency,
     requestItemsLimit,
   )();

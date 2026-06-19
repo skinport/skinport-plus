@@ -69,6 +69,7 @@ featureManager.add(
         createWidgetElement(({ shadowRoot }) => {
           const skinportItemPrices = useSkinportItemPrices(
             selectedItem.marketHashName,
+            selectedItem.ownerSteamId ?? undefined,
           );
 
           const skinportItemPrice = selectSkinportItemPrice(
