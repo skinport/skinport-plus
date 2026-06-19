@@ -55,15 +55,18 @@ const inventoryItemsInfo: Feature = async ({
     const inventory = await steamCommunity.inventory.loadCompleteInventory();
 
     const skinportItemNames = new Set<string>();
+    let inventoryOwnerSteamId: string | undefined;
 
     for (const item of Object.values(inventory)) {
       if (item) {
         skinportItemNames.add(item.marketHashName);
+        inventoryOwnerSteamId ??= item.ownerSteamId ?? undefined;
       }
     }
 
     const useSkinportItemPrices = createUseSkinportItemPrices(
       Array.from(skinportItemNames),
+      inventoryOwnerSteamId,
     );
 
     const inventoryItemElements = $$(".itemHolder .item", inventoryElement);
